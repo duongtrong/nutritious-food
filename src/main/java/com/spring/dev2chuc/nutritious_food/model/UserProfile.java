@@ -31,6 +31,14 @@ public class UserProfile extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
     public UserProfile(User user, Integer height, Integer weight, Integer age) {
         this.user = user;
         this.height = height;
@@ -39,6 +47,8 @@ public class UserProfile extends DateAudit {
         this.status = Status.ACTIVE.getValue();
     }
 
+    public UserProfile() {
+    }
 
     public Long getId() {
         return id;
