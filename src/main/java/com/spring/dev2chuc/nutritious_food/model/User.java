@@ -54,6 +54,11 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<UserProfile> userProfiles;
+
+
     public User() {
         this.status = Status.ACTIVE.getValue();
     }
