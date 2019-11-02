@@ -53,7 +53,7 @@ public class AuthController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getAccount(),
                         loginRequest.getPassword()
                 )
         );
@@ -61,7 +61,9 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Success", jwt));
+//        return new ResponseEntity(new ApiResponse(true, "User create", new JwtAuthenticationResponse(jwt)), HttpStatus.CREATED);
+
     }
 
     @PostMapping("/signup")
