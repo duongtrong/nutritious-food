@@ -12,6 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+
     List<Category> queryCategoriesByParentId(Long parentId);
+
     List<Category> findAllByIdIn(Collection<Long> Ids);
 }
