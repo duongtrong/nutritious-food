@@ -3,7 +3,9 @@ package com.spring.dev2chuc.nutritious_food.model;
 import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_profile")
@@ -22,6 +24,12 @@ public class UserProfile extends DateAudit {
     private Integer weight;
     private Integer age;
     private Integer status;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "category_user_profile",
+            joinColumns = @JoinColumn(name = "user_profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
 
     public UserProfile(User user, Integer height, Integer weight, Integer age) {
         this.user = user;
