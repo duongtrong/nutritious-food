@@ -50,20 +50,24 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Optional<User> user = userRepository.findByUsernameOrPhone (loginRequest.getAccount (), loginRequest.getAccount ());
-        if (!user.isPresent ()) {
+        if (user.isPresent ()) {
+            User userCurrent = user.get();
+            if (!passwordEncoder.matches (loginRequest.getPassword(), userCurrent.getPassword())) {
+                return new ResponseEntity (
+                        new ApiResponseError (HttpStatus.UNAUTHORIZED.value (),
+                                "Password not matches"),
+                        HttpStatus.UNAUTHORIZED);
+            }
+        } else {
             return new ResponseEntity (
                     new ApiResponseError (HttpStatus.UNAUTHORIZED.value (),
-                            "Account or password is incorrect"),
+                            "Account notfound"),
                     HttpStatus.UNAUTHORIZED);
         }
 
-        Optional<User> currentUser = userRepository.findByPassword (loginRequest.getPassword ());
-        if (!currentUser.isPresent ()) {
-            return new ResponseEntity (
-                    new ApiResponseError (HttpStatus.UNAUTHORIZED.value (),
-                            "Account or password is incorrect"),
-                    HttpStatus.UNAUTHORIZED);
-        }
+
+//        passwordEncoder.matches (loginRequest.getPassword(), userCurrent.getPassword());
+
 
         Authentication authentication = authenticationManager.authenticate (
                 new UsernamePasswordAuthenticationToken (
