@@ -1,7 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.payload;
 
-import javax.validation.constraints.NotBlank;
-
 public class UserProfileRequest {
 
     private Integer height;

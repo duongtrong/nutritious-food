@@ -4,10 +4,7 @@ import com.spring.dev2chuc.nutritious_food.exception.AppException;
 import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.JwtAuthenticationResponse;
-import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
-import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
+import com.spring.dev2chuc.nutritious_food.payload.*;
 import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
 import com.spring.dev2chuc.nutritious_food.security.JwtTokenProvider;
@@ -28,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -50,6 +48,14 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+        Optional<User> user = userRepository.findByUsernameOrEmail(loginRequest.getAccount(), loginRequest.getAccount());
+        if (!user.isPresent()) {
+            return new ResponseEntity(
+                    new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
+                            "Account or password is incorrect"),
+                    HttpStatus.UNAUTHORIZED);
+        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
