@@ -203,4 +203,12 @@ public class Food extends DateAudit {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
 }
