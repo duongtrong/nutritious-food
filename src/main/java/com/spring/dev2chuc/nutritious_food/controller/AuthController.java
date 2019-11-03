@@ -49,7 +49,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Optional<User> user = userRepository.findByUsernameOrEmail(loginRequest.getAccount(), loginRequest.getAccount());
+        Optional<User> user = userRepository.findByUsernameOrPhone(loginRequest.getAccount(), loginRequest.getAccount());
         if (!user.isPresent()) {
             return new ResponseEntity(
                     new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
@@ -79,10 +79,15 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+        if(userRepository.existsByPhone(signUpRequest.getPhone())) {
+            return new ResponseEntity(new ApiResponse(false, "Phone Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
+
+//        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+//            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+//                    HttpStatus.BAD_REQUEST);
+//        }
 
         // Creating user's account
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
