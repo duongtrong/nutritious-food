@@ -1,6 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.payload;
 
 import javax.persistence.Column;
+import java.util.List;
 
 public class ComboRequest {
 
@@ -21,6 +22,24 @@ public class ComboRequest {
     private float vitaminC;
     private float vitaminD;
     private float vitaminE;
+    private List<Long> foodIds;
+    private List<Long> categoryIds;
+
+    public List<Long> getFoodIds() {
+        return foodIds;
+    }
+
+    public void setFoodIds(List<Long> foodIds) {
+        this.foodIds = foodIds;
+    }
+
+    public List<Long> getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(List<Long> categoryIds) {
+        this.categoryIds = categoryIds;
+    }
 
     public String getName() {
         return name;
