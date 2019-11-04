@@ -25,13 +25,13 @@ public class CategoryController {
     public ResponseEntity<?> store(@Valid @RequestBody CategoryRequest categoryRequest) {
         Category category = new Category(categoryRequest.getParentId(), categoryRequest.getName(), categoryRequest.getImage(), categoryRequest.getDescription());
         Category result = categoryRepository.save(category);
-        return new ResponseEntity(new ApiResponse(true, "ok", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(true, "ok", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
         Category result = categoryRepository.findById(id).orElseThrow(null);
-        return new ResponseEntity(new ApiResponse(true, "ok", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "ok", result), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -42,19 +42,19 @@ public class CategoryController {
         if (categoryRequest.getDescription() != null)category.setDescription(categoryRequest.getDescription());
         if (categoryRequest.getParentId() != null)category.setParentId(categoryRequest.getParentId());
         Category result = categoryRepository.save(category);
-        return new ResponseEntity(new ApiResponse(true, "ok", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(true, "ok", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/")
     public ResponseEntity<?> listAll() {
         List<Category> result = categoryRepository.findAll();
-        return new ResponseEntity(new ApiResponse(true, "ok", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "ok", result), HttpStatus.OK);
     }
 
     @GetMapping("/parent/{id}")
     public ResponseEntity<?> getByParentId(@PathVariable("id") Long id) {
         List<Category> result = categoryRepository.queryCategoriesByParentId(id);
-        return new ResponseEntity(new ApiResponse(true, "ok", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "ok", result), HttpStatus.OK);
     }
 
 //    @GetMapping("/latest")

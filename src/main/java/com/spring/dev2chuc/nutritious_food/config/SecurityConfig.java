@@ -89,7 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/api/users/**",
                             "/api/category/**",
                             "/api/user-profile/**",
-                            "/api/food/**")
+                            "/api/food/**",
+                            "/api/combo/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated();

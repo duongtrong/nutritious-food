@@ -56,7 +56,7 @@ public class FoodController {
         Set<Category> categorySet = new HashSet<> (categories);
         food.setCategories (categorySet);
         Food current = foodRepository.save (food);
-        return new ResponseEntity(new ApiResponse (true, "Create new food success", current), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse (true, "Create new food success", current), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}/update/{id}")
@@ -84,6 +84,6 @@ public class FoodController {
         food.setCategories (categorySet);
         Food result = foodRepository.save (food);
 
-        return new ResponseEntity(new ApiResponse (true, "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse (true, "Update success", result), HttpStatus.OK);
     }
 }

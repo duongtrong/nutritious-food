@@ -44,19 +44,19 @@ public class UserProfileController {
             System.out.println(username + " == " + user.getId());
 
             if (user == null) {
-                return new ResponseEntity(new ApiResponse(false, "User notfound"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new ApiResponse(false, "User notfound"), HttpStatus.NOT_FOUND);
             }
             UserProfile userProfile = new UserProfile(user, userProfileRequest.getHeight(), userProfileRequest.getWeight(), userProfileRequest.getAge());
             UserProfile userProfileResult = userProfileRepository.save(userProfile);
-            return new ResponseEntity(new ApiResponse(true, "ok", userProfileResult), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse(true, "ok", userProfileResult), HttpStatus.CREATED);
         }
-        return new ResponseEntity(new ApiResponse(true, "You has reject"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ApiResponse(true, "You has reject"), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
         UserProfile userProfile = userProfileRepository.findById(id).orElseThrow(null);
-        return new ResponseEntity(new ApiResponse(true, "Get detail success", userProfile), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "Get detail success", userProfile), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/category")
@@ -68,6 +68,6 @@ public class UserProfileController {
         Set<Category> categorySet = new HashSet<>(categories);
         userProfile.setCategories(categorySet);
         userProfileRepository.save(userProfile);
-        return new ResponseEntity(new ApiResponse(true, "Add category success", userProfile), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "Add category success", userProfile), HttpStatus.OK);
     }
 }
