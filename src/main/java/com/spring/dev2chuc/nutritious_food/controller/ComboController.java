@@ -35,8 +35,8 @@ public class ComboController {
     @Autowired
     FoodRepository foodRepository;
 
-    @PostMapping("/category/{catId}/food/{foodId}/create")
-    public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest, @PathVariable List<Long> catId,@PathVariable List<Long> foodId){
+    @PostMapping("/create")
+    public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest){
 //        logger.info("Cat id: {} - foodId: {}", catId, foodId);
         Combo combo = new Combo(
                 comboRequest.getName(),
@@ -57,11 +57,11 @@ public class ComboController {
                 comboRequest.getVitaminE()
         );
 
-        List<Category> categories = categoryRepository.findAllByIdIn (catId);
+        List<Category> categories = categoryRepository.findAllByIdIn (comboRequest.getCategoryIds());
         Set<Category> categorySet = new HashSet<>(categories);
         combo.setCategories (categorySet);
 
-        List<Food> foodList = foodRepository.findAllByIdIn(foodId);
+        List<Food> foodList = foodRepository.findAllByIdIn(comboRequest.getFoodIds());
         Set<Food> foodSet = new HashSet<>(foodList);
         combo.setFoodSet(foodSet);
 
@@ -75,12 +75,10 @@ public class ComboController {
         return new ResponseEntity<>(new ApiResponse(true, "OK", combos), HttpStatus.OK);
     }
 
-    @PutMapping("/category/{cateId}/food/{foodId}/update/{comId}")
+    @PutMapping("/{id}/update")
     public ResponseEntity<?> update(@Valid @RequestBody ComboRequest comboRequest,
-                                    @PathVariable Long comId,
-                                    @PathVariable List<Long> cateId,
-                                    @PathVariable List<Long> foodId) {
-        Combo combo = comboRepository.findById(comId).orElseThrow(null);
+                                    @PathVariable Long id) {
+        Combo combo = comboRepository.findById(id).orElseThrow(null);
         if (comboRequest.getName() != null) combo.setName(comboRequest.getName());
         if (comboRequest.getDescription() != null) combo.setDescription(comboRequest.getDescription());
         if (comboRequest.getImage() != null) combo.setImage(comboRequest.getImage());
@@ -97,14 +95,16 @@ public class ComboController {
         if (comboRequest.getVitaminC() != 0.0f) combo.setVitaminC(comboRequest.getVitaminC());
         if (comboRequest.getVitaminD() != 0.0f) combo.setVitaminD(comboRequest.getVitaminD());
         if (comboRequest.getVitaminE() != 0.0f) combo.setVitaminE(comboRequest.getVitaminE());
-
-        List<Category> categories = categoryRepository.findAllByIdIn(cateId);
-        Set<Category> categorySet = new HashSet<>(categories);
-        combo.setCategories(categorySet);
-
-        List<Food> foodList = foodRepository.findAllByIdIn(foodId);
-        Set<Food> foodSet = new HashSet<>(foodList);
-        combo.setFoodSet(foodSet);
+        if (comboRequest.getFoodIds().size() > 0) {
+            List<Category> categories = categoryRepository.findAllByIdIn(comboRequest.getFoodIds());
+            Set<Category> categorySet = new HashSet<>(categories);
+            combo.setCategories(categorySet);
+        }
+        if (comboRequest.getCategoryIds().size() > 0) {
+            List<Food> foodList = foodRepository.findAllByIdIn(comboRequest.getCategoryIds());
+            Set<Food> foodSet = new HashSet<>(foodList);
+            combo.setFoodSet(foodSet);
+        }
         Combo result = comboRepository.save(combo);
 
         return new ResponseEntity<>(new ApiResponse(true, "Update success", result), HttpStatus.OK);

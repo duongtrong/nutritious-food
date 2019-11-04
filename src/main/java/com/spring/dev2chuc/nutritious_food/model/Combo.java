@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 
 import javax.persistence.*;
@@ -40,6 +41,10 @@ public class Combo extends DateAudit {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "set_category", joinColumns = @JoinColumn(name = "set_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "combo")
+    private Set<ScheduleCombo> scheduleCombos;
 
     public Set<Food> getFoodSet() {
         return foodSet;
