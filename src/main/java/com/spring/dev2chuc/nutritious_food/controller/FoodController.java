@@ -29,11 +29,11 @@ public class FoodController {
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Food> foodList = foodRepository.findAll();
-        return new ResponseEntity<>(new ApiResponse(true, "OK", foodList), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/create")
-    public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest, @PathVariable("id") List<Long> id) {
+    @PostMapping("/create")
+    public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest) {
         Food food = new Food(
                 foodRequest.getName(),
                 foodRequest.getDescription(),
@@ -52,15 +52,19 @@ public class FoodController {
                 foodRequest.getVitaminD(),
                 foodRequest.getVitaminE()
         );
-        List<Category> categories = categoryRepository.findAllByIdIn(id);
-        Set<Category> categorySet = new HashSet<>(categories);
-        food.setCategories(categorySet);
+
+        if (foodRequest.getCateId().size() > 0) {
+            List<Category> categories = categoryRepository.findAllByIdIn(foodRequest.getCateId());
+            Set<Category> categorySet = new HashSet<>(categories);
+            food.setCategories(categorySet);
+        }
+
         Food current = foodRepository.save(food);
-        return new ResponseEntity<>(new ApiResponse(true, "Create new food success", current), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED.value(), "Create new food success", current), HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}/update/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody FoodRequest foodRequest, @PathVariable("id") Long id, @PathVariable("id") List<Long> idn) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@Valid @RequestBody FoodRequest foodRequest, @PathVariable("id") Long id) {
         Food food = foodRepository.findById(id).orElseThrow(null);
         if (foodRequest.getName() != null) food.setName(foodRequest.getName());
         if (foodRequest.getDescription() != null) food.setDescription(foodRequest.getDescription());
@@ -79,11 +83,13 @@ public class FoodController {
         if (foodRequest.getVitaminD() != 0.0f) food.setVitaminD(foodRequest.getVitaminD());
         if (foodRequest.getVitaminE() != 0.0f) food.setVitaminE(foodRequest.getVitaminE());
 
-        List<Category> categories = categoryRepository.findAllByIdIn(idn);
-        Set<Category> categorySet = new HashSet<>(categories);
-        food.setCategories(categorySet);
-        Food result = foodRepository.save(food);
+        if (foodRequest.getCateId().size() > 0) {
+            List<Category> categories = categoryRepository.findAllByIdIn(foodRequest.getCateId());
+            Set<Category> categorySet = new HashSet<>(categories);
+            food.setCategories(categorySet);
+        }
 
-        return new ResponseEntity<>(new ApiResponse(true, "Update success", result), HttpStatus.OK);
+        Food result = foodRepository.save(food);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 }
