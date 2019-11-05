@@ -1,11 +1,12 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 
 import javax.persistence.*;
 
 @Entity
-public class ScheduleCombo {
+public class ScheduleCombo extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
