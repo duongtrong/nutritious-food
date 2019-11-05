@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/schedule-combo")
@@ -33,8 +32,9 @@ public class ScheduleComboController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
         ScheduleCombo scheduleCombo = scheduleComboRepository.findById(id).orElseThrow(null);
-        if (scheduleCombo == null) return new ResponseEntity<> (new ApiResponse(false, "Combo of schedule notfound"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<> (new ApiResponse(true, "OK", scheduleCombo), HttpStatus.OK);
+        if (scheduleCombo == null)
+            return new ResponseEntity<>(new ApiResponse(false, "Combo of schedule notfound"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponse(true, "OK", scheduleCombo), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -52,13 +52,13 @@ public class ScheduleComboController {
     public ResponseEntity<?> getAllByScheduleId(@PathVariable("id") Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(null);
         List<ScheduleCombo> scheduleCombos = scheduleComboRepository.findAllBySchedule(schedule);
-        return new ResponseEntity<> (new ApiResponse(true, "OK", scheduleCombos), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "OK", scheduleCombos), HttpStatus.OK);
     }
 
     @GetMapping("/combo/{id}")
     public ResponseEntity<?> getAllByComboId(@PathVariable("id") Long id) {
         Combo combo = comboRepository.findById(id).orElseThrow(null);
         List<ScheduleCombo> scheduleCombos = scheduleComboRepository.findAllByCombo(combo);
-        return new ResponseEntity<> (new ApiResponse(true, "OK", scheduleCombos), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "OK", scheduleCombos), HttpStatus.OK);
     }
 }

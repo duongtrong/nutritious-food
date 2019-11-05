@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 
 import javax.persistence.*;
@@ -36,6 +37,10 @@ public class Food extends DateAudit {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "category_food", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
     private Set<Category> categories = new HashSet<>();
+
+    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
+    private Set<RattingFood> rattingFoods;
 
     public Food() {
     }
