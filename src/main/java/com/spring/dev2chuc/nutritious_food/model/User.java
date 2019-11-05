@@ -57,6 +57,8 @@ public class User extends DateAudit {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<UserProfile> userProfiles;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<RattingFood> rattingFoods;
 
     public User() {
         this.status = Status.ACTIVE.getValue();

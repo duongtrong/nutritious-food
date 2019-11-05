@@ -70,6 +70,5 @@ public class ScheduleController {
         }
         schedule.setStatus(Status.DEACTIVE.getValue());
         scheduleRepository.save(schedule);
-        return new ResponseEntity<> (new ApiResponse(true, "OK", schedule), HttpStatus.OK);
     }
 }

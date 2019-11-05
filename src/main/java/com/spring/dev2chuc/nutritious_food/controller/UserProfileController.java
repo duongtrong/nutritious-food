@@ -1,12 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.exception.AppException;
-import com.spring.dev2chuc.nutritious_food.exception.ResourceNotFoundException;
 import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserProfileRepository;
@@ -20,14 +17,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user-profile")
 public class UserProfileController {
     @Autowired
     UserRepository userRepository;
-
 
     @Autowired
     CategoryRepository categoryRepository;

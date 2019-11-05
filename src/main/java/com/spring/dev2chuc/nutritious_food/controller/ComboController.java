@@ -24,19 +24,16 @@ import java.util.Set;
 @RequestMapping("/api/combo")
 public class ComboController {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     ComboRepository comboRepository;
-
     @Autowired
     CategoryRepository categoryRepository;
-
     @Autowired
     FoodRepository foodRepository;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest){
+    public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest) {
 //        logger.info("Cat id: {} - foodId: {}", catId, foodId);
         Combo combo = new Combo(
                 comboRequest.getName(),
@@ -57,9 +54,9 @@ public class ComboController {
                 comboRequest.getVitaminE()
         );
 
-        List<Category> categories = categoryRepository.findAllByIdIn (comboRequest.getCategoryIds());
+        List<Category> categories = categoryRepository.findAllByIdIn(comboRequest.getCategoryIds());
         Set<Category> categorySet = new HashSet<>(categories);
-        combo.setCategories (categorySet);
+        combo.setCategories(categorySet);
 
         List<Food> foodList = foodRepository.findAllByIdIn(comboRequest.getFoodIds());
         Set<Food> foodSet = new HashSet<>(foodList);
