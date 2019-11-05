@@ -26,10 +26,13 @@ public class ComboController {
 
     @Autowired
     ComboRepository comboRepository;
+
     @Autowired
     CategoryRepository categoryRepository;
+
     @Autowired
     FoodRepository foodRepository;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/create")
@@ -63,13 +66,13 @@ public class ComboController {
         combo.setFoodSet(foodSet);
 
         Combo result = comboRepository.save(combo);
-        return new ResponseEntity<>(new ApiResponse(true, "Create success", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Combo> combos = comboRepository.findAll();
-        return new ResponseEntity<>(new ApiResponse(true, "OK", combos), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", combos), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update")
@@ -104,6 +107,6 @@ public class ComboController {
         }
         Combo result = comboRepository.save(combo);
 
-        return new ResponseEntity<>(new ApiResponse(true, "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 }

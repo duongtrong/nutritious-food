@@ -5,19 +5,19 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ApiResponse {
-    private Boolean success;
+public class ApiResponse<T> {
+    private int status;
     private String message;
-    private Object object;
+    private T data;
 
-    public ApiResponse(Boolean success, String message) {
-        this.success = success;
+    public ApiResponse(int status, String message) {
+        this.status = status;
         this.message = message;
     }
 
-    public ApiResponse(Boolean success, String message, Object object) {
-        this.success = success;
+    public ApiResponse(int status, String message, T data) {
+        this.status = status;
         this.message = message;
-        this.object = object;
+        this.data = data;
     }
 }

@@ -13,6 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class Schedule extends DateAudit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,6 +28,10 @@ public class Schedule extends DateAudit {
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "schedule")
     private Set<ScheduleCombo> scheduleCombos;
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "schedule")
+    private Set<RattingSchedule> rattingSchedules;
 
     public Schedule(String name, String description, float price, String image) {
         this.name = name;

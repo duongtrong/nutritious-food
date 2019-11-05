@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,4 +27,5 @@ public class FoodRequest {
     private float vitaminC;
     private float vitaminD;
     private float vitaminE;
+    private List<Long> cateId;
 }
