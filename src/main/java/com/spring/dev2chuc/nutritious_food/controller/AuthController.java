@@ -53,13 +53,13 @@ public class AuthController {
         if (user.isPresent ()) {
             User userCurrent = user.get();
             if (!passwordEncoder.matches (loginRequest.getPassword(), userCurrent.getPassword())) {
-                return new ResponseEntity (
+                return new ResponseEntity<> (
                         new ApiResponseError (HttpStatus.UNAUTHORIZED.value (),
                                 "Password not matches"),
                         HttpStatus.UNAUTHORIZED);
             }
         } else {
-            return new ResponseEntity (
+            return new ResponseEntity<> (
                     new ApiResponseError (HttpStatus.UNAUTHORIZED.value (),
                             "Account notfound"),
                     HttpStatus.UNAUTHORIZED);
@@ -87,12 +87,12 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userRepository.existsByUsername (signUpRequest.getUsername ())) {
-            return new ResponseEntity (new ApiResponse (false, "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse (false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (userRepository.existsByPhone (signUpRequest.getPhone ())) {
-            return new ResponseEntity (new ApiResponse (false, "Phone Address already in use!"),
+            return new ResponseEntity<> (new ApiResponse (false, "Phone Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 

@@ -1,4 +1,4 @@
-package com.spring.dev2chuc.nutritious_food.config;
+package com.spring.dev2chuc.nutritious_food.payload;
 
 public class RESTPagination {
     private int page;
