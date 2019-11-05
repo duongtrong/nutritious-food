@@ -4,6 +4,7 @@ import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
@@ -70,5 +71,6 @@ public class ScheduleController {
         }
         schedule.setStatus(Status.DEACTIVE.getValue());
         scheduleRepository.save(schedule);
+        return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
     }
 }
