@@ -83,8 +83,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/auth/**")
                 .permitAll()
-                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                .permitAll()
                 .antMatchers(HttpMethod.GET,
                         "/api/users/**",
                         "/api/category/**",
@@ -93,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/schedule/**",
                         "/api/schedule-combo/**",
                         "/api/combo/**",
-                        "/api/ratting-food/**")
+                        "/api/ratting-food/**","/api/ratting-combo/**", "/api/ratting-schedule/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

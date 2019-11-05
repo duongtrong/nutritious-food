@@ -25,7 +25,7 @@ public class ScheduleController {
     @GetMapping("/")
     public ResponseEntity<?> getList() {
         List<Schedule> schedules = scheduleRepository.findAllByStatusIs(Status.ACTIVE.getValue());
-        return new ResponseEntity<> (new ApiResponse(HttpStatus.OK.value(), "OK", schedules), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponse<>(HttpStatus.OK.value(), "OK", schedules), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -37,16 +37,16 @@ public class ScheduleController {
                 scheduleRequest.getImage()
         );
         Schedule result = scheduleRepository.save(schedule);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDtail(@PathVariable("id") Long id) {
         Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), id);
         if (schedule == null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<> (new ApiResponse(HttpStatus.OK.value(), "OK", schedule), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponse<>(HttpStatus.OK.value(), "OK", schedule), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update")
@@ -60,14 +60,14 @@ public class ScheduleController {
         if (scheduleRequest.getPrice() != 0) schedule.setPrice(scheduleRequest.getPrice());
         if (scheduleRequest.getImage() != null)  schedule.setImage(scheduleRequest.getImage());
         Schedule result = scheduleRepository.save(schedule);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), id);
         if (schedule == null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "schedule not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "schedule not found"), HttpStatus.NOT_FOUND);
         }
         schedule.setStatus(Status.DEACTIVE.getValue());
         scheduleRepository.save(schedule);

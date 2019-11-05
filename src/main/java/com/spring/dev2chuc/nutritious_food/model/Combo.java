@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 import lombok.Getter;
@@ -49,6 +50,10 @@ public class Combo extends DateAudit {
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "combo")
     private Set<ScheduleCombo> scheduleCombos;
+
+    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "combo")
+    private Set<RattingCombo> combos;
 
     public Combo() {
     }

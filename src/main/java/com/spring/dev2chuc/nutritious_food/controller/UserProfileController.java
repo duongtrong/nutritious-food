@@ -46,7 +46,7 @@ public class UserProfileController {
             }
             UserProfile userProfile = new UserProfile(user, userProfileRequest.getHeight(), userProfileRequest.getWeight(), userProfileRequest.getAge());
             UserProfile userProfileResult = userProfileRepository.save(userProfile);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED.value(), "Create success", userProfileResult), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", userProfileResult), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "You has reject"), HttpStatus.BAD_REQUEST);
     }
@@ -54,7 +54,7 @@ public class UserProfileController {
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
         UserProfile userProfile = userProfileRepository.findById(id).orElseThrow(null);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Get detail success", userProfile), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Get detail success", userProfile), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/category")
@@ -66,6 +66,6 @@ public class UserProfileController {
         Set<Category> categorySet = new HashSet<>(categories);
         userProfile.setCategories(categorySet);
         userProfileRepository.save(userProfile);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Create new category success", userProfile), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Create new category success", userProfile), HttpStatus.OK);
     }
 }

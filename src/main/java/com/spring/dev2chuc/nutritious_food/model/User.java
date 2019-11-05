@@ -57,12 +57,17 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<UserProfile> userProfiles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<RattingFood> rattingFoods;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<RattingSchedule> rattingSchedules;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<RattingCombo> rattingCombos;
 
     public User() {
         this.status = Status.ACTIVE.getValue();
