@@ -1,13 +1,14 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Schedule {
+public class Schedule extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +29,7 @@ public class Schedule {
         this.description = description;
         this.price = price;
         this.image = image;
+        this.status = Status.ACTIVE.getValue();
     }
 
     public Schedule() {
