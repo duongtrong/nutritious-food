@@ -13,7 +13,11 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    List<Category> queryCategoriesByParentId(Long parentId);
+    List<Category> queryCategoriesByParentIdAndStatus(Long parentId, Integer status);
 
     List<Category> findAllByIdIn(Collection<Long> Ids);
+
+    List<Category> findAllByStatusIs(Integer status);
+
+    Category findByIdAndStatus(Long id, Integer status);
 }
