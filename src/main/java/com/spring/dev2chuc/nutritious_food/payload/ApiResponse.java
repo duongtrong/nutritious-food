@@ -1,5 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.payload;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ApiResponse {
     private Boolean success;
     private String message;
@@ -14,29 +19,5 @@ public class ApiResponse {
         this.success = success;
         this.message = message;
         this.object = object;
-    }
-
-    public Object getObject() {
-        return object;
-    }
-
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
