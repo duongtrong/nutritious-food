@@ -40,7 +40,7 @@ public class CategoryController {
     public ResponseEntity<?> store(@Valid @RequestBody CategoryRequest categoryRequest, @PathVariable("id") Long id) {
         Category category = categoryRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (category == null) {
-            return new ResponseEntity<>(new ApiResponse(false, "Category not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
         if (categoryRequest.getName() != null) category.setName(categoryRequest.getName());
         if (categoryRequest.getImage() != null) category.setImage(categoryRequest.getImage());
@@ -54,11 +54,11 @@ public class CategoryController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Category result = categoryRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (result == null) {
-            return new ResponseEntity<>(new ApiResponse(false, "Category not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
         result.setStatus(Status.DEACTIVE.getValue());
         categoryRepository.save(result);
-        return new ResponseEntity<>(new ApiResponse(true, "ok", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "ok", result), HttpStatus.OK);
     }
 
     @GetMapping("/")
@@ -81,6 +81,6 @@ public class CategoryController {
         List<Category> categoryResult = new ArrayList<Category>();
         Long parentId = Long.valueOf("0");
         List<Category> result = CategoryHelper.recusiveCategory(categoryList, parentId, "", categoryResult);
-        return new ResponseEntity(new ApiResponse<>HttpStatus.OK.value(), "ok", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "ok", result), HttpStatus.OK);
     }
 }
