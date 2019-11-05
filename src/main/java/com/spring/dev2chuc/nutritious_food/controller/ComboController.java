@@ -54,7 +54,8 @@ public class ComboController {
                 comboRequest.getVitaminB(),
                 comboRequest.getVitaminC(),
                 comboRequest.getVitaminD(),
-                comboRequest.getVitaminE()
+                comboRequest.getVitaminE(),
+                comboRequest.getCalorie()
         );
 
         List<Category> categories = categoryRepository.findAllByIdIn(comboRequest.getCategoryIds());
@@ -95,6 +96,7 @@ public class ComboController {
         if (comboRequest.getVitaminC() != 0.0f) combo.setVitaminC(comboRequest.getVitaminC());
         if (comboRequest.getVitaminD() != 0.0f) combo.setVitaminD(comboRequest.getVitaminD());
         if (comboRequest.getVitaminE() != 0.0f) combo.setVitaminE(comboRequest.getVitaminE());
+        if (comboRequest.getCalorie() != 0.0f) combo.setCalorie(comboRequest.getCalorie());
         if (comboRequest.getFoodIds().size() > 0) {
             List<Category> categories = categoryRepository.findAllByIdIn(comboRequest.getFoodIds());
             Set<Category> categorySet = new HashSet<>(categories);
