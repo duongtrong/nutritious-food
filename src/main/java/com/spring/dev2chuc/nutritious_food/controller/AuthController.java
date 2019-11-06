@@ -1,13 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.exception.AppException;
-import com.spring.dev2chuc.nutritious_food.model.Role;
-import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.*;
-import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
-import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
 import com.spring.dev2chuc.nutritious_food.security.JwtTokenProvider;
+import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.Collections;
 import java.util.Optional;
 
 @RestController
@@ -35,10 +28,7 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
+    UserService userService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -49,7 +39,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Optional<User> user = userRepository.findByUsernameOrPhone(loginRequest.getAccount(), loginRequest.getAccount());
+        Optional<User> user = userService.findByUsernameOrPhone(loginRequest.getAccount(), loginRequest.getAccount());
         if (user.isPresent()) {
             User userCurrent = user.get();
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
@@ -65,10 +55,6 @@ public class AuthController {
                     HttpStatus.UNAUTHORIZED);
         }
 
-
-//        passwordEncoder.matches (loginRequest.getPassword(), userCurrent.getPassword());
-
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getAccount(),
@@ -77,47 +63,57 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Success", jwt));
-//        return new ResponseEntity(new ApiResponse(true, "User create", new JwtAuthenticationResponse(jwt)), HttpStatus.CREATED);
 
+        return new ResponseEntity<>(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Login Success", jwt), HttpStatus.OK);
     }
+
+    // signup for permission user
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userService.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (userRepository.existsByPhone(signUpRequest.getPhone())) {
+        if (userService.existsByPhone(signUpRequest.getPhone())) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Phone Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        // Creating user's account
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-                signUpRequest.getEmail(), signUpRequest.getPassword(), signUpRequest.getPhone());
+        User current = new User();
+        User result = userService.merge(current, signUpRequest);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "User registered successfully", result), HttpStatus.CREATED);
+    }
 
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
+    // private sign up for permission admin
 
-        user.setRoles(Collections.singleton(userRole));
+    @PostMapping("/admin/signup")
+    public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignUpRequest signUpRequest) {
+        if (userService.existsByUsername(signUpRequest.getUsername())) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
-        User result = userRepository.save(user);
+        if (userService.existsByPhone(signUpRequest.getPhone())) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Phone Address already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/users/{username}")
-                .buildAndExpand(result.getUsername()).toUri();
+        if(userService.existsByEmail(signUpRequest.getEmail())) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email Address already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
-        return ResponseEntity.created(location).body(new ApiResponse(HttpStatus.CREATED.value(), "User registered successfully", result));
+        User current = new User();
+        User result = userService.mergeAdmin(current, signUpRequest);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Admin create successfully", result), HttpStatus.CREATED);
     }
 }

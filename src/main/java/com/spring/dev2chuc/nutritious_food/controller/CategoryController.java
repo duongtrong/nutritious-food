@@ -6,6 +6,7 @@ import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.CategoryRequest;
 import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
+import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
+
     @Autowired
-    CategoryRepository categoryRepository;
+    CategoryService categoryService;
 
     @PostMapping("/create")
     public ResponseEntity<?> store(@Valid @RequestBody CategoryRequest categoryRequest) {
-        Category category = new Category(categoryRequest.getParentId(), categoryRequest.getName(), categoryRequest.getImage(), categoryRequest.getDescription());
-        Category result = categoryRepository.save(category);
+        Category current = new Category();
+        Category result = categoryService.merge(current, categoryRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
@@ -38,46 +40,40 @@ public class CategoryController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> store(@Valid @RequestBody CategoryRequest categoryRequest, @PathVariable("id") Long id) {
-        Category category = categoryRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        Category category = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (category == null) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
-        if (categoryRequest.getName() != null) category.setName(categoryRequest.getName());
-        if (categoryRequest.getImage() != null) category.setImage(categoryRequest.getImage());
-        if (categoryRequest.getDescription() != null) category.setDescription(categoryRequest.getDescription());
-        if (categoryRequest.getParentId() != null) category.setParentId(categoryRequest.getParentId());
-        Category result = categoryRepository.save(category);
+        Category result = categoryService.update(category, categoryRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        Category result = categoryRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        Category result = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (result == null) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
         result.setStatus(Status.DEACTIVE.getValue());
-        categoryRepository.save(result);
+        categoryService.merge(result);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "ok", result), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<?> listAll() {
-        List<Category> result = categoryRepository.findAllByStatusIs(Status.ACTIVE.getValue());
+        List<Category> result = categoryService.findAllByStatusIs(Status.ACTIVE.getValue());
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "ok", result), HttpStatus.OK);
     }
 
     @GetMapping("/parent/{id}")
     public ResponseEntity<?> getByParentId(@PathVariable("id") Long id) {
-        List<Category> result = categoryRepository.queryCategoriesByParentIdAndStatus(id, Status.ACTIVE.getValue());
+        List<Category> result = categoryService.findByCategoriesByParentIdAndStatus(id, Status.ACTIVE.getValue());
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "ok", result), HttpStatus.OK);
     }
 
     @GetMapping("/latest")
     public ResponseEntity<?> latest() {
-        List<Category> categoryList = categoryRepository.findAll();
-//        Collections.reverse(categoryList);
-//        return new ResponseEntity(new ApiResponse(true, "ok", categoryList), HttpStatus.OK);
+        List<Category> categoryList = categoryService.findAll();
         List<Category> categoryResult = new ArrayList<Category>();
         Long parentId = Long.valueOf("0");
         List<Category> result = CategoryHelper.recusiveCategory(categoryList, parentId, "", categoryResult);
