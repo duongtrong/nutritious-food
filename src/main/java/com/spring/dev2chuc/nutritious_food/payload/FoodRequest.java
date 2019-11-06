@@ -27,5 +27,6 @@ public class FoodRequest {
     private float vitaminC;
     private float vitaminD;
     private float vitaminE;
+    private float calorie;
     private List<Long> cateId;
 }

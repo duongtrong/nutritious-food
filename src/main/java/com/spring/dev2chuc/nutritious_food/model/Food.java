@@ -36,6 +36,7 @@ public class Food extends DateAudit {
     private float vitaminC;
     private float vitaminD;
     private float vitaminE;
+    private float calorie;
     private int status;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -49,7 +50,7 @@ public class Food extends DateAudit {
     public Food() {
     }
 
-    public Food(String name, String description, String image, float price, float carbonhydrates, float protein, float lipid, float xenluloza, float canxi, float iron, float zinc, float vitaminA, float vitaminB, float vitaminC, float vitaminD, float vitaminE) {
+    public Food(String name, String description, String image, float price, float carbonhydrates, float protein, float lipid, float xenluloza, float canxi, float iron, float zinc, float vitaminA, float vitaminB, float vitaminC, float vitaminD, float vitaminE, float calorie) {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -66,6 +67,7 @@ public class Food extends DateAudit {
         this.vitaminC = vitaminC;
         this.vitaminD = vitaminD;
         this.vitaminE = vitaminE;
+        this.calorie = calorie;
         this.status = Status.ACTIVE.getValue();
     }
 }

@@ -50,7 +50,8 @@ public class FoodController {
                 foodRequest.getVitaminB(),
                 foodRequest.getVitaminC(),
                 foodRequest.getVitaminD(),
-                foodRequest.getVitaminE()
+                foodRequest.getVitaminE(),
+                foodRequest.getCalorie()
         );
 
         if (foodRequest.getCateId().size() > 0) {
@@ -82,6 +83,7 @@ public class FoodController {
         if (foodRequest.getVitaminC() != 0.0f) food.setVitaminC(foodRequest.getVitaminC());
         if (foodRequest.getVitaminD() != 0.0f) food.setVitaminD(foodRequest.getVitaminD());
         if (foodRequest.getVitaminE() != 0.0f) food.setVitaminE(foodRequest.getVitaminE());
+        if (foodRequest.getCalorie() != 0.0f) food.setCalorie(foodRequest.getCalorie());
 
         if (foodRequest.getCateId().size() > 0) {
             List<Category> categories = categoryRepository.findAllByIdIn(foodRequest.getCateId());
