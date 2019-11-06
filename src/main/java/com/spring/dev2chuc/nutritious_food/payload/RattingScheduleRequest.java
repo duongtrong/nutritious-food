@@ -7,12 +7,12 @@ import javax.persistence.Column;
 
 @Getter
 @Setter
-public class RattingFoodRequest {
+public class RattingScheduleRequest {
     private Integer rate;
     @Column(columnDefinition = "TEXT")
     private String comment;
     private String image;
 
     private Long userId;
-    private Long foodId;
+    private Long scheduleId;
 }

@@ -29,7 +29,7 @@ public class FoodController {
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Food> foodList = foodRepository.findAll();
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -60,7 +60,7 @@ public class FoodController {
         }
 
         Food current = foodRepository.save(food);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED.value(), "Create new food success", current), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create new food success", current), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
@@ -90,6 +90,6 @@ public class FoodController {
         }
 
         Food result = foodRepository.save(food);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 }

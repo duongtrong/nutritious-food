@@ -1,9 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.Food;
-import com.spring.dev2chuc.nutritious_food.model.RattingFood;
-import com.spring.dev2chuc.nutritious_food.model.User;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.RattingComboRequest;
 import com.spring.dev2chuc.nutritious_food.payload.RattingFoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.repository.RattingFoodRepository;
@@ -39,12 +39,35 @@ public class RattingFoodController {
         rattingFood.setUser(user);
         rattingFood.setFood(food);
         RattingFood result = rattingFoodRepository.save(rattingFood);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> getList() {
         List<RattingFood> rattingFoods = rattingFoodRepository.findAll();
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "OK", rattingFoods), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", rattingFoods), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@Valid @RequestBody RattingFoodRequest rattingFoodRequest, @PathVariable Long id){
+        RattingFood rattingFood = rattingFoodRepository.findById(id).orElseThrow(null);
+        if (rattingFoodRequest.getRate() != null) rattingFood.setRate(rattingFoodRequest.getRate());
+        if (rattingFoodRequest.getComment() != null) rattingFood.setComment(rattingFoodRequest.getComment());
+        if (rattingFoodRequest.getImage() != null) rattingFood.setImage(rattingFoodRequest.getImage());
+
+        User user = userRepository.findById(rattingFoodRequest.getUserId()).orElseThrow(null);
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        }
+        rattingFood.setUser(user);
+
+        Food food = foodRepository.findById(rattingFoodRequest.getFoodId()).orElseThrow(null);
+        if (food == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+        }
+        rattingFood.setFood(food);
+
+        RattingFood result = rattingFoodRepository.save(rattingFood);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 }
