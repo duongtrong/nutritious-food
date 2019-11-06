@@ -39,7 +39,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getDtail(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(null);
         return new ResponseEntity<> (new ApiResponse(true, "OK", schedule), HttpStatus.OK);
     }
