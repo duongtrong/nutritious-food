@@ -1,10 +1,8 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Combo;
-import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
 import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
 import org.slf4j.Logger;
@@ -54,7 +52,7 @@ public class ComboController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
-        Combo combo = comboRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        Combo combo = comboService.findByStatusAndId(Status.ACTIVE.getValue(), id);
         if (combo == null) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
@@ -65,12 +63,12 @@ public class ComboController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        Combo combo = comboRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        Combo combo = comboService.findByStatusAndId(Status.ACTIVE.getValue(), id);
         if (combo == null) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
         combo.setStatus(Status.DEACTIVE.getValue());
-        comboRepository.save(combo);
+        comboService.merge(combo);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", combo), HttpStatus.OK);
     }
 }
