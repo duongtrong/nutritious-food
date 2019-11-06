@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,6 +23,9 @@ public class Order extends DateAudit {
     private float totalPrice;
     private int type;
     private int status;
+
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+//    private Set<OrderDetail> orderDetails;
 
     public Order(User user, float totalPrice) {
         this.user = user;
