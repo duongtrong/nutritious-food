@@ -39,12 +39,12 @@ public class RattingFoodController {
         rattingFood.setUser(user);
         rattingFood.setFood(food);
         RattingFood result = rattingFoodRepository.save(rattingFood);
-        return new ResponseEntity<>(new ApiResponse(true, "ok", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> getList() {
         List<RattingFood> rattingFoods = rattingFoodRepository.findAll();
-        return new ResponseEntity<>(new ApiResponse(true, "OK", rattingFoods), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "OK", rattingFoods), HttpStatus.OK);
     }
 }
