@@ -32,7 +32,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
-        Category result = categoryRepository.findById(id).orElseThrow(null);
+        Category result = categoryRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 
@@ -61,7 +61,7 @@ public class CategoryController {
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "ok", result), HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<?> listAll() {
         List<Category> result = categoryRepository.findAllByStatusIs(Status.ACTIVE.getValue());
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "ok", result), HttpStatus.OK);

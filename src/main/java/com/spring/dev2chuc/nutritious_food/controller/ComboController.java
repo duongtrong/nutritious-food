@@ -3,6 +3,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Food;
+import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
 import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
@@ -72,14 +73,17 @@ public class ComboController {
 
     @GetMapping
     public ResponseEntity<?> getList() {
-        List<Combo> combos = comboRepository.findAll();
+        List<Combo> combos = comboRepository.findAllByStatus(Status.ACTIVE.getValue());
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", combos), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update")
     public ResponseEntity<?> update(@Valid @RequestBody ComboRequest comboRequest,
                                     @PathVariable Long id) {
-        Combo combo = comboRepository.findById(id).orElseThrow(null);
+        Combo combo = comboRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        if (combo == null) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+        }
         if (comboRequest.getName() != null) combo.setName(comboRequest.getName());
         if (comboRequest.getDescription() != null) combo.setDescription(comboRequest.getDescription());
         if (comboRequest.getImage() != null) combo.setImage(comboRequest.getImage());
@@ -110,5 +114,27 @@ public class ComboController {
         Combo result = comboRepository.save(combo);
 
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> show(@PathVariable("id") Long id) {
+        Combo combo = comboRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        if (combo == null) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", combo), HttpStatus.OK);
+    }
+
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        Combo combo = comboRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        if (combo == null) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+        }
+        combo.setStatus(Status.DEACTIVE.getValue());
+        comboRepository.save(combo);
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", combo), HttpStatus.OK);
     }
 }
