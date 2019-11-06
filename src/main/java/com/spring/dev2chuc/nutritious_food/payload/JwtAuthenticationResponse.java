@@ -1,5 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.payload;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class JwtAuthenticationResponse {
     private int status;
     private String message;
@@ -10,29 +15,5 @@ public class JwtAuthenticationResponse {
         this.message = message;
         String tokenType = "Bearer";
         this.accessToken = tokenType + " " + accessToken;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
     }
 }
