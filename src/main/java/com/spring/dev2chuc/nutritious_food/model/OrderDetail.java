@@ -32,6 +32,7 @@ public class OrderDetail extends DateAudit {
     private Schedule schedule;
 
     private Integer quantity;
+    private Integer type;
     private float price;
     private Integer status;
 
@@ -42,6 +43,34 @@ public class OrderDetail extends DateAudit {
         this.schedule = schedule;
         this.quantity = quantity;
         this.price = price;
+        this.status = Status.ACTIVE.getValue();
+    }
+
+    public OrderDetail(Order order, Food food, Integer quantity, float price) {
+        this.order = order;
+        this.food = food;
+        this.quantity = quantity;
+        this.type = 1;
+        this.price = price;
+        this.status = Status.ACTIVE.getValue();
+    }
+
+    public OrderDetail(Order order, Combo combo, Integer quantity, float price) {
+        this.order = order;
+        this.combo = combo;
+        this.quantity = quantity;
+        this.type = 2;
+        this.price = price;
+        this.status = Status.ACTIVE.getValue();
+    }
+
+    public OrderDetail(Order order, Schedule schedule, Integer quantity, float price) {
+        this.order = order;
+        this.schedule = schedule;
+        this.quantity = quantity;
+        this.type = 3;
+        this.price = price;
+        this.status = Status.ACTIVE.getValue();
     }
 
     public OrderDetail() {
