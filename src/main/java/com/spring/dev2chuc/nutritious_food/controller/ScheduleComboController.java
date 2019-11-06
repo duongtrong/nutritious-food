@@ -9,6 +9,9 @@ import com.spring.dev2chuc.nutritious_food.payload.ScheduleComboRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ComboRepository;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleComboRepository;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
+import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
+import com.spring.dev2chuc.nutritious_food.service.schedule.ScheduleService;
+import com.spring.dev2chuc.nutritious_food.service.schedulecombo.ScheduleComboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +25,17 @@ import java.util.List;
 public class ScheduleComboController {
 
     @Autowired
-    ScheduleRepository scheduleRepository;
+    ComboService comboService;
 
     @Autowired
-    ComboRepository comboRepository;
+    ScheduleService scheduleService;
 
     @Autowired
-    ScheduleComboRepository scheduleComboRepository;
+    ScheduleComboService scheduleComboService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
-        ScheduleCombo scheduleCombo = scheduleComboRepository.findById(id).orElseThrow(null);
+        ScheduleCombo scheduleCombo = scheduleComboService.findById(id);
         if (scheduleCombo == null)
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Combo of schedule notfound"), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", scheduleCombo), HttpStatus.OK);
@@ -40,26 +43,40 @@ public class ScheduleComboController {
 
     @PostMapping("/create")
     public ResponseEntity<?> store(@Valid @RequestBody ScheduleComboRequest scheduleComboRequest) {
-        Combo combo = comboRepository.findById(scheduleComboRequest.getComboId()).orElseThrow(null);
-        Schedule schedule = scheduleRepository.findById(scheduleComboRequest.getScheduleId()).orElseThrow(null);
-        ScheduleCombo scheduleCombo = new ScheduleCombo(scheduleComboRequest.getDay(), scheduleComboRequest.getType());
+        ScheduleCombo scheduleCombo = new ScheduleCombo();
+        Combo combo = comboService.findById(scheduleComboRequest.getComboId());
+        if (combo == null) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+        }
         scheduleCombo.setCombo(combo);
+
+        Schedule schedule = scheduleService.findById(scheduleComboRequest.getScheduleId());
+        if (schedule == null) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);
+        }
         scheduleCombo.setSchedule(schedule);
-        ScheduleCombo result = scheduleComboRepository.save(scheduleCombo);
+
+        ScheduleCombo result = scheduleComboService.merge(scheduleCombo, scheduleComboRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/schedule/{id}")
     public ResponseEntity<?> getAllByScheduleId(@PathVariable("id") Long id) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(null);
-        List<ScheduleCombo> scheduleCombos = scheduleComboRepository.findAllBySchedule(schedule);
+        Schedule schedule = scheduleService.findById(id);
+        if (schedule == null) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);
+        }
+        List<ScheduleCombo> scheduleCombos = scheduleComboService.findAllBySchedule(schedule);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", scheduleCombos), HttpStatus.OK);
     }
 
     @GetMapping("/combo/{id}")
     public ResponseEntity<?> getAllByComboId(@PathVariable("id") Long id) {
-        Combo combo = comboRepository.findById(id).orElseThrow(null);
-        List<ScheduleCombo> scheduleCombos = scheduleComboRepository.findAllByCombo(combo);
+        Combo combo = comboService.findById(id);
+        if (combo == null) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+        }
+        List<ScheduleCombo> scheduleCombos = scheduleComboService.findAllByCombo(combo);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", scheduleCombos), HttpStatus.OK);
     }
 }
