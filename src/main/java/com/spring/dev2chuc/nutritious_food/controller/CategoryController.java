@@ -34,7 +34,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
-        Category result = categoryRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
+        Category result = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 
