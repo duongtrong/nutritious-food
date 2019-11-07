@@ -6,6 +6,7 @@ import com.spring.dev2chuc.nutritious_food.model.OrderDetail;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class OrderResponse {
     private Long id;
@@ -27,6 +28,18 @@ public class OrderResponse {
         this.type = order.getType();
         this.status = order.getStatus();
         this.orderDetail = orderDetails;
+        this.createdAt = DateTimeHelper.formatDateFromLong(order.getCreatedAt());
+        this.updatedAt = DateTimeHelper.formatDateFromLong(order.getUpdatedAt());
+    }
+
+    public OrderResponse(Order order) {
+        this.id = order.getId();
+        this.userId = order.getUser().getId();
+        this.userName = order.getUser().getUsername();
+        this.totalPrice = order.getTotalPrice();
+        this.type = order.getType();
+        this.status = order.getStatus();
+        this.orderDetail = order.getOrderDetails().stream().map(orderDetail -> new OnlyOrderDetailResponse(orderDetail)).collect(Collectors.toSet());
         this.createdAt = DateTimeHelper.formatDateFromLong(order.getCreatedAt());
         this.updatedAt = DateTimeHelper.formatDateFromLong(order.getUpdatedAt());
     }

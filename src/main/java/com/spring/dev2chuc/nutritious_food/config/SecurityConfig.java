@@ -83,6 +83,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/auth/**")
                 .permitAll()
+                .antMatchers(HttpMethod.POST,
+                        "/api/food/**",
+                        "/api/combo/**")
+                .hasAnyRole("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET,
                         "/api/users/**",
                         "/api/category/**",

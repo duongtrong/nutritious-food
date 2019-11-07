@@ -24,8 +24,8 @@ public class Order extends DateAudit {
     private int type;
     private int status;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
-//    private Set<OrderDetail> orderDetails;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    private Set<OrderDetail> orderDetails;
 
     public Order(User user, float totalPrice) {
         this.user = user;
