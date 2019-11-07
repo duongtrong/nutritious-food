@@ -4,9 +4,11 @@ import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -41,8 +43,8 @@ public class User extends DateAudit {
     @Email
     private String email;
 
-    @NotNull(message = "Password is a required field")
-    @Size(min = 8, max = 16, message = "Password must be equal to or greater than 8 characters and less than 16 characters")
+    @NotBlank
+    @Length(max = 100)
     private String password;
 
     @NotNull
