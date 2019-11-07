@@ -11,7 +11,6 @@ import java.util.List;
 public class ComboRequest {
 
     private String name;
-    @Column(columnDefinition = "TEXT")
     private String description;
     private String image;
     private float price;

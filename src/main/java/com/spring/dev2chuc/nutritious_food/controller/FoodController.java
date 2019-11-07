@@ -6,6 +6,7 @@ import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
+import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,77 +22,29 @@ import java.util.Set;
 public class FoodController {
 
     @Autowired
-    FoodRepository foodRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
+    FoodService foodService;
 
     @GetMapping
     public ResponseEntity<?> getList() {
-        List<Food> foodList = foodRepository.findAll();
+        List<Food> foodList = foodService.findAll();
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest) {
-        Food food = new Food(
-                foodRequest.getName(),
-                foodRequest.getDescription(),
-                foodRequest.getImage(),
-                foodRequest.getPrice(),
-                foodRequest.getCarbonhydrates(),
-                foodRequest.getProtein(),
-                foodRequest.getLipid(),
-                foodRequest.getXenluloza(),
-                foodRequest.getCanxi(),
-                foodRequest.getIron(),
-                foodRequest.getZinc(),
-                foodRequest.getVitaminA(),
-                foodRequest.getVitaminB(),
-                foodRequest.getVitaminC(),
-                foodRequest.getVitaminD(),
-                foodRequest.getVitaminE(),
-                foodRequest.getCalorie()
-        );
-
-        if (foodRequest.getCateId().size() > 0) {
-            List<Category> categories = categoryRepository.findAllByIdIn(foodRequest.getCateId());
-            Set<Category> categorySet = new HashSet<>(categories);
-            food.setCategories(categorySet);
-        }
-
-        Food current = foodRepository.save(food);
+        Food food = new Food();
+        Food current = foodService.merge(food, foodRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create new food success", current), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody FoodRequest foodRequest, @PathVariable("id") Long id) {
-        Food food = foodRepository.findById(id).orElseThrow(null);
-        if (foodRequest.getName() != null) food.setName(foodRequest.getName());
-        if (foodRequest.getDescription() != null) food.setDescription(foodRequest.getDescription());
-        if (foodRequest.getImage() != null) food.setImage(foodRequest.getImage());
-        if (foodRequest.getPrice() != 0.0f) food.setPrice(foodRequest.getPrice());
-        if (foodRequest.getCarbonhydrates() != 0.0f) food.setCarbonhydrates(foodRequest.getCarbonhydrates());
-        if (foodRequest.getProtein() != 0.0f) food.setProtein(foodRequest.getProtein());
-        if (foodRequest.getLipid() != 0.0f) food.setLipid(foodRequest.getLipid());
-        if (foodRequest.getXenluloza() != 0.0f) food.setXenluloza(foodRequest.getXenluloza());
-        if (foodRequest.getCanxi() != 0.0f) food.setCanxi(foodRequest.getCanxi());
-        if (foodRequest.getIron() != 0.0f) food.setIron(foodRequest.getIron());
-        if (foodRequest.getZinc() != 0.0f) food.setZinc(foodRequest.getZinc());
-        if (foodRequest.getVitaminA() != 0.0f) food.setVitaminA(foodRequest.getVitaminA());
-        if (foodRequest.getVitaminB() != 0.0f) food.setVitaminB(foodRequest.getVitaminB());
-        if (foodRequest.getVitaminC() != 0.0f) food.setVitaminC(foodRequest.getVitaminC());
-        if (foodRequest.getVitaminD() != 0.0f) food.setVitaminD(foodRequest.getVitaminD());
-        if (foodRequest.getVitaminE() != 0.0f) food.setVitaminE(foodRequest.getVitaminE());
-        if (foodRequest.getCalorie() != 0.0f) food.setCalorie(foodRequest.getCalorie());
-
-        if (foodRequest.getCateId().size() > 0) {
-            List<Category> categories = categoryRepository.findAllByIdIn(foodRequest.getCateId());
-            Set<Category> categorySet = new HashSet<>(categories);
-            food.setCategories(categorySet);
+        Food food = foodService.findById(id);
+        if (food == null) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
         }
 
-        Food result = foodRepository.save(food);
+        Food result = foodService.merge(food);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 }
