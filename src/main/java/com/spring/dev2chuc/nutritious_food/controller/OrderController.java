@@ -1,10 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.OnlyOrderDetailResponse;
-import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
-import com.spring.dev2chuc.nutritious_food.payload.OrderResponse;
+import com.spring.dev2chuc.nutritious_food.payload.*;
 import com.spring.dev2chuc.nutritious_food.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,12 +44,12 @@ public class OrderController {
             String username = authentication.getName();
             User user = userRepository.findByUsername(username);
             if (user == null) {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
             }
             List<Order> orderList = orderRepository.findAllByUser(user);
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", orderList), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
@@ -62,7 +59,7 @@ public class OrderController {
             String username = authentication.getName();
             User user = userRepository.findByUsername(username);
             if (user == null) {
-                return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
             }
             Order order = new Order(user, (float) 0);
             Order orderSave = orderRepository.save(order);
@@ -99,7 +96,7 @@ public class OrderController {
                             orderRequest.getPrice()
                     );
                 } else {
-                    return new ResponseEntity<>(new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Data not match"), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Data not match"), HttpStatus.BAD_REQUEST);
                 }
                 OrderDetail orderDetail = orderDetailRepository.save(orderDetailCurrent);
                 onlyOrderDetailResponse = new OnlyOrderDetailResponse(orderDetail);
@@ -111,7 +108,7 @@ public class OrderController {
             OrderResponse orderResponse = new OrderResponse(orderSavePrice, onlyOrderDetailResponses);
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Save order success", orderResponse), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{id}")
@@ -121,15 +118,15 @@ public class OrderController {
             String username = authentication.getName();
             User user = userRepository.findByUsername(username);
             if (user == null) {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
             }
             Order order = orderRepository.findById(id).orElseThrow(null);
             if (order == null) {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "Order not found"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Order not found"), HttpStatus.NOT_FOUND);
             }
 
             if (!order.getUser().equals(user)) {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Order not accept for you"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Order not accept for you"), HttpStatus.BAD_REQUEST);
             }
             List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderAndStatus(order, Status.ACTIVE.getValue());
             Set<OnlyOrderDetailResponse> onlyOrderDetailResponses = new HashSet<>();
@@ -140,6 +137,6 @@ public class OrderController {
             OrderResponse orderResponse = new OrderResponse(order, onlyOrderDetailResponses);
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", orderResponse), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
     }
 }

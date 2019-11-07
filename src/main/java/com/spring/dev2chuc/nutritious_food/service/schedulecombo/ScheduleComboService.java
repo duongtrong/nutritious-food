@@ -11,11 +11,13 @@ public interface ScheduleComboService {
 
     ScheduleCombo findById(Long id);
 
+    ScheduleCombo merge(ScheduleCombo scheduleCombo);
+
     List<ScheduleCombo> findAllByCombo(Combo combo);
 
     List<ScheduleCombo> findAllBySchedule(Schedule schedule);
 
-    ScheduleCombo update(ScheduleCombo scheduleCombo, ScheduleComboRequest scheduleComboRequest);
+    ScheduleCombo findByStatusAndId(Integer status, Long id);
 
     ScheduleCombo merge(ScheduleCombo scheduleCombo, ScheduleComboRequest scheduleComboRequest);
 

@@ -18,5 +18,7 @@ public interface FoodService {
 
     Food merge(Food food, FoodRequest foodRequest);
 
-    List<Food> findAllByIdIn(Collection<Long> Ids);
+    Food findByStatusAndId(Integer status, Long id);
+
+    List<Food> findAllByIdIn(Collection<Long> ids);
 }

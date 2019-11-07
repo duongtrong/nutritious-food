@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface ScheduleComboRepository extends JpaRepository<ScheduleCombo, Long> {
     List<ScheduleCombo> findAllByCombo(Combo combo);
+
     List<ScheduleCombo> findAllBySchedule(Schedule schedule);
+
+    ScheduleCombo findByStatusAndId(Integer status, Long id);
 }

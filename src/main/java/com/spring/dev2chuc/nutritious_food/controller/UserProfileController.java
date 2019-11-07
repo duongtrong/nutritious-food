@@ -8,6 +8,8 @@ import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserProfileRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
+import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
+import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,26 +21,28 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user-profile")
 public class UserProfileController {
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
 
     @Autowired
     UserProfileRepository userProfileRepository;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    CategoryService categoryService;
 
     @PutMapping("/update")
     public ResponseEntity<Object> update(@Valid @RequestBody UserProfileRequest userProfileRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String username = authentication.getName();
-            User user = userRepository.findByUsername(username);
+            User user = userService.findByUsername(username);
             System.out.println(username + " == " + user.getId());
 
             if (user == null) {
@@ -61,7 +65,7 @@ public class UserProfileController {
     public ResponseEntity<?> updateCategory(@Valid @RequestBody List<Long> ids, @PathVariable("id") Long id) {
         System.out.println(ids);
         UserProfile userProfile = userProfileRepository.findById(id).orElseThrow(null);
-        List<Category> categories = categoryRepository.findAllByIdIn(ids);
+        List<Category> categories = categoryService.findAllByIdIn(ids);
         System.out.println(categories.size());
         Set<Category> categorySet = new HashSet<>(categories);
         userProfile.setCategories(categorySet);

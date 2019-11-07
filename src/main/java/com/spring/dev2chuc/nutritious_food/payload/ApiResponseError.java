@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ApiResponseError {
-
     private int status;
     private String message;
 
@@ -15,3 +14,5 @@ public class ApiResponseError {
         this.message = message;
     }
 }
+
+

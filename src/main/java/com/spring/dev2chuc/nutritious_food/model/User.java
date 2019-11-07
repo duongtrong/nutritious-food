@@ -7,7 +7,7 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,10 +17,10 @@ import java.util.Set;
 @Setter
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
-            "username"
+                "username"
         }),
         @UniqueConstraint(columnNames = {
-            "email"
+                "email"
         })
 })
 public class User extends DateAudit {
@@ -28,12 +28,12 @@ public class User extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 40)
+    @NotNull
+    @Size(min = 6, max = 40)
     private String name;
 
-    @NotBlank
-    @Size(max = 15)
+    @NotNull
+    @Size(min = 6, max = 15)
     private String username;
 
     @NaturalId
@@ -41,11 +41,11 @@ public class User extends DateAudit {
     @Email
     private String email;
 
-    @NotBlank
-    @Size(max = 100)
+    @NotNull(message = "Password is a required field")
+    @Size(min = 8, max = 16, message = "Password must be equal to or greater than 8 characters and less than 16 characters")
     private String password;
 
-    @NotBlank
+    @NotNull
     @Size(max = 20)
     private String phone;
 

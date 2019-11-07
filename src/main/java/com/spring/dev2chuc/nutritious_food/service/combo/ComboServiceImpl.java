@@ -10,7 +10,9 @@ import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +31,9 @@ public class ComboServiceImpl implements ComboService{
 
     @Override
     public Combo findById(Long id) {
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new NullPointerException("Null pointer exception");
+        }
         return comboRepository.findById(id).orElseThrow(null);
     }
 
@@ -112,9 +117,16 @@ public class ComboServiceImpl implements ComboService{
 
     @Override
     public Combo findByStatusAndId(Integer status, Long id) {
+        if (CollectionUtils.isEmpty(Collections.singleton(status))) {
+            throw new RuntimeException("Null pointer exception");
+        }
+
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new RuntimeException("Null pointer exception");
+        }
         Combo combo = comboRepository.findByStatusAndId(status, id);
         if (combo == null) {
-            return null;
+            throw new RuntimeException("Null pointer exception");
         }
         return combo;
     }

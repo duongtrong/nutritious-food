@@ -2,8 +2,6 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
-import com.spring.dev2chuc.nutritious_food.payload.RattingComboRequest;
 import com.spring.dev2chuc.nutritious_food.payload.RattingFoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.repository.RattingFoodRepository;
@@ -57,13 +55,13 @@ public class RattingFoodController {
 
         User user = userRepository.findById(rattingFoodRequest.getUserId()).orElseThrow(null);
         if (user == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         }
         rattingFood.setUser(user);
 
         Food food = foodRepository.findById(rattingFoodRequest.getFoodId()).orElseThrow(null);
         if (food == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
         rattingFood.setFood(food);
 

@@ -44,13 +44,13 @@ public class AuthController {
             User userCurrent = user.get();
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
-                        new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
+                        new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
                                 "Password not matches"),
                         HttpStatus.UNAUTHORIZED);
             }
         } else {
             return new ResponseEntity<>(
-                    new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
+                    new ApiResponse(HttpStatus.UNAUTHORIZED.value(),
                             "Account notfound"),
                     HttpStatus.UNAUTHORIZED);
         }
@@ -73,7 +73,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -98,7 +98,7 @@ public class AuthController {
     @PostMapping("/admin/signup")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
