@@ -3,7 +3,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.RattingCombo;
 import com.spring.dev2chuc.nutritious_food.model.User;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.RattingComboRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ComboRepository;
 import com.spring.dev2chuc.nutritious_food.repository.RattingComboRepository;

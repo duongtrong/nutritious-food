@@ -2,6 +2,8 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.*;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.JwtAuthenticationResponse;
 import com.spring.dev2chuc.nutritious_food.security.JwtTokenProvider;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.RattingFoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.repository.RattingFoodRepository;

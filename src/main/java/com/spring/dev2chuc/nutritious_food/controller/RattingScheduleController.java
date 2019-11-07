@@ -1,13 +1,12 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.RattingScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.RattingScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
-import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -2,8 +2,8 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.service.schedule.ScheduleService;

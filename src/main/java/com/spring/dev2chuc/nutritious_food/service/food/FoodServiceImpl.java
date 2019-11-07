@@ -7,6 +7,9 @@ import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -73,8 +76,8 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public Food merge(Food food, FoodRequest foodRequest) {
         food.setName(foodRequest.getName());
-        food.setName(foodRequest.getDescription());
-        food.setName(foodRequest.getImage());
+        food.setDescription(foodRequest.getDescription());
+        food.setImage(foodRequest.getImage());
         food.setPrice(foodRequest.getPrice());
         food.setCarbonhydrates(foodRequest.getCarbonhydrates());
         food.setProtein(foodRequest.getProtein());
@@ -125,5 +128,11 @@ public class FoodServiceImpl implements FoodService {
             throw new RuntimeException("Null pointer exception...");
         }
         return list;
+    }
+
+    @Override
+    public Page<Food> foodsWithPaginate(Specification specification, int page, int limit) {
+        List<Food> foodList = foodRepository.findAllByStatus(Status.ACTIVE.getValue());
+        return foodRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 }
