@@ -65,17 +65,17 @@ public class FoodController {
 
     @GetMapping("/list")
     public ResponseEntity<?> getListPage(
-            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "form", required = false) String form,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int limit){
 
         Specification specification = Specification.where(null);
-        if (keyword != null && keyword.length() > 0) {
+        if (search != null && search.length() > 0) {
             specification = specification
-                    .and(new SpecificationAll(new SearchCriteria("name", ":", keyword)))
-                    .or(new SpecificationAll(new SearchCriteria("description", ":", keyword)));
+                    .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
+                    .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
         }
 
         specification = specification
