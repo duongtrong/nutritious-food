@@ -1,24 +1,24 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.Category;
-import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
-import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
-import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponsePage;
+import com.spring.dev2chuc.nutritious_food.payload.response.RESTPagination;
+import com.spring.dev2chuc.nutritious_food.payload.response.SearchCriteria;
+import com.spring.dev2chuc.nutritious_food.payload.response.SpecificationAll;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/food")
@@ -60,5 +60,26 @@ public class FoodController {
         food.setStatus(Status.DEACTIVE.getValue());
         foodService.merge(food);
         return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getListPage(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "to", required = false) String to,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int limit){
+
+        Specification specification = Specification.where(null);
+        if (keyword != null && keyword.length() > 0) {
+            specification = specification
+                    .and(new SpecificationAll(new SearchCriteria("name", ":", keyword)))
+                    .or(new SpecificationAll(new SearchCriteria("description", ":", keyword)));
+        }
+
+        Page<Food> foodPage = foodService.foodsWithPaginate(specification, page, limit);
+        return new ResponseEntity<>(new ApiResponsePage<>(
+                HttpStatus.OK.value(), "OK", foodPage,
+                new RESTPagination(page, limit, foodPage.getTotalPages(), foodPage.getTotalElements())), HttpStatus.OK);
     }
 }

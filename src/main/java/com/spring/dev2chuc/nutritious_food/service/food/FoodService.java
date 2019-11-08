@@ -2,6 +2,8 @@ package com.spring.dev2chuc.nutritious_food.service.food;
 
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,4 +23,6 @@ public interface FoodService {
     Food findByStatusAndId(Integer status, Long id);
 
     List<Food> findAllByIdIn(Collection<Long> ids);
+
+    Page<Food> foodsWithPaginate(Specification specification, int page, int limit);
 }

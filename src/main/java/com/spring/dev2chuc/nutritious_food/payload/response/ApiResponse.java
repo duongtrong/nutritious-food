@@ -1,4 +1,4 @@
-package com.spring.dev2chuc.nutritious_food.payload;
+package com.spring.dev2chuc.nutritious_food.payload.response;
 
 import lombok.Getter;
 import lombok.Setter;

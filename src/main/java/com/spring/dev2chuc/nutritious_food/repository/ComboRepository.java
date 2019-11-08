@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface ComboRepository extends JpaRepository<Combo, Long> {
     Combo findByStatusAndId(Integer status, Long id);
+
     List<Combo> findAllByStatus(int Status);
 }
