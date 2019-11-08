@@ -9,6 +9,9 @@ import com.spring.dev2chuc.nutritious_food.repository.ComboRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -129,5 +132,10 @@ public class ComboServiceImpl implements ComboService{
             throw new RuntimeException("Null pointer exception");
         }
         return combo;
+    }
+
+    @Override
+    public Page<Combo> foodsWithPaginate(Specification specification, int page, int limit) {
+        return comboRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 }

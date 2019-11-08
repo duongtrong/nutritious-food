@@ -78,6 +78,9 @@ public class FoodController {
                     .or(new SpecificationAll(new SearchCriteria("description", ":", keyword)));
         }
 
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
+
         Page<Food> foodPage = foodService.foodsWithPaginate(specification, page, limit);
         return new ResponseEntity<>(new ApiResponsePage<>(
                 HttpStatus.OK.value(), "OK", foodPage,
