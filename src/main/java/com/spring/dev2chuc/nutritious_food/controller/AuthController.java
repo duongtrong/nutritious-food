@@ -87,10 +87,10 @@ public class AuthController {
         if (signUpRequest.getUsername() == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your username"),
                     HttpStatus.BAD_REQUEST);
-        } else if (signUpRequest.getUsername().length() > 4) {
+        } else if (signUpRequest.getUsername().length() < 4) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is too short"),
                     HttpStatus.BAD_REQUEST);
-        } else if (signUpRequest.getUsername().length() < 20) {
+        } else if (signUpRequest.getUsername().length() > 20) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is too long"),
                     HttpStatus.BAD_REQUEST);
         } else if (userService.existsByUsername(signUpRequest.getUsername())) {
@@ -104,9 +104,6 @@ public class AuthController {
         } else if (signUpRequest.getPhone().length() < 10) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number is in the wrong format"),
                     HttpStatus.BAD_REQUEST);
-        } else if (signUpRequest.getPhone().length() > 11) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number is in the wrong format"),
-                    HttpStatus.BAD_REQUEST);
         } else if (userService.existsByPhone(signUpRequest.getPhone())) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Phone number already in use!"),
                     HttpStatus.BAD_REQUEST);
@@ -115,7 +112,7 @@ public class AuthController {
         if (signUpRequest.getEmail() == null) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Please enter your email."),
                     HttpStatus.BAD_REQUEST);
-        } else if (signUpRequest.getEmail() != EMAIL_PATTERN) {
+        } else if (!signUpRequest.getEmail().equals(EMAIL_PATTERN)) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email is in the wrong format"),
                     HttpStatus.BAD_REQUEST);
         } else if (userService.existsByEmail(signUpRequest.getEmail())) {
