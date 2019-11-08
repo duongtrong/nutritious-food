@@ -105,15 +105,15 @@ public class AuthController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number is in the wrong format"),
                     HttpStatus.BAD_REQUEST);
         } else if (userService.existsByPhone(signUpRequest.getPhone())) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Phone number already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (signUpRequest.getEmail() == null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Please enter your email."),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your email."),
                     HttpStatus.BAD_REQUEST);
         } else if (userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Email already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -139,17 +139,17 @@ public class AuthController {
     @PostMapping("/admin/signup")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (userService.existsByPhone(signUpRequest.getPhone())) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Phone Address already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if(userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
