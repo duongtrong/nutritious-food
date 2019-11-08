@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.repository;
 
+import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsernameOrPhone(String username, String phone);
 
     List<User> findByIdIn(List<Long> userIds);
+
+    List<User> findAllByRoles(RoleName name);
 
     User findByUsername(String username);
 

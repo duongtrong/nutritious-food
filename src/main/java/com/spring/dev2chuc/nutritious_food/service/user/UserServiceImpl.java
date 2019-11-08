@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,11 +54,6 @@ public class UserServiceImpl<T> implements UserService{
         user.setName(signUpRequest.getName());
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
-
-//        if (signUpRequest.getPassword().length() <= 6) {
-//            return new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too short");
-//        }
-
         user.setPassword(signUpRequest.getPassword());
         user.setPhone(signUpRequest.getPhone());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -82,6 +78,16 @@ public class UserServiceImpl<T> implements UserService{
         user.setRoles(Collections.singleton(userRole));
         return userRepository.save(user);
     }
+
+    @Override
+    public List<User> findAllByRoles(RoleName name) {
+        List<User> list = userRepository.findAllByRoles(name);
+        if (list == null) {
+            throw new RuntimeException("List user by role user null pointer exception...");
+        }
+        return list;
+    }
+
 
     @Override
     public boolean existsByUsername(String username) {
