@@ -21,5 +21,4 @@ public interface FoodRepository extends JpaRepository<Food, Long>, JpaSpecificat
 
     List<Food> findAllByStatus(Integer Status);
 
-    Page<Food> findAll(Specification specification, PageRequest of, Integer status);
 }

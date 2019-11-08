@@ -62,6 +62,7 @@ public class FoodServiceImpl implements FoodService {
         if (foodRequest.getVitaminD() != 0.0f) food.setVitaminD(foodRequest.getVitaminD());
         if (foodRequest.getVitaminE() != 0.0f) food.setVitaminE(foodRequest.getVitaminE());
         if (foodRequest.getCalorie() != 0.0f) food.setCalorie(foodRequest.getCalorie());
+        if (foodRequest.getWeight() != 0.0f) food.setWeight(foodRequest.getWeight());
 
         if (foodRequest.getCateId().size() > 0) {
             List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCateId());
@@ -92,6 +93,7 @@ public class FoodServiceImpl implements FoodService {
         food.setVitaminD(foodRequest.getVitaminD());
         food.setVitaminE(foodRequest.getVitaminE());
         food.setCalorie(foodRequest.getCalorie());
+        food.setWeight(foodRequest.getWeight());
         food.setStatus(Status.ACTIVE.getValue());
 
         if (foodRequest.getCateId().size() > 0) {
