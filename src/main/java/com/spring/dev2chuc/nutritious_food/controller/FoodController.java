@@ -1,8 +1,11 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Category;
+import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Food;
+import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
@@ -46,5 +49,16 @@ public class FoodController {
 
         Food result = foodService.merge(food);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        Food food = foodService.findByStatusAndId(Status.ACTIVE.getValue(), id);
+        if (food == null) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Food not found"), HttpStatus.NOT_FOUND);
+        }
+        food.setStatus(Status.DEACTIVE.getValue());
+        foodService.merge(food);
+        return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
     }
 }

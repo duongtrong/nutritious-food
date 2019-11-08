@@ -3,12 +3,10 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.ScheduleCombo;
+import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleComboRequest;
-import com.spring.dev2chuc.nutritious_food.repository.ComboRepository;
-import com.spring.dev2chuc.nutritious_food.repository.ScheduleComboRepository;
-import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
 import com.spring.dev2chuc.nutritious_food.service.schedule.ScheduleService;
 import com.spring.dev2chuc.nutritious_food.service.schedulecombo.ScheduleComboService;
@@ -37,7 +35,7 @@ public class ScheduleComboController {
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
         ScheduleCombo scheduleCombo = scheduleComboService.findById(id);
         if (scheduleCombo == null)
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Combo of schedule notfound"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Combo of schedule notfound"), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", scheduleCombo), HttpStatus.OK);
     }
 
@@ -78,5 +76,17 @@ public class ScheduleComboController {
         }
         List<ScheduleCombo> scheduleCombos = scheduleComboService.findAllByCombo(combo);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", scheduleCombos), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        ScheduleCombo scheduleCombo = scheduleComboService.findByStatusAndId(Status.ACTIVE.getValue(), id);
+        if (scheduleCombo == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "schedule not found"), HttpStatus.NOT_FOUND);
+        }
+
+        scheduleCombo.setStatus(Status.DEACTIVE.getValue());
+        scheduleComboService.merge(scheduleCombo);
+        return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
     }
 }

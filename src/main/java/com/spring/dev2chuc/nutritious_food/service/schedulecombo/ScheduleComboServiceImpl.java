@@ -9,7 +9,9 @@ import com.spring.dev2chuc.nutritious_food.repository.ScheduleComboRepository;
 import com.spring.dev2chuc.nutritious_food.service.schedule.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,10 +26,15 @@ public class ScheduleComboServiceImpl implements ScheduleComboService {
     }
 
     @Override
+    public ScheduleCombo merge(ScheduleCombo scheduleCombo) {
+        return scheduleComboRepository.save(scheduleCombo);
+    }
+
+    @Override
     public List<ScheduleCombo> findAllByCombo(Combo combo) {
         List<ScheduleCombo> list = scheduleComboRepository.findAllByCombo(combo);
         if (list == null) {
-            return null;
+            throw new RuntimeException("Null pointer exception");
         }
         return list;
     }
@@ -36,14 +43,26 @@ public class ScheduleComboServiceImpl implements ScheduleComboService {
     public List<ScheduleCombo> findAllBySchedule(Schedule schedule) {
         List<ScheduleCombo> list = scheduleComboRepository.findAllBySchedule(schedule);
         if (list == null) {
-            return null;
+            throw new RuntimeException("Null pointer exception");
         }
         return list;
     }
 
     @Override
-    public ScheduleCombo update(ScheduleCombo scheduleCombo, ScheduleComboRequest scheduleComboRequest) {
-        return null;
+    public ScheduleCombo findByStatusAndId(Integer status, Long id) {
+        if (CollectionUtils.isEmpty(Collections.singleton(status))) {
+            throw new RuntimeException("Null pointer exception");
+        }
+
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new RuntimeException("Null pointer exception");
+        }
+
+        ScheduleCombo scheduleCombo = scheduleComboRepository.findByStatusAndId(status, id);
+        if (scheduleCombo == null) {
+            throw new RuntimeException("Null pointer exception");
+        }
+        return scheduleCombo;
     }
 
     @Override

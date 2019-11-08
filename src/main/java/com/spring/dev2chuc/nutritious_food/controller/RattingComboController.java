@@ -4,7 +4,6 @@ import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.RattingCombo;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.RattingComboRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ComboRepository;
 import com.spring.dev2chuc.nutritious_food.repository.RattingComboRepository;
@@ -63,13 +62,13 @@ public class RattingComboController {
 
         User user = userRepository.findById(rattingComboRequest.getUserId()).orElseThrow(null);
         if (user == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         }
         rattingCombo.setUser(user);
 
         Combo combo = comboRepository.findById(rattingComboRequest.getComboId()).orElseThrow(null);
         if (combo == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
         rattingCombo.setCombo(combo);
 

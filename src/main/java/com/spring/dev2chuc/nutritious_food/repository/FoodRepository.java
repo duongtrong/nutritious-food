@@ -11,4 +11,6 @@ import java.util.List;
 public interface FoodRepository extends JpaRepository<Food, Long> {
 
     List<Food> findAllByIdIn(Collection<Long> Ids);
+
+    Food findByStatusAndId(Integer status, Long id);
 }

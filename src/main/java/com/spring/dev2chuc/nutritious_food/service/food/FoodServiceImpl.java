@@ -8,11 +8,9 @@ import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class FoodServiceImpl implements FoodService {
@@ -35,6 +33,9 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public Food findById(Long id) {
+        if (CollectionUtils.isEmpty(Collections.singleton(id))){
+            throw new RuntimeException("Null pointer exception...");
+        }
         Food food = foodRepository.findById(id).orElseThrow(null);
         return food;
     }
@@ -101,10 +102,27 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> findAllByIdIn(Collection<Long> Ids) {
-        List<Food> list = foodRepository.findAllByIdIn(Ids);
+    public Food findByStatusAndId(Integer status, Long id) {
+        if (CollectionUtils.isEmpty(Collections.singleton(status))) {
+            throw new RuntimeException("Null pointer exception");
+        }
+
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new RuntimeException("Null pointer exception");
+        }
+
+        Food food = foodRepository.findByStatusAndId(status, id);
+        return food;
+    }
+
+    @Override
+    public List<Food> findAllByIdIn(Collection<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            throw new RuntimeException("Null pointer exception...");
+        }
+        List<Food> list = foodRepository.findAllByIdIn(ids);
         if (list == null) {
-            return null;
+            throw new RuntimeException("Null pointer exception...");
         }
         return list;
     }

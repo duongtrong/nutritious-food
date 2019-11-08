@@ -3,14 +3,13 @@ package com.spring.dev2chuc.nutritious_food.service.user;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByUsername(String username);
+    User findByUsername(String username);
 
     Optional<User> findByUsernameOrPhone(String username, String phone);
 
