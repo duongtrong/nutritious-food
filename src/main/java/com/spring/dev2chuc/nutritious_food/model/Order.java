@@ -30,6 +30,7 @@ public class Order extends DateAudit {
     public Order(User user, float totalPrice) {
         this.user = user;
         this.totalPrice = totalPrice;
+        this.status = Status.ACTIVE.getValue();
     }
 
     public Order() {

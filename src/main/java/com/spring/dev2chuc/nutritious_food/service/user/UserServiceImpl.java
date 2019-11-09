@@ -9,7 +9,10 @@ import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
 import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -126,5 +129,19 @@ public class UserServiceImpl<T> implements UserService{
             throw new IllegalArgumentException();
         }
         return false;
+    }
+
+    @Override
+    public User getUserAuth() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                return null;
+            }
+            return user;
+        }
+        return null;
     }
 }

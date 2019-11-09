@@ -28,4 +28,7 @@ public interface UserService {
     boolean existsByPhone(String phone);
 
     boolean existsByEmail(String email);
+
+    User getUserAuth();
+
 }
