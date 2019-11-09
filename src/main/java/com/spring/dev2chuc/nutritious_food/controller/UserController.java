@@ -4,6 +4,7 @@ import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
 import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        List<User> users = userService.findAllByRoles(RoleName.ROLE_USER);
+        List<OnlyUserResponse> users = userService.findAllByRoles(RoleName.ROLE_USER);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Success", users), HttpStatus.OK);
     }
 }
