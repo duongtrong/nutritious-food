@@ -1,8 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.User;
-import com.spring.dev2chuc.nutritious_food.payload.*;
+import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
+import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.response.JwtAuthenticationResponse;
 import com.spring.dev2chuc.nutritious_food.security.JwtTokenProvider;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
@@ -86,6 +88,14 @@ public class AuthController {
 
         if (userService.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email Address already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (signUpRequest.getPassword().length() <= 6) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too short"),
+                    HttpStatus.BAD_REQUEST);
+        } else if (signUpRequest.getPassword().length() >= 20) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too long"),
                     HttpStatus.BAD_REQUEST);
         }
 

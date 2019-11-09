@@ -85,8 +85,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST,
                         "/api/food/**",
-                        "/api/combo/**")
-                .hasAnyRole("ROLE_ADMIN")
+                        "/api/category/**",
+                        "/api/combo/**",
+                        "/api/schedule/**",
+                        "/api/schedule-combo/**").hasAnyRole("ROLE_ADMIN")
+                .antMatchers(HttpMethod.PUT,
+                        "/api/food/**",
+                        "/api/category/**",
+                        "/api/combo/**",
+                        "/api/schedule/**",
+                        "/api/schedule-combo/**").hasAnyRole("ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE,
+                        "/api/food/**",
+                        "/api/category/**",
+                        "/api/combo/**",
+                        "/api/schedule/**",
+                        "/api/schedule-combo/**").hasAnyRole("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET,
                         "/api/users/**",
                         "/api/category/**",
@@ -95,7 +109,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/schedule/**",
                         "/api/schedule-combo/**",
                         "/api/combo/**",
-                        "/api/ratting-food/**","/api/ratting-combo/**", "/api/ratting-schedule/**")
+                        "/api/ratting-food/**",
+                        "/api/ratting-combo/**",
+                        "/api/ratting-schedule/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
