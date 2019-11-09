@@ -1,6 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
+import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.User;
+
+import java.util.Set;
 
 public class OnlyUserResponse {
     private Long id;
@@ -8,6 +11,7 @@ public class OnlyUserResponse {
     private String username;
     private String email;
     private String phone;
+    private Set<Role> roles;
     private int status;
 
 
@@ -17,6 +21,7 @@ public class OnlyUserResponse {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.phone = user.getPhone();
+        this.roles = user.getRoles();
         this.status = user.getStatus();
     }
 
@@ -58,6 +63,14 @@ public class OnlyUserResponse {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public int getStatus() {

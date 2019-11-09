@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.repository;
 
+import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +24,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "    INNER JOIN roles ON user_roles.role_id = roles.id\n" +
             "    WHERE roles.name = \"ROLE_USER\"", nativeQuery = true)
     List<User> findAllByRoles(RoleName name);
+
+
+    List<User> queryAllByRolesIsContaining(Role role);
 
     User findByUsername(String username);
 
