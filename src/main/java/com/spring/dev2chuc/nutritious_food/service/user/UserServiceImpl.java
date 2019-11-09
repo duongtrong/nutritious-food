@@ -81,6 +81,7 @@ public class UserServiceImpl<T> implements UserService{
 
     @Override
     public List<User> findAllByRoles(RoleName name) {
+//        Optional<Role> demo = roleRepository.findByName(name);
         List<User> list = userRepository.findAllByRoles(name);
         if (list == null) {
             throw new RuntimeException("List user by role user null pointer exception...");
