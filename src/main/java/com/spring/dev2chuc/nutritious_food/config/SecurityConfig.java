@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.config;
 
+import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.security.CustomUserDetailsService;
 import com.spring.dev2chuc.nutritious_food.security.JwtAuthenticationEntryPoint;
 import com.spring.dev2chuc.nutritious_food.security.JwtAuthenticationFilter;
@@ -88,21 +89,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/category/**",
                         "/api/combo/**",
                         "/api/schedule/**",
-                        "/api/schedule-combo/**").hasAnyRole("ROLE_ADMIN")
+                        "/api/schedule-combo/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.PUT,
                         "/api/food/**",
                         "/api/category/**",
                         "/api/combo/**",
                         "/api/schedule/**",
-                        "/api/schedule-combo/**").hasAnyRole("ROLE_ADMIN")
+                        "/api/schedule-combo/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.DELETE,
                         "/api/food/**",
                         "/api/category/**",
                         "/api/combo/**",
                         "/api/schedule/**",
-                        "/api/schedule-combo/**").hasAnyRole("ROLE_ADMIN")
+                        "/api/schedule-combo/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET,
-                        "/api/users/**").hasAnyRole("ROLE_ADMIN")
+                        "/api/users/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET,
                         "/api/category/**",
                         "/api/user-profile/**",
