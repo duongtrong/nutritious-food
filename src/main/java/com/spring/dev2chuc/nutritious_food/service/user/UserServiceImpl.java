@@ -5,6 +5,7 @@ import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
+import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
 import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl<T> implements UserService{
@@ -80,13 +83,10 @@ public class UserServiceImpl<T> implements UserService{
     }
 
     @Override
-    public List<User> findAllByRoles(RoleName name) {
-//        Optional<Role> demo = roleRepository.findByName(name);
+    public List<OnlyUserResponse> findAllByRoles(RoleName name) {
+        Optional<Role> demo = roleRepository.findByName(name);
         List<User> list = userRepository.findAllByRoles(name);
-        if (list == null) {
-            throw new RuntimeException("List user by role user null pointer exception...");
-        }
-        return list;
+        return list.stream().map(x -> new OnlyUserResponse(x)).collect(Collectors.toList());
     }
 
 
