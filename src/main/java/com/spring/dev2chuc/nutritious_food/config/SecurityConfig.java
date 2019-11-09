@@ -102,7 +102,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/schedule/**",
                         "/api/schedule-combo/**").hasAnyRole("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET,
-                        "/api/users/**",
+                        "/api/users/**").hasAnyRole("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET,
                         "/api/category/**",
                         "/api/user-profile/**",
                         "/api/food/**",

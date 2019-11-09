@@ -1,8 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.service.user;
 
+import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -16,6 +18,8 @@ public interface UserService {
     User merge(User user, SignUpRequest signUpRequest);
 
     User mergeAdmin(User user, SignUpRequest signUpRequest);
+
+    List<User> findAllByRoles(RoleName name);
 
     boolean existsByUsername(String username);
 

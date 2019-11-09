@@ -40,6 +40,9 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    private static final String EMAIL_PATTERN
+            = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -76,26 +79,58 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (userService.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
+        if (signUpRequest.getName() == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your name."),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (userService.existsByPhone(signUpRequest.getPhone())) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Phone Address already in use!"),
+        if (signUpRequest.getUsername() == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your username"),
+                    HttpStatus.BAD_REQUEST);
+        } else if (signUpRequest.getUsername().length() > 4) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is too short"),
+                    HttpStatus.BAD_REQUEST);
+        } else if (signUpRequest.getUsername().length() < 20) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is too long"),
+                    HttpStatus.BAD_REQUEST);
+        } else if (userService.existsByUsername(signUpRequest.getUsername())) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email Address already in use!"),
+        if (signUpRequest.getPhone() == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your phone."),
+                    HttpStatus.BAD_REQUEST);
+        } else if (signUpRequest.getPhone().length() < 10) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number is in the wrong format"),
+                    HttpStatus.BAD_REQUEST);
+        } else if (signUpRequest.getPhone().length() > 11) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number is in the wrong format"),
+                    HttpStatus.BAD_REQUEST);
+        } else if (userService.existsByPhone(signUpRequest.getPhone())) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Phone number already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (signUpRequest.getPassword().length() <= 6) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too short"),
+        if (signUpRequest.getEmail() == null) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Please enter your email."),
+                    HttpStatus.BAD_REQUEST);
+        } else if (signUpRequest.getEmail() != EMAIL_PATTERN) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email is in the wrong format"),
+                    HttpStatus.BAD_REQUEST);
+        } else if (userService.existsByEmail(signUpRequest.getEmail())) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Email already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (signUpRequest.getPassword() == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your password."),
+                    HttpStatus.BAD_REQUEST);
+        } else if (signUpRequest.getPassword().length() <= 6) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too long."),
                     HttpStatus.BAD_REQUEST);
         } else if (signUpRequest.getPassword().length() >= 20) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too long"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too short."),
                     HttpStatus.BAD_REQUEST);
         }
 
