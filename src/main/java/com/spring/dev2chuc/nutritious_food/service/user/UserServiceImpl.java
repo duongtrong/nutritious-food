@@ -60,8 +60,7 @@ public class UserServiceImpl<T> implements UserService{
         user.setPassword(signUpRequest.getPassword());
         user.setPhone(signUpRequest.getPhone());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("Role user not set."));
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER);
 
         user.setRoles(Collections.singleton(userRole));
         return userRepository.save(user);
@@ -75,8 +74,7 @@ public class UserServiceImpl<T> implements UserService{
         user.setPassword(signUpRequest.getPassword());
         user.setPhone(signUpRequest.getPhone());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                .orElseThrow(() -> new AppException("Role admin not set."));
+        Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN);
 
         user.setRoles(Collections.singleton(userRole));
         return userRepository.save(user);
@@ -84,8 +82,9 @@ public class UserServiceImpl<T> implements UserService{
 
     @Override
     public List<OnlyUserResponse> findAllByRoles(RoleName name) {
-        Optional<Role> demo = roleRepository.findByName(name);
-        List<User> list = userRepository.findAllByRoles(name);
+        Role demo = roleRepository.findByName(name);
+
+        List<User> list = userRepository.queryAllByRolesIsContaining(demo);
         return list.stream().map(x -> new OnlyUserResponse(x)).collect(Collectors.toList());
     }
 
