@@ -34,6 +34,12 @@ public class FoodController {
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDetails(@PathVariable Long id){
+        Food food = foodService.findById (id);
+        return new ResponseEntity<> (new ApiResponse<> (HttpStatus.OK.value (), "OK", food), HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest) {
         Food food = new Food();
