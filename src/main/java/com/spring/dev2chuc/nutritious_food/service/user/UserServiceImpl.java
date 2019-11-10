@@ -15,11 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -143,5 +141,13 @@ public class UserServiceImpl<T> implements UserService{
             return user;
         }
         return null;
+    }
+
+    @Override
+    public User getById(Long id) {
+        if (CollectionUtils.isEmpty (Collections.singleton (id))) {
+            throw new RuntimeException ("Null pointer exception");
+        }
+        return userRepository.findById (id).orElseThrow (null);
     }
 }
