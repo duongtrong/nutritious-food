@@ -5,6 +5,7 @@ import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
+import com.spring.dev2chuc.nutritious_food.payload.response.UserProfileResponse;
 import com.spring.dev2chuc.nutritious_food.repository.UserProfileRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
@@ -47,7 +48,8 @@ public class UserProfileController {
             }
             UserProfile userProfile = new UserProfile(user, userProfileRequest.getHeight(), userProfileRequest.getWeight(), userProfileRequest.getAge());
             UserProfile userProfileResult = userProfileRepository.save(userProfile);
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", userProfileResult), HttpStatus.CREATED);
+
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", new UserProfileResponse(userProfileResult)), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "You has reject"), HttpStatus.BAD_REQUEST);
     }

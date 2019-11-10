@@ -1,13 +1,14 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.User;
+import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
-import com.spring.dev2chuc.nutritious_food.payload.response.JwtAuthenticationResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.security.JwtTokenProvider;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
+import com.spring.dev2chuc.nutritious_food.service.userProfile.UserProfileService;
+import org.hibernate.engine.internal.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,6 +33,9 @@ public class AuthController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    UserProfileService userProfileService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -156,5 +159,28 @@ public class AuthController {
         User current = new User();
         User result = userService.mergeAdmin(current, signUpRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Admin create successfully", result), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getMe() {
+        User user = userService.getUserAuth();
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Save order success", new OnlyUserResponse(user)), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/me-profile")
+    public ResponseEntity<?> getUserProfile() {
+        User user = userService.getUserAuth();
+
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            List<UserProfile> userProfiles = userProfileService.getAllByUser(user);
+            List<UserProfileResponse> userProfileResponses = userProfiles.stream().map(x -> new UserProfileResponse(x)).collect(Collectors.toList());;
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "success", userProfileResponses), HttpStatus.OK);
+        }
     }
 }
