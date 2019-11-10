@@ -1,13 +1,12 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.RattingCombo;
-import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.payload.RattingComboRequest;
-import com.spring.dev2chuc.nutritious_food.repository.ComboRepository;
-import com.spring.dev2chuc.nutritious_food.repository.RattingComboRepository;
-import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
+import com.spring.dev2chuc.nutritious_food.service.ratting.combo.RattingComboService;
+import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,58 +20,34 @@ import java.util.List;
 public class RattingComboController {
 
     @Autowired
-    RattingComboRepository rattingComboRepository;
+    RattingComboService rattingComboService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
-    ComboRepository comboRepository;
+    ComboService comboService;
 
     @GetMapping
     public ResponseEntity<?> getList() {
-        List<RattingCombo> list = rattingComboRepository.findAll();
+        List<RattingCombo> list = rattingComboService.list ();
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", list), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody RattingComboRequest rattingComboRequest){
-        RattingCombo rattingCombo = new RattingCombo(
-                rattingComboRequest.getRate(),
-                rattingComboRequest.getComment(),
-                rattingComboRequest.getImage()
-        );
-
-        User user = userRepository.findById(rattingComboRequest.getUserId()).orElseThrow(null);
-        Combo combo = comboRepository.findById(rattingComboRequest.getComboId()).orElseThrow(null);
-
-        rattingCombo.setUser(user);
-        rattingCombo.setCombo(combo);
-
-        RattingCombo result = rattingComboRepository.save(rattingCombo);
+        RattingCombo rattingCombo = new RattingCombo ();
+        RattingCombo result = rattingComboService.merge (rattingCombo, rattingComboRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody RattingComboRequest rattingComboRequest, @PathVariable Long id){
-        RattingCombo rattingCombo = rattingComboRepository.findById(id).orElseThrow(null);
-        if (rattingComboRequest.getRate() != null) rattingCombo.setRate(rattingComboRequest.getRate());
-        if (rattingComboRequest.getComment() != null) rattingCombo.setComment(rattingComboRequest.getComment());
-        if (rattingComboRequest.getImage() != null) rattingCombo.setImage(rattingComboRequest.getImage());
-
-        User user = userRepository.findById(rattingComboRequest.getUserId()).orElseThrow(null);
-        if (user == null) {
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        RattingCombo rattingCombo = rattingComboService.getDetail (id);
+        if (rattingCombo == null) {
+            return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Ratting combo not found"), HttpStatus.NOT_FOUND);
         }
-        rattingCombo.setUser(user);
-
-        Combo combo = comboRepository.findById(rattingComboRequest.getComboId()).orElseThrow(null);
-        if (combo == null) {
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Combo not found"), HttpStatus.NOT_FOUND);
-        }
-        rattingCombo.setCombo(combo);
-
-        RattingCombo result = rattingComboRepository.save(rattingCombo);
+        RattingCombo result = rattingComboService.update (rattingCombo, rattingComboRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 }
