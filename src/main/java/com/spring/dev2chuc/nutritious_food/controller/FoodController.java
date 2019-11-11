@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/food")
@@ -37,6 +38,7 @@ public class FoodController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetails(@PathVariable Long id){
         Food food = foodService.findById (id);
+        if (food == null) return new ResponseEntity<> (new ApiResponse<> (HttpStatus.NOT_FOUND.value (), "Food not found"), HttpStatus.NOT_FOUND);
         return new ResponseEntity<> (new ApiResponse<> (HttpStatus.OK.value (), "OK", food), HttpStatus.OK);
     }
 
@@ -54,7 +56,7 @@ public class FoodController {
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
         }
 
-        Food result = foodService.merge(food);
+        Food result = foodService.update(food, foodRequest);
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 

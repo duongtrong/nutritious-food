@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RattingFoodServiceImpl implements RattingFoodService{
@@ -46,7 +47,7 @@ public class RattingFoodServiceImpl implements RattingFoodService{
         }
 
         Food food = foodService.findById(rattingFoodRequest.getFoodId());
-        if (CollectionUtils.isEmpty (Collections.singleton (food))) {
+        if (food == null) {
             throw new RuntimeException ("Null pointer exception");
         }
 

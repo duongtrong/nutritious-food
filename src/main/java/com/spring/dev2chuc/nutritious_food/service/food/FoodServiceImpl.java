@@ -31,7 +31,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<Food> findAll() {
-        return foodRepository.findAll();
+        return foodRepository.findAllByStatus(Status.ACTIVE.getValue());
     }
 
     @Override
@@ -39,7 +39,7 @@ public class FoodServiceImpl implements FoodService {
         if (CollectionUtils.isEmpty(Collections.singleton(id))){
             throw new RuntimeException("Null pointer exception...");
         }
-        Food food = foodRepository.findById(id).orElseThrow(null);
+        Food food = foodRepository.findByIdAndStatus(id, Status.ACTIVE.getValue()) ;
         return food;
     }
 
@@ -70,8 +70,7 @@ public class FoodServiceImpl implements FoodService {
             food.setCategories(categorySet);
         }
 
-        Food result = foodRepository.save(food);
-        return result;
+        return foodRepository.save(food);
     }
 
     @Override
@@ -102,8 +101,7 @@ public class FoodServiceImpl implements FoodService {
             food.setCategories(categorySet);
         }
 
-        Food current = foodRepository.save(food);
-        return current;
+        return foodRepository.save(food);
     }
 
     @Override
