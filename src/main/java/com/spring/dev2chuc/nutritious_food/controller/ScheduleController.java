@@ -2,7 +2,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
@@ -28,14 +28,14 @@ public class ScheduleController {
     @GetMapping("/")
     public ResponseEntity<?> getList() {
         List<Schedule> schedules = scheduleService.findAllByStatusIs(Status.ACTIVE.getValue());
-        return new ResponseEntity<> (new ApiResponse<>(HttpStatus.OK.value(), "OK", schedules), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", schedules), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody ScheduleRequest scheduleRequest) {
         Schedule schedule = new Schedule();
         Schedule result = scheduleService.merge(schedule, scheduleRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -44,7 +44,7 @@ public class ScheduleController {
         if (schedule == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<> (new ApiResponse<>(HttpStatus.OK.value(), "OK", schedule), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", schedule), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -54,7 +54,7 @@ public class ScheduleController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);
         }
         Schedule result = scheduleService.update(schedule, scheduleRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

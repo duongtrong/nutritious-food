@@ -3,7 +3,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.helper.CategoryHelper;
 import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.CategoryRequest;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
@@ -27,13 +27,13 @@ public class CategoryController {
     public ResponseEntity<?> store(@Valid @RequestBody CategoryRequest categoryRequest) {
         Category current = new Category();
         Category result = categoryService.merge(current, categoryRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
         Category result = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -43,14 +43,14 @@ public class CategoryController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
         Category result = categoryService.update(category, categoryRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Category result = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (result == null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Category not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponseCustom(HttpStatus.OK.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
         result.setStatus(Status.DEACTIVE.getValue());
         categoryService.merge(result);
@@ -60,13 +60,13 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> listAll() {
         List<Category> result = categoryService.findAllByStatusIs(Status.ACTIVE.getValue());
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 
     @GetMapping("/parent/{id}")
     public ResponseEntity<?> getByParentId(@PathVariable("id") Long id) {
         List<Category> result = categoryService.findByCategoriesByParentIdAndStatus(id, Status.ACTIVE.getValue());
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 
     @GetMapping("/latest")
@@ -75,6 +75,6 @@ public class CategoryController {
         List<Category> categoryResult = new ArrayList<Category>();
         Long parentId = Long.valueOf("0");
         List<Category> result = CategoryHelper.recusiveCategory(categoryList, parentId, "", categoryResult);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 }

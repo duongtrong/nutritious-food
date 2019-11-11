@@ -1,14 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.RattingFoodRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
-import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
-import com.spring.dev2chuc.nutritious_food.repository.RattingFoodRepository;
-import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
-import com.spring.dev2chuc.nutritious_food.service.ratting.combo.RattingComboService;
 import com.spring.dev2chuc.nutritious_food.service.ratting.food.RattingFoodService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +33,13 @@ public class RattingFoodController {
     public ResponseEntity<?> create(@Valid @RequestBody RattingFoodRequest rattingFoodRequest) {
         RattingFood rattingFood = new RattingFood();
         RattingFood result = rattingFoodService.merge (rattingFood, rattingFoodRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "OK", result), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> getList() {
         List<RattingFood> rattingFoods = rattingFoodService.list ();
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", rattingFoods), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", rattingFoods), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -54,6 +50,6 @@ public class RattingFoodController {
         }
 
         RattingFood result = rattingFoodService.update(rattingFood, rattingFoodRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 }

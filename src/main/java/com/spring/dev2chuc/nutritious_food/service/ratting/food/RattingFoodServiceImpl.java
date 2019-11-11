@@ -4,13 +4,10 @@ import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.RattingFood;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.RattingFoodRequest;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
 import com.spring.dev2chuc.nutritious_food.repository.RattingFoodRepository;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 

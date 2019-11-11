@@ -3,7 +3,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.response.UserProfileResponse;
@@ -45,7 +45,7 @@ public class UserProfileController {
         }
 
         UserProfile profile = userProfileService.merge (userProfile, userProfileRequest);
-        return new ResponseEntity<> (new ApiResponse<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileResponse(profile)), HttpStatus.CREATED);
+        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileResponse(profile)), HttpStatus.CREATED);
 
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        if (!(authentication instanceof AnonymousAuthenticationToken)) {

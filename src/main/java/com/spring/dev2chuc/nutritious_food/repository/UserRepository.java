@@ -4,8 +4,11 @@ import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,14 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByIdIn(List<Long> userIds);
 
-    @Query(value = "SELECT *\n" +
-            "    FROM users\n" +
-            "    INNER JOIN user_roles ON users.id = user_roles.user_id\n" +
-            "    INNER JOIN roles ON user_roles.role_id = roles.id\n" +
-            "    WHERE roles.name = \"ROLE_USER\"", nativeQuery = true)
-    List<User> findAllByRoles(RoleName name);
-
-
     List<User> queryAllByRolesIsContaining(Role role);
 
     User findByUsername(String username);
@@ -35,4 +30,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByPhone(String phone);
 
     Boolean existsByEmail(String email);
+
+    @Query(value = "SELECT * FROM users INNER JOIN user_roles ON users.id = user_roles.user_idINNER JOIN roles ON user_roles.role_id = roles.id WHERE roles.name = \"ROLE_USER\"", nativeQuery = true)
+    List<User> findAllByRoles(RoleName name);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE users SET users.password=:password WHERE users.email=:email AND users.password=:oldPassword IS NOT NULL LIMIT 1", nativeQuery = true)
+    void changePassword(@Param("email") String email, @Param("password") String password, @Param("oldPassword") String oldPassword);
+
+    @Query(value = "SELECT * FROM users WHERE users.email=:email AND users.password=:password IS NOT NULL LIMIT 1", nativeQuery = true)
+    Optional<User> findUserWith(@Param("email") String email, @Param("password") String password);
 }

@@ -1,7 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.RattingCombo;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.RattingComboRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
@@ -31,14 +31,14 @@ public class RattingComboController {
     @GetMapping
     public ResponseEntity<?> getList() {
         List<RattingCombo> list = rattingComboService.list ();
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", list), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", list), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody RattingComboRequest rattingComboRequest){
         RattingCombo rattingCombo = new RattingCombo ();
         RattingCombo result = rattingComboService.merge (rattingCombo, rattingComboRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
@@ -48,6 +48,6 @@ public class RattingComboController {
             return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Ratting combo not found"), HttpStatus.NOT_FOUND);
         }
         RattingCombo result = rattingComboService.update (rattingCombo, rattingComboRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 }
