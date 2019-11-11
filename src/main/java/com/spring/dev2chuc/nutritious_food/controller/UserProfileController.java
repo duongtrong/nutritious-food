@@ -71,8 +71,8 @@ public class UserProfileController {
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
         System.out.println(id);
         Optional<UserProfile> userProfile = userProfileService.getDetail(id);
-        if (!userProfile.isPresent()) return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Profile not found"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Get detail success", new UserProfileResponse(userProfile.get())), HttpStatus.OK);
+        if (!userProfile.isPresent()) return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Profile not found"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Get detail success", new UserProfileResponse(userProfile.get())), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/category")
@@ -85,6 +85,6 @@ public class UserProfileController {
         Set<Category> categorySet = new HashSet<>(categories);
         userProfile.get().setCategories(categorySet);
         UserProfile profile = userProfileService.update(userProfile.get());
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Create new category success", new UserProfileResponse(profile)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Create new category success", new UserProfileResponse(profile)), HttpStatus.OK);
     }
 }
