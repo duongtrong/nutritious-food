@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class UserProfileResponse {
     private Integer weight;
     private Integer age;
     private Integer status;
-    private Set<Category> categories;
+    private Set<OnlyCategoryResponse> categories;
 
 
     public UserProfileResponse(UserProfile userProfile) {
@@ -26,5 +27,6 @@ public class UserProfileResponse {
         this.weight = userProfile.getWeight();
         this.age = userProfile.getAge();
         this.status = userProfile.getStatus();
+        this.categories = userProfile.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());
     }
 }
