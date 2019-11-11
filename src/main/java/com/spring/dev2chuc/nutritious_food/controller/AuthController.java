@@ -46,6 +46,8 @@ public class AuthController {
 //    private static final String EMAIL_PATTERN
 //            = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
+    // signup for permission user
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -61,7 +63,7 @@ public class AuthController {
         } else {
             return new ResponseEntity<>(
                     new ApiResponse(HttpStatus.UNAUTHORIZED.value(),
-                            "Account notfound"),
+                            "Account not found"),
                     HttpStatus.UNAUTHORIZED);
         }
 
@@ -77,8 +79,6 @@ public class AuthController {
 
         return new ResponseEntity<>(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Login Success", jwt), HttpStatus.OK);
     }
-
-    // signup for permission user
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -137,7 +137,39 @@ public class AuthController {
         return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "User registered successfully", result), HttpStatus.CREATED);
     }
 
-    // private sign up for permission admin
+    // private for permission admin
+
+    @PostMapping("/admin/signin")
+    public ResponseEntity<?> authenticateAdmin(@Valid @RequestBody LoginRequest loginRequest) {
+
+        Optional<User> user = userService.findByUsernameOrPhone(loginRequest.getAccount(), loginRequest.getAccount());
+        if (user.isPresent()) {
+            User userCurrent = user.get();
+            if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
+                return new ResponseEntity<>(
+                        new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+                                "Password not matches"),
+                        HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            return new ResponseEntity<>(
+                    new ApiResponse(HttpStatus.UNAUTHORIZED.value(),
+                            "Account not found"),
+                    HttpStatus.UNAUTHORIZED);
+        }
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getAccount(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+
+        return new ResponseEntity<>(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Login Success", jwt), HttpStatus.OK);
+    }
 
     @PostMapping("/admin/signup")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignUpRequest signUpRequest) {
