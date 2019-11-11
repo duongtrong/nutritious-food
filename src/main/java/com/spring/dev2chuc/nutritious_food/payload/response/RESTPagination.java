@@ -1,5 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RESTPagination {
     private int page;
     private int limit;
@@ -21,38 +26,6 @@ public class RESTPagination {
         if (limit != 0) {
             this.totalPages = (totalItems % limit == 0) ? (int) (totalItems / limit) : ((int) (totalItems / limit) + 1);
         } else this.totalPages = 0;
-        this.totalItems = totalItems;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public long getTotalItems() {
-        return totalItems;
-    }
-
-    public void setTotalItems(long totalItems) {
         this.totalItems = totalItems;
     }
 

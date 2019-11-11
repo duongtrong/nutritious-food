@@ -1,7 +1,11 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
 import com.spring.dev2chuc.nutritious_food.model.User;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class UserResponse {
     private Long id;
     private String name;
