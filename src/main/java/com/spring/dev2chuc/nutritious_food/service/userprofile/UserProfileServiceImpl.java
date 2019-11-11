@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserProfileServiceImpl implements UserProfileService{
@@ -42,21 +39,18 @@ public class UserProfileServiceImpl implements UserProfileService{
     }
 
     @Override
-    public UserProfile getDetail(Long id) {
+    public Optional<UserProfile> getDetail(Long id) {
         if (CollectionUtils.isEmpty (Collections.singleton (id))) {
-            throw new RuntimeException ("Null pointer exception");
+            return null;
+//            throw new RuntimeException ("Null pointer exception");
         }
-        return userProfileRepository.findById (id).orElseThrow (null);
+        System.out.println(id);
+        Optional<UserProfile> userProfile = userProfileRepository.findById(id);
+        return userProfile;
     }
 
     @Override
-    public UserProfile update(UserProfile userProfile, UserProfileRequest userProfileRequest) {
-        List<Category> categories = categoryService.findAllByIdIn(userProfileRequest.getCateId ());
-        if (CollectionUtils.isEmpty (categories)) {
-            throw new RuntimeException ("Null pointer exception");
-        }
-        Set<Category> categorySet = new HashSet<>(categories);
-        userProfile.setCategories(categorySet);
-        return userProfile;
+    public UserProfile update(UserProfile userProfile) {
+        return userProfileRepository.save(userProfile);
     }
 }

@@ -92,41 +92,17 @@ public class UserServiceImpl<T> implements UserService{
 
     @Override
     public boolean existsByUsername(String username) {
-        if (username == null || username.trim().length() == 0) {
-            return true;
-        }
-        SignUpRequest signUpRequest = new SignUpRequest();
-        Boolean user = userRepository.existsByUsername(signUpRequest.getUsername());
-        if (user == null) {
-            throw new RuntimeException("Null pointer exception");
-        }
-        return false;
+        return userRepository.existsByUsername(username);
     }
 
     @Override
     public boolean existsByPhone(String phone) {
-        if (phone == null || phone.trim().length() == 0) {
-            return true;
-        }
-        SignUpRequest signUpRequest = new SignUpRequest();
-        Boolean user = userRepository.existsByPhone(signUpRequest.getPhone());
-        if (user == null) {
-            return true;
-        }
-        return false;
+        return userRepository.existsByPhone(phone);
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        if (email == null || email.trim().length() == 0) {
-            return true;
-        }
-        SignUpRequest signUpRequest = new SignUpRequest();
-        Boolean user = userRepository.existsByEmail(signUpRequest.getEmail());
-        if (user == null) {
-            throw new IllegalArgumentException();
-        }
-        return false;
+        return userRepository.existsByEmail(email);
     }
 
     @Override

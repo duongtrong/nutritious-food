@@ -5,6 +5,7 @@ import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserProfileService {
 
@@ -12,7 +13,7 @@ public interface UserProfileService {
 
     UserProfile merge(UserProfile userProfile, UserProfileRequest userProfileRequest);
 
-    UserProfile getDetail(Long id);
+    Optional<UserProfile> getDetail(Long id);
 
-    UserProfile update(UserProfile userProfile, UserProfileRequest userProfileRequest);
+    UserProfile update(UserProfile userProfile);
 }
