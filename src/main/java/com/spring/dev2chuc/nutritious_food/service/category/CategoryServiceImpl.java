@@ -28,9 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> findAllByIdIn(Collection<Long> Ids) {
         List<Category> list = categoryRepository.findAllByIdIn(Ids);
-        if (list == null) {
-            return null;
-        }
         return list;
     }
 
