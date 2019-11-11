@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "sets")
+@Table(name = "combos")
 public class Combo extends DateAudit {
 
     @Id
@@ -41,11 +41,11 @@ public class Combo extends DateAudit {
     private int status;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "set_food", joinColumns = @JoinColumn(name = "set_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
+    @JoinTable(name = "combo_food", joinColumns = @JoinColumn(name = "combo_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
     private Set<Food> foodSet = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "set_category", joinColumns = @JoinColumn(name = "set_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @JoinTable(name = "combo_category", joinColumns = @JoinColumn(name = "combo_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
     @JsonManagedReference
