@@ -141,4 +141,16 @@ public class UserServiceImpl implements UserService{
         return Observable.fromCallable(() -> userRepository.findUserWith(email, passwordEncoder.encode(password))
                 .orElseThrow(() -> new AppException("{user.id.not.found}")));
     }
+
+    @Override
+    public boolean checkPassword(String oldPassword, User user) {
+        return passwordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    @Override
+    public boolean updatePassword(String password, User user) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+        return true;
+    }
 }

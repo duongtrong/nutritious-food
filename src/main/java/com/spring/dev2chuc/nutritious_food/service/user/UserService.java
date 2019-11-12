@@ -38,4 +38,8 @@ public interface UserService {
 
     Observable<User> findUserWith(PasswordEncoder passwordEncoder, String email, String password);
 
+    boolean checkPassword(String oldPassword, User user);
+
+    boolean updatePassword(String password, User user);
+
 }
