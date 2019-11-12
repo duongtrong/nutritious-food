@@ -3,11 +3,12 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.helper.CategoryHelper;
 import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.payload.CategoryRequest;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,5 +77,29 @@ public class CategoryController {
         Long parentId = Long.valueOf("0");
         List<Category> result = CategoryHelper.recusiveCategory(categoryList, parentId, "", categoryResult);
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getListPage(
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "to", required = false) String to,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int limit){
+
+        Specification specification = Specification.where(null);
+        if (search != null && search.length() > 0) {
+            specification = specification
+                    .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
+                    .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
+        }
+
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
+
+        Page<Category> categories = categoryService.categoriesWithPaginate(specification, page, limit);
+        return new ResponseEntity<>(new ApiResponsePage<>(
+                HttpStatus.OK.value(), "OK", categories,
+                new RESTPagination(page, limit, categories.getTotalPages(), categories.getTotalElements())), HttpStatus.OK);
     }
 }

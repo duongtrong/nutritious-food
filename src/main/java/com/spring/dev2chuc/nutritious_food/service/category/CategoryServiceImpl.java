@@ -5,6 +5,9 @@ import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.CategoryRequest;
 import com.spring.dev2chuc.nutritious_food.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -82,5 +85,12 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryRequest.getDescription() != null) category.setDescription(categoryRequest.getDescription());
         if (categoryRequest.getParentId() != null) category.setParentId(categoryRequest.getParentId());
         return categoryRepository.save(category);
+    }
+
+    @Override
+    public Page<Category> categoriesWithPaginate(Specification specification, int page, int limit) {
+        List<Category> categories = categoryRepository.findAllByStatusIs(Status.ACTIVE.getValue());
+
+        return categoryRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 }
