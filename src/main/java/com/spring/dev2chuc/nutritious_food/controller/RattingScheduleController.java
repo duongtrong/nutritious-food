@@ -1,7 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.RattingScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.RattingScheduleRepository;
@@ -43,14 +43,14 @@ public class RattingScheduleController {
     @GetMapping
     public ResponseEntity<?> getList() {
         List<RattingSchedule> list = rattingScheduleService.list ();
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", list), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", list), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody RattingScheduleRequest rattingScheduleRequest){
         RattingSchedule rattingSchedule = new RattingSchedule();
         RattingSchedule result = rattingScheduleService.merge (rattingSchedule, rattingScheduleRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
@@ -60,6 +60,6 @@ public class RattingScheduleController {
             return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Ratting schedule not found"), HttpStatus.NOT_FOUND);
         }
         RattingSchedule result = rattingScheduleService.update (rattingSchedule, rattingScheduleRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 }

@@ -1,7 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Combo;
-import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -32,13 +30,13 @@ public class ComboController {
     public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest) {
         Combo current = new Combo();
         Combo result = comboService.merge(current, comboRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Combo> combos = comboService.findAll();
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", combos), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", combos), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -49,7 +47,7 @@ public class ComboController {
         }
 
         Combo result = comboService.update(combo, comboRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 
 
@@ -60,7 +58,7 @@ public class ComboController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", combo), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", combo), HttpStatus.OK);
     }
 
 
@@ -68,7 +66,7 @@ public class ComboController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Combo combo = comboService.findByStatusAndId(Status.ACTIVE.getValue(), id);
         if (combo == null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponseCustom(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
         combo.setStatus(Status.DEACTIVE.getValue());
         comboService.merge(combo);

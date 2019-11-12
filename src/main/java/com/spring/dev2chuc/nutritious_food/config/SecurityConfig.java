@@ -1,6 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.config;
 
-import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.security.CustomUserDetailsService;
 import com.spring.dev2chuc.nutritious_food.security.JwtAuthenticationEntryPoint;
 import com.spring.dev2chuc.nutritious_food.security.JwtAuthenticationFilter;

@@ -8,6 +8,7 @@ import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
 import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
+import io.reactivex.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl<T> implements UserService{
+public class UserServiceImpl implements UserService{
 
     @Autowired
     UserRepository userRepository;
@@ -111,7 +112,7 @@ public class UserServiceImpl<T> implements UserService{
         SignUpRequest signUpRequest = new SignUpRequest();
         Boolean user = userRepository.existsByPhone(signUpRequest.getPhone());
         if (user == null) {
-            return true;
+            throw new RuntimeException("Null pointer exception");
         }
         return false;
     }
@@ -124,7 +125,7 @@ public class UserServiceImpl<T> implements UserService{
         SignUpRequest signUpRequest = new SignUpRequest();
         Boolean user = userRepository.existsByEmail(signUpRequest.getEmail());
         if (user == null) {
-            throw new IllegalArgumentException();
+            throw new RuntimeException("Null pointer exception");
         }
         return false;
     }
@@ -146,8 +147,22 @@ public class UserServiceImpl<T> implements UserService{
     @Override
     public User getById(Long id) {
         if (CollectionUtils.isEmpty (Collections.singleton (id))) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException ("{user.id.not.found}");
         }
         return userRepository.findById (id).orElseThrow (null);
+    }
+
+    @Override
+    public Observable<Integer> changePassword(PasswordEncoder passwordEncoder, String email, String password, String oldPassword) {
+        return Observable.fromCallable(() -> {
+            userRepository.changePassword(email, passwordEncoder.encode(password), passwordEncoder.encode(oldPassword));
+            return Integer.MAX_VALUE;
+        });
+    }
+
+    @Override
+    public Observable<User> findUserWith(PasswordEncoder passwordEncoder, String email, String password) {
+        return Observable.fromCallable(() -> userRepository.findUserWith(email, passwordEncoder.encode(password))
+                .orElseThrow(() -> new AppException("{user.id.not.found}")));
     }
 }

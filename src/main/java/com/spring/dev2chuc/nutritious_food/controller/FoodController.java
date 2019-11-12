@@ -2,7 +2,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponsePage;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,38 +30,38 @@ public class FoodController {
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Food> foodList = foodService.findAll();
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetails(@PathVariable Long id){
         Food food = foodService.findById (id);
-        return new ResponseEntity<> (new ApiResponse<> (HttpStatus.OK.value (), "OK", food), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponseCustom<>(HttpStatus.OK.value (), "OK", food), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest) {
         Food food = new Food();
         Food current = foodService.merge(food, foodRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create new food success", current), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create new food success", current), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody FoodRequest foodRequest, @PathVariable("id") Long id) {
         Food food = foodService.findById(id);
         if (food == null) {
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
         }
 
         Food result = foodService.merge(food);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Food food = foodService.findByStatusAndId(Status.ACTIVE.getValue(), id);
         if (food == null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK.value(), "Food not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponseCustom(HttpStatus.OK.value(), "Food not found"), HttpStatus.NOT_FOUND);
         }
         food.setStatus(Status.DEACTIVE.getValue());
         foodService.merge(food);

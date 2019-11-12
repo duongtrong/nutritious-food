@@ -2,7 +2,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
@@ -40,7 +40,7 @@ public class UserProfileController {
         }
 
         UserProfile profile = userProfileService.merge (userProfile, userProfileRequest);
-        return new ResponseEntity<> (new ApiResponse<> (HttpStatus.CREATED.value (), "Save order success", profile), HttpStatus.CREATED);
+        return new ResponseEntity<> (new ApiResponseCustom<>(HttpStatus.CREATED.value (), "Save order success", profile), HttpStatus.CREATED);
 
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -65,7 +65,7 @@ public class UserProfileController {
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
         UserProfile userProfile = userProfileService.getDetail (id);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Get detail success", userProfile), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Get detail success", userProfile), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/category")
@@ -80,6 +80,6 @@ public class UserProfileController {
         }
 
         UserProfile profile = userProfileService.update (userProfile, userProfileRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Create new category success", profile), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Create new category success", profile), HttpStatus.OK);
     }
 }

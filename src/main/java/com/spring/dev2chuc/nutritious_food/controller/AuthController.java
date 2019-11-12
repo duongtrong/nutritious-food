@@ -1,13 +1,17 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
+import com.spring.dev2chuc.nutritious_food.model.PasswordChange;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
+import com.spring.dev2chuc.nutritious_food.model.audit.AbstractEndpoint;
 import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.security.JwtTokenProvider;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import com.spring.dev2chuc.nutritious_food.service.userprofile.UserProfileService;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,31 +20,37 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AuthController extends AbstractEndpoint {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    UserProfileService userProfileService;
+    private UserProfileService userProfileService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    JwtTokenProvider tokenProvider;
+    private JwtTokenProvider tokenProvider;
 
 //    private static final String EMAIL_PATTERN
 //            = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -55,13 +65,13 @@ public class AuthController {
             User userCurrent = user.get();
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
-                        new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+                        new ApiResponseCustom<>(HttpStatus.UNAUTHORIZED.value(),
                                 "Password not matches"),
                         HttpStatus.UNAUTHORIZED);
             }
         } else {
             return new ResponseEntity<>(
-                    new ApiResponse(HttpStatus.UNAUTHORIZED.value(),
+                    new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
                             "Account not found"),
                     HttpStatus.UNAUTHORIZED);
         }
@@ -133,7 +143,7 @@ public class AuthController {
         User current = new User();
         User result = userService.merge(current, signUpRequest);
 
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "User registered successfully", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "User registered successfully", result), HttpStatus.CREATED);
     }
 
     // private for permission admin
@@ -146,13 +156,13 @@ public class AuthController {
             User userCurrent = user.get();
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
-                        new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+                        new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
                                 "Password not matches"),
                         HttpStatus.UNAUTHORIZED);
             }
         } else {
             return new ResponseEntity<>(
-                    new ApiResponse(HttpStatus.UNAUTHORIZED.value(),
+                    new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
                             "Account not found"),
                     HttpStatus.UNAUTHORIZED);
         }
@@ -189,7 +199,7 @@ public class AuthController {
 
         User current = new User();
         User result = userService.mergeAdmin(current, signUpRequest);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Admin create successfully", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Admin create successfully", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/me")
@@ -198,7 +208,7 @@ public class AuthController {
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "Save order success", new OnlyUserResponse(user)), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Save order success", new OnlyUserResponse(user)), HttpStatus.OK);
         }
     }
 
@@ -211,7 +221,35 @@ public class AuthController {
         } else {
             List<UserProfile> userProfiles = userProfileService.getAllByUser(user);
             List<UserProfileResponse> userProfileResponses = userProfiles.stream().map(x -> new UserProfileResponse(x)).collect(Collectors.toList());;
-            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK.value(), "success", userProfileResponses), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "success", userProfileResponses), HttpStatus.OK);
         }
+    }
+
+    @PutMapping("/password/change")
+    public DeferredResult<ResponseEntity> securityChangePassword(
+            @RequestBody @Validated PasswordChange passwordChange, BindingResult bindingResult,
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        return toDeferredResult(
+                new DeferredResult<>(),
+                toObservable(bindingResult)
+                        .flatMap(
+                                v -> userService.findUserWith(passwordEncoder,
+                                        passwordChange.getEmail(),
+                                        passwordChange.getOldPassword())
+
+                                        .flatMap(
+                                                u -> userService.changePassword(passwordEncoder,
+                                                        passwordChange.getEmail(),
+                                                        passwordChange.getPassword(),
+                                                        passwordChange.getOldPassword())
+                                                        .subscribeOn(Schedulers.io())
+                                ),
+                                e -> Observable.error(new RuntimeException("{password.incorrect}")),
+                                () -> Observable.empty()
+                        )
+                        .subscribeOn(Schedulers.io()),
+                bindingResult,
+                Locale.getDefault()
+        );
     }
 }
