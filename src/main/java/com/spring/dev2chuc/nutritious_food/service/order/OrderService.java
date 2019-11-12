@@ -1,9 +1,8 @@
 package com.spring.dev2chuc.nutritious_food.service.order;
 
-import com.spring.dev2chuc.nutritious_food.model.Order;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
-import com.spring.dev2chuc.nutritious_food.payload.OrderResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.OrderResponse;
 
 import java.util.List;
 

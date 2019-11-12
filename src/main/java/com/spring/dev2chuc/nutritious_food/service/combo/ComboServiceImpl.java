@@ -37,7 +37,7 @@ public class ComboServiceImpl implements ComboService{
         if (CollectionUtils.isEmpty(Collections.singleton(id))) {
             throw new NullPointerException("Null pointer exception");
         }
-        return comboRepository.findById(id).orElseThrow(null);
+        return comboRepository.findByStatusAndId(Status.ACTIVE.getValue(), id);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ComboServiceImpl implements ComboService{
         if (comboRequest.getCategoryIds().size() > 0) {
             List<Food> foodList = foodService.findAllByIdIn(comboRequest.getCategoryIds());
             Set<Food> foodSet = new HashSet<>(foodList);
-            combo.setFoodSet(foodSet);
+            combo.setFoods(foodSet);
         }
 
         Combo result = comboRepository.save(combo);
@@ -112,7 +112,7 @@ public class ComboServiceImpl implements ComboService{
 
         List<Food> foodList = foodService.findAllByIdIn(comboRequest.getFoodIds());
         Set<Food> foodSet = new HashSet<>(foodList);
-        combo.setFoodSet(foodSet);
+        combo.setFoods(foodSet);
 
         Combo result = comboRepository.save(combo);
         return result;
@@ -120,18 +120,7 @@ public class ComboServiceImpl implements ComboService{
 
     @Override
     public Combo findByStatusAndId(Integer status, Long id) {
-        if (CollectionUtils.isEmpty(Collections.singleton(status))) {
-            throw new RuntimeException("Null pointer exception");
-        }
-
-        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
-            throw new RuntimeException("Null pointer exception");
-        }
-        Combo combo = comboRepository.findByStatusAndId(status, id);
-        if (combo == null) {
-            throw new RuntimeException("Null pointer exception");
-        }
-        return combo;
+        return comboRepository.findByStatusAndId(status, id);
     }
 
     @Override

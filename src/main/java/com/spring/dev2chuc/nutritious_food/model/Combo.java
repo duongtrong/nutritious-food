@@ -42,7 +42,7 @@ public class Combo extends DateAudit {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "combo_food", joinColumns = @JoinColumn(name = "combo_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
-    private Set<Food> foodSet = new HashSet<>();
+    private Set<Food> foods = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "combo_category", joinColumns = @JoinColumn(name = "combo_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))

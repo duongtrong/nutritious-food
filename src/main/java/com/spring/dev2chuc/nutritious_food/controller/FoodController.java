@@ -2,13 +2,8 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponsePage;
-import com.spring.dev2chuc.nutritious_food.payload.response.RESTPagination;
-import com.spring.dev2chuc.nutritious_food.payload.response.SearchCriteria;
-import com.spring.dev2chuc.nutritious_food.payload.response.SpecificationAll;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/food")
@@ -31,21 +27,28 @@ public class FoodController {
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Food> foodList = foodService.findAll();
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", foodList), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new ApiResponseCustom<>(
+                        HttpStatus.OK.value(),
+                        "OK",
+                        foodList.stream()
+                                .map(x -> new OnlyFoodResponse(x))
+                                .collect(Collectors.toList())),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetails(@PathVariable Long id){
         Food food = foodService.findById (id);
         if (food == null) return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Food not found"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "OK", food), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "OK", new FoodResponse(food)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest) {
         Food food = new Food();
         Food current = foodService.merge(food, foodRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create new food success", current), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create new food success", new FoodResponse(current)), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
@@ -55,7 +58,7 @@ public class FoodController {
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
         }
         Food result = foodService.update(food, foodRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", new FoodResponse(result)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -89,7 +92,9 @@ public class FoodController {
 
         Page<Food> foodPage = foodService.foodsWithPaginate(specification, page, limit);
         return new ResponseEntity<>(new ApiResponsePage<>(
-                HttpStatus.OK.value(), "OK", foodPage,
+                HttpStatus.OK.value(), "OK", foodPage.stream()
+                                                                .map(x -> new OnlyFoodResponse(x))
+                                                                .collect(Collectors.toList()),
                 new RESTPagination(page, limit, foodPage.getTotalPages(), foodPage.getTotalElements())), HttpStatus.OK);
     }
 }

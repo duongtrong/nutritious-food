@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/combo")
@@ -30,13 +31,13 @@ public class ComboController {
     public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest) {
         Combo current = new Combo();
         Combo result = comboService.merge(current, comboRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", new ComboResponse(result)), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Combo> combos = comboService.findAll();
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", combos), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", combos.stream().map(x -> new ComboResponse(x)).collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -47,7 +48,7 @@ public class ComboController {
         }
 
         Combo result = comboService.update(combo, comboRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success",  new ComboResponse(result)), HttpStatus.OK);
     }
 
 
@@ -58,7 +59,7 @@ public class ComboController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", combo), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK",  new ComboResponse(combo)), HttpStatus.OK);
     }
 
 
@@ -93,7 +94,7 @@ public class ComboController {
 
         Page<Combo> combos = comboService.foodsWithPaginate(specification, page, limit);
         return new ResponseEntity<>(new ApiResponsePage<>(
-                HttpStatus.OK.value(), "OK", combos,
+                HttpStatus.OK.value(), "OK", combos.stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toList()),
                 new RESTPagination(page, limit, combos.getTotalPages(), combos.getTotalElements())), HttpStatus.OK);
     }
 }
