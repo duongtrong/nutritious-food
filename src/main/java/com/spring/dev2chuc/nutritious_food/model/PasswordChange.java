@@ -27,9 +27,9 @@ public class PasswordChange implements Serializable {
     @NotEmpty(message = "{confirm.password.notempty}")
     @Size(min = 6, max = 50, message = "{password.size}")
     private String confirmPassword;
-
-    @NotNull
-    @NotEmpty(message = "{email.notempty}")
-    @Size(min = 6, max = 100, message = "{email.size}")
-    private String email;
+//
+//    @NotNull
+//    @NotEmpty(message = "{email.notempty}")
+//    @Size(min = 6, max = 100, message = "{email.size}")
+//    private String email;
 }

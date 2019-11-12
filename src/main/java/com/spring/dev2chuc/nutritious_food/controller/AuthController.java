@@ -3,7 +3,6 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.model.PasswordChange;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
-import com.spring.dev2chuc.nutritious_food.model.audit.AbstractEndpoint;
 import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController extends AbstractEndpoint {
+public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -65,7 +64,7 @@ public class AuthController extends AbstractEndpoint {
             User userCurrent = user.get();
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
-                        new ApiResponseCustom<>(HttpStatus.UNAUTHORIZED.value(),
+                        new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
                                 "Password not matches"),
                         HttpStatus.UNAUTHORIZED);
             }
@@ -225,31 +224,58 @@ public class AuthController extends AbstractEndpoint {
         }
     }
 
-    @PutMapping("/password/change")
-    public DeferredResult<ResponseEntity> securityChangePassword(
-            @RequestBody @Validated PasswordChange passwordChange, BindingResult bindingResult,
-            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        return toDeferredResult(
-                new DeferredResult<>(),
-                toObservable(bindingResult)
-                        .flatMap(
-                                v -> userService.findUserWith(passwordEncoder,
-                                        passwordChange.getEmail(),
-                                        passwordChange.getOldPassword())
+//    @PutMapping("/password/change")
+//    public DeferredResult<ResponseEntity> securityChangePassword(
+//            @RequestBody @Validated PasswordChange passwordChange, BindingResult bindingResult,
+//            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+//        return toDeferredResult(
+//                new DeferredResult<>(),
+//                toObservable(bindingResult)
+//                        .flatMap(
+//                                v -> userService.findUserWith(passwordEncoder,
+//                                        passwordChange.getEmail(),
+//                                        passwordChange.getOldPassword())
+//
+//                                        .flatMap(
+//                                                u -> userService.changePassword(passwordEncoder,
+//                                                        passwordChange.getEmail(),
+//                                                        passwordChange.getPassword(),
+//                                                        passwordChange.getOldPassword())
+//                                                        .subscribeOn(Schedulers.io())
+//                                ),
+//                                e -> Observable.error(new RuntimeException("{password.incorrect}")),
+//                                () -> Observable.empty()
+//                        )
+//                        .subscribeOn(Schedulers.io()),
+//                bindingResult,
+//                Locale.getDefault()
+//        );
+//    }
 
-                                        .flatMap(
-                                                u -> userService.changePassword(passwordEncoder,
-                                                        passwordChange.getEmail(),
-                                                        passwordChange.getPassword(),
-                                                        passwordChange.getOldPassword())
-                                                        .subscribeOn(Schedulers.io())
-                                ),
-                                e -> Observable.error(new RuntimeException("{password.incorrect}")),
-                                () -> Observable.empty()
-                        )
-                        .subscribeOn(Schedulers.io()),
-                bindingResult,
-                Locale.getDefault()
-        );
+    @PutMapping("/password/change")
+    public ResponseEntity<?> securityChangePassword(@RequestBody @Validated PasswordChange passwordChange) {
+        User user = userService.getUserAuth();
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            if (!userService.checkPassword(passwordChange.getOldPassword(), user)) {
+                return new ResponseEntity<>(
+                        new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
+                                "Old password not matches"),
+                        HttpStatus.UNAUTHORIZED);
+            } else {
+                if (!userService.updatePassword(passwordChange.getPassword(), user)) {
+                    return new ResponseEntity<>(
+                            new ApiResponseError(HttpStatus.BAD_REQUEST.value(),
+                                    "Update password false"),
+                            HttpStatus.BAD_REQUEST);
+                } else {
+                    return new ResponseEntity<>(
+                            new ApiResponseError(HttpStatus.OK.value(),
+                                    "Update password success"),
+                            HttpStatus.OK);
+                }
+            }
+        }
     }
 }
