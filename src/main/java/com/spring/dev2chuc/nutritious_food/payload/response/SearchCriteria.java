@@ -1,5 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SearchCriteria {
 
     private String key;
@@ -7,7 +12,6 @@ public class SearchCriteria {
     private Object value;
 
     public SearchCriteria() {
-
     }
 
     public SearchCriteria(final String key, final String operation, final Object value) {
@@ -16,29 +20,4 @@ public class SearchCriteria {
         this.operation = operation;
         this.value = value;
     }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(final String key) {
-        this.key = key;
-    }
-
-    public String getOperation() {
-        return operation;
-    }
-
-    public void setOperation(final String operation) {
-        this.operation = operation;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(final Object value) {
-        this.value = value;
-    }
-
 }
