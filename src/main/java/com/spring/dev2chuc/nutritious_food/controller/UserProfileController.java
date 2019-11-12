@@ -6,6 +6,7 @@ import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
 import com.spring.dev2chuc.nutritious_food.payload.response.UserProfileResponse;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
@@ -36,35 +37,13 @@ public class UserProfileController {
 
     @PutMapping("/create")
     public ResponseEntity<Object> createUserProfile(@Valid @RequestBody UserProfileRequest userProfileRequest) {
-        UserProfile userProfile = new UserProfile ();
-        User user = userService.getUserAuth ();
-        userProfile.setUser (user);
-
+        User user = userService.getUserAuth();
         if (user == null) {
-            return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "User not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            UserProfile profile = userProfileService.store(user, userProfileRequest);
+            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileResponse(profile)), HttpStatus.CREATED);
         }
-
-        UserProfile profile = userProfileService.merge (userProfile, userProfileRequest);
-        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileResponse(profile)), HttpStatus.CREATED);
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//            String username = authentication.getName();
-//            User user = userService.findByUsername(username);
-//            System.out.println(username + " == " + user.getId());
-//
-//            if (user == null) {
-//                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
-//            }
-//            UserProfile userProfile = new UserProfile(user,
-//                    userProfileRequest.getHeight(),
-//                    userProfileRequest.getWeight(),
-//                    userProfileRequest.getAge());
-//            UserProfile userProfileResult = userProfileRepository.save(userProfile);
-//            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.CREATED.value(), "Create success", userProfileResult), HttpStatus.CREATED);
-//        }
-//        return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "You has reject"), HttpStatus.BAD_REQUEST);
-//    }
     }
 
     @GetMapping("/{id}")

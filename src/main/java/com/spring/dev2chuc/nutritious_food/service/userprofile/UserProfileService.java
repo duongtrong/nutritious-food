@@ -11,7 +11,7 @@ public interface UserProfileService {
 
     List<UserProfile> getAllByUser(User user);
 
-    UserProfile merge(UserProfile userProfile, UserProfileRequest userProfileRequest);
+    UserProfile store(User user, UserProfileRequest userProfileRequest);
 
     Optional<UserProfile> getDetail(Long id);
 

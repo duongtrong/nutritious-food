@@ -11,6 +11,15 @@ public class UserProfileRequest {
     private Integer height;
     private Integer weight;
     private Integer age;
+    private Integer bodyFat;
+    private Integer exerciseIntensity;
+    private Integer lbmIndex;
+    private Integer bmrIndex;
+    private Integer tdeeIndex;
+    private Integer caloriesConsumed;
+    private Integer desiredWeight;
+    private Integer dietTime;
+    private Integer caloriesChange;
     private Integer status;
     private Set<Long> cateId;
 }

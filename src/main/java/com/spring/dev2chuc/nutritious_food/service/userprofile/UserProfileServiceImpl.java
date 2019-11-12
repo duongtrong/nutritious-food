@@ -31,10 +31,22 @@ public class UserProfileServiceImpl implements UserProfileService{
     }
 
     @Override
-    public UserProfile merge(UserProfile userProfile, UserProfileRequest userProfileRequest) {
-        userProfile.setHeight (userProfileRequest.getHeight ());
-        userProfile.setWeight (userProfileRequest.getWeight ());
-        userProfile.setAge (userProfileRequest.getAge ());
+    public UserProfile store(User user, UserProfileRequest userProfileRequest) {
+        UserProfile userProfile = new UserProfile(
+                user,
+                userProfileRequest.getHeight(),
+                userProfileRequest.getWeight(),
+                userProfileRequest.getAge(),
+                userProfileRequest.getBodyFat(),
+                userProfileRequest.getExerciseIntensity(),
+                userProfileRequest.getLbmIndex(),
+                userProfileRequest.getBmrIndex(),
+                userProfileRequest.getTdeeIndex(),
+                userProfileRequest.getCaloriesConsumed(),
+                userProfileRequest.getDesiredWeight(),
+                userProfileRequest.getDietTime(),
+                userProfileRequest.getCaloriesChange()
+        );
         return userProfileRepository.save(userProfile);
     }
 
