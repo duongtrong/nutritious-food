@@ -45,7 +45,7 @@ public class Food extends DateAudit {
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "combo_food", joinColumns = @JoinColumn(name = "combo_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
+    @JoinTable(name = "combo_food", joinColumns = @JoinColumn(name = "food_id"), inverseJoinColumns = @JoinColumn(name = "combo_id"))
     private Set<Combo> combos = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")

@@ -1,14 +1,11 @@
 package com.spring.dev2chuc.nutritious_food.service.order;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.OnlyOrderDetailResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.OnlyOrderDetailResponse;
 import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
-import com.spring.dev2chuc.nutritious_food.payload.OrderResponse;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.OrderResponse;
 import com.spring.dev2chuc.nutritious_food.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -49,12 +46,12 @@ public class OrderServiceImpl implements OrderService {
         Order orderSave = orderRepository.save(order);
         float totalPrice = 0;
 
-        Set<OnlyOrderDetailResponse> onlyOrderDetailResponses = new HashSet<>();
+        Set<OrderDetail> orderDetails = new HashSet<>();
         for (OrderRequest orderRequest : orderRequests) {
-            OnlyOrderDetailResponse onlyOrderDetailResponse = null;
             OrderDetail orderDetailCurrent = null;
             if (orderRequest.getFoodId() != null) {
-                Food food = foodRepository.findById(orderRequest.getFoodId()).orElseThrow(null);
+                Food food = foodRepository.findByIdAndStatus(orderRequest.getFoodId(), Status.ACTIVE.getValue());
+                if (food == null) return null;
                 orderDetailCurrent = new OrderDetail(
                         orderSave,
                         food,
@@ -63,7 +60,8 @@ public class OrderServiceImpl implements OrderService {
                 );
 
             } else if (orderRequest.getComboId() != null) {
-                Combo combo = comboRepository.findById(orderRequest.getComboId()).orElseThrow(null);
+                Combo combo = comboRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderRequest.getComboId());
+                if (combo == null) return null;
                 orderDetailCurrent = new OrderDetail(
                         orderSave,
                         combo,
@@ -71,7 +69,8 @@ public class OrderServiceImpl implements OrderService {
                         orderRequest.getPrice()
                 );
             } else if (orderRequest.getScheduleId() != null) {
-                Schedule schedule = scheduleRepository.findById(orderRequest.getScheduleId()).orElseThrow(null);
+                Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderRequest.getScheduleId());
+                if (schedule == null) return null;
                 orderDetailCurrent = new OrderDetail(
                         orderSave,
                         schedule,
@@ -81,14 +80,19 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 return null;
             }
+
             OrderDetail orderDetail = orderDetailRepository.save(orderDetailCurrent);
-            onlyOrderDetailResponse = new OnlyOrderDetailResponse(orderDetail);
-            onlyOrderDetailResponses.add(onlyOrderDetailResponse);
-            totalPrice += orderRequest.getPrice();
+//            onlyOrderDetailResponse = new OnlyOrderDetailResponse(orderDetail);
+//            onlyOrderDetailResponses.add(onlyOrderDetailResponse);
+            orderDetails.add(orderDetail);
+            System.out.println(orderDetail.getType());
+            totalPrice += orderRequest.getPrice() * orderRequest.getQuantity();
         }
         orderSave.setTotalPrice(totalPrice);
+        orderSave.setOrderDetails(orderDetails);
         Order orderSavePrice = orderRepository.save(orderSave);
-        return new OrderResponse(orderSavePrice, onlyOrderDetailResponses);
+        System.out.println(orderSavePrice.getOrderDetails().size());
+        return new OrderResponse(orderSavePrice);
     }
 
     @Override

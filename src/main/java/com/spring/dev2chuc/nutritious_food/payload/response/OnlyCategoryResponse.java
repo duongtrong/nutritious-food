@@ -1,17 +1,28 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
 import com.spring.dev2chuc.nutritious_food.model.Category;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 
-public class OnlyCategoryResponse extends Category {
+@Getter
+@Setter
+public class OnlyCategoryResponse {
+    private Long id;
+
+    private Long parentId;
+    private String name;
+    private String image;
+    private String description;
+    private Integer status;
+
     public OnlyCategoryResponse(Category category) {
-        this.setId(category.getId());
-        this.setName(category.getName());
-        this.setDescription(category.getDescription());
-        this.setParentId(category.getParentId());
-        this.setImage(category.getImage());
-        this.setStatus(category.getStatus());
-        this.setCreatedAt(category.getCreatedAt());
+        this.id = category.getId();
+        this.name = category.getName();
+        this.description = category.getDescription();
+        this.parentId = category.getParentId();
+        this.image = category.getImage();
+        this.status = category.getStatus();
     }
 }

@@ -4,6 +4,7 @@ import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.*;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.OrderResponse;
 import com.spring.dev2chuc.nutritious_food.service.order.OrderService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class OrderController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
             OrderResponse orderResponse = orderService.saveOrderByUser(user, orderRequests);
+            if (orderResponse == null)
+                return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), "Item not match"), HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Save order success", orderResponse), HttpStatus.CREATED);
         }
     }
