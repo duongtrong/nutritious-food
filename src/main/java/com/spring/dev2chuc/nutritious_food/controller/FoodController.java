@@ -78,7 +78,7 @@ public class FoodController {
             @RequestParam(value = "form", required = false) String form,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "10", required = false) int limit){
+            @RequestParam(defaultValue = "12", required = false) int limit){
 
         Specification specification = Specification.where(null);
         if (search != null && search.length() > 0) {
