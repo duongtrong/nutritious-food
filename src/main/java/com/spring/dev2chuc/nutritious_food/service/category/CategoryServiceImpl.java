@@ -65,11 +65,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category merge(Category category, CategoryRequest categoryRequest) {
-        category.setParentId(categoryRequest.getParentId());
-        category.setName(categoryRequest.getName());
-        category.setDescription(categoryRequest.getDescription());
-        category.setImage(categoryRequest.getImage());
-        category.setStatus(Status.ACTIVE.getValue());
+        if (categoryRequest.getParentId() != null) category.setParentId(categoryRequest.getParentId());
+        else category.setParentId(Long.valueOf(0));
+        if (categoryRequest.getName() != null) category.setName(categoryRequest.getName());
+        if (categoryRequest.getDescription() != null) category.setDescription(categoryRequest.getDescription());
+        if (categoryRequest.getImage() != null) category.setImage(categoryRequest.getImage());
+        if (category.getStatus() == null) category.setStatus(Status.ACTIVE.getValue());
         return categoryRepository.save(category);
     }
 
