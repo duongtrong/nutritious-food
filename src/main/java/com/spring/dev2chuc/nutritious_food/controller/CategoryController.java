@@ -38,7 +38,7 @@ public class CategoryController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> store(@Valid @RequestBody CategoryRequest categoryRequest, @PathVariable("id") Long id) {
+    public ResponseEntity<?> update(@Valid @RequestBody CategoryRequest categoryRequest, @PathVariable("id") Long id) {
         Category category = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (category == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Category not found"), HttpStatus.NOT_FOUND);
