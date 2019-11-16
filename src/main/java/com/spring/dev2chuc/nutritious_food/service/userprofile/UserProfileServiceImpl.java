@@ -1,6 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.service.userprofile;
 
-import com.spring.dev2chuc.nutritious_food.model.Category;
+import com.spring.dev2chuc.nutritious_food.model.ExerciseIntensity;
+import com.spring.dev2chuc.nutritious_food.model.Gender;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
@@ -54,7 +55,6 @@ public class UserProfileServiceImpl implements UserProfileService{
     public Optional<UserProfile> getDetail(Long id) {
         if (CollectionUtils.isEmpty (Collections.singleton (id))) {
             return null;
-//            throw new RuntimeException ("Null pointer exception");
         }
         System.out.println(id);
         Optional<UserProfile> userProfile = userProfileRepository.findById(id);
@@ -64,5 +64,18 @@ public class UserProfileServiceImpl implements UserProfileService{
     @Override
     public UserProfile update(UserProfile userProfile) {
         return userProfileRepository.save(userProfile);
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(mathCalories(52, 173, 20, Gender.MALE.getValue(), ExerciseIntensity.LIGHT_ACTIVITY.getValue()));
+    }
+
+    private static int mathCalories(int weight, int height, int age, int gender, double intensity) {
+        int index = gender == Gender.MALE.getValue() ? 88362 : 447593;
+        int indexWeight = gender == Gender.MALE.getValue() ? 13397 : 9247;
+        int indexHeight = gender == Gender.MALE.getValue() ? 4799 : 3098;
+        int indexAge = gender == Gender.MALE.getValue() ? 5677 : 4330;
+        return (int) (((index + (indexWeight * weight) + (indexHeight * height) - (indexAge * age)) * intensity)) / 1000;
     }
 }

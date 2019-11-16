@@ -1,7 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.service.category;
 
 import com.spring.dev2chuc.nutritious_food.model.Category;
-import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.payload.CategoryRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;

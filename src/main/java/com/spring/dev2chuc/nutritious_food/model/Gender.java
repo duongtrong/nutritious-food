@@ -1,12 +1,13 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
-public enum Status {
-    ACTIVE(1),
-    DEACTIVE(0);
+public enum Gender {
+
+    MALE(1),
+    FEMALE(2);
 
     private Integer value;
 
-    Status(Integer value) {
+    Gender(Integer value) {
         this.value = value;
     }
 
