@@ -43,7 +43,7 @@ public class CategoryController {
         if (category == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
-        Category result = categoryService.update(category, categoryRequest);
+        Category result = categoryService.merge(category, categoryRequest);
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
     }
 

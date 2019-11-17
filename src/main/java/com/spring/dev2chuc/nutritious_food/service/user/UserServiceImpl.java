@@ -128,19 +128,19 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById (id).orElseThrow (null);
     }
 
-    @Override
-    public Observable<Integer> changePassword(PasswordEncoder passwordEncoder, String email, String password, String oldPassword) {
-        return Observable.fromCallable(() -> {
-            userRepository.changePassword(email, passwordEncoder.encode(password), passwordEncoder.encode(oldPassword));
-            return Integer.MAX_VALUE;
-        });
-    }
-
-    @Override
-    public Observable<User> findUserWith(PasswordEncoder passwordEncoder, String email, String password) {
-        return Observable.fromCallable(() -> userRepository.findUserWith(email, passwordEncoder.encode(password))
-                .orElseThrow(() -> new AppException("{user.id.not.found}")));
-    }
+//    @Override
+//    public Observable<Integer> changePassword(PasswordEncoder passwordEncoder, String email, String password, String oldPassword) {
+//        return Observable.fromCallable(() -> {
+//            userRepository.changePassword(email, passwordEncoder.encode(password), passwordEncoder.encode(oldPassword));
+//            return Integer.MAX_VALUE;
+//        });
+//    }
+//
+//    @Override
+//    public Observable<User> findUserWith(PasswordEncoder passwordEncoder, String email, String password) {
+//        return Observable.fromCallable(() -> userRepository.findUserWith(email, passwordEncoder.encode(password))
+//                .orElseThrow(() -> new AppException("{user.id.not.found}")));
+//    }
 
     @Override
     public boolean checkPassword(String oldPassword, User user) {

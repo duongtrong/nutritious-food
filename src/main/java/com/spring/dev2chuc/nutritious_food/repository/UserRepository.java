@@ -31,14 +31,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
-    @Query(value = "SELECT * FROM users INNER JOIN user_roles ON users.id = user_roles.user_idINNER JOIN roles ON user_roles.role_id = roles.id WHERE roles.name = \"ROLE_USER\"", nativeQuery = true)
-    List<User> findAllByRoles(RoleName name);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE users SET users.password=:password WHERE users.email=:email AND users.password=:oldPassword IS NOT NULL LIMIT 1", nativeQuery = true)
-    void changePassword(@Param("email") String email, @Param("password") String password, @Param("oldPassword") String oldPassword);
-
-    @Query(value = "SELECT * FROM users WHERE users.email=:email AND users.password=:password IS NOT NULL LIMIT 1", nativeQuery = true)
-    Optional<User> findUserWith(@Param("email") String email, @Param("password") String password);
+//    @Query(value = "SELECT * FROM users INNER JOIN user_roles ON users.id = user_roles.user_idINNER JOIN roles ON user_roles.role_id = roles.id WHERE roles.name = \"ROLE_USER\"", nativeQuery = true)
+//    List<User> findAllByRoles(RoleName name);
+//
+//    @Transactional
+//    @Modifying
+//    @Query(value = "UPDATE users SET users.password=:password WHERE users.email=:email AND users.password=:oldPassword IS NOT NULL LIMIT 1", nativeQuery = true)
+//    void changePassword(@Param("email") String email, @Param("password") String password, @Param("oldPassword") String oldPassword);
+//
+//    @Query(value = "SELECT * FROM users WHERE users.email=:email AND users.password=:password IS NOT NULL LIMIT 1", nativeQuery = true)
+//    Optional<User> findUserWith(@Param("email") String email, @Param("password") String password);
 }

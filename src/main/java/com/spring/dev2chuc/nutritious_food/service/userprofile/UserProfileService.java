@@ -16,4 +16,5 @@ public interface UserProfileService {
     Optional<UserProfile> getDetail(Long id);
 
     UserProfile update(UserProfile userProfile);
+
 }
