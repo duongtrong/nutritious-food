@@ -34,7 +34,7 @@ public class OnlyFoodResponse {
         this.name = food.getName();
         this.description = food.getDescription();
         this.image = food.getImage();
-        this.price = food.getId();
+        this.price = food.getPrice();
         this.carbonhydrates = food.getCarbonhydrates();
         this.protein = food.getProtein();
         this.lipid = food.getLipid();
