@@ -8,7 +8,6 @@ import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
 import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
-import io.reactivex.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;

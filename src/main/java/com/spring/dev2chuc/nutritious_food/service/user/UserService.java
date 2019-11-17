@@ -4,8 +4,6 @@ import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
-import io.reactivex.Observable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
