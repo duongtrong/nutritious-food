@@ -58,7 +58,7 @@ public class UserProfile extends DateAudit {
             Integer desiredWeight,
             Integer dietTime,
             Integer caloriesChange
-            ) {
+    ) {
         this.user = user;
         this.height = height;
         this.weight = weight;

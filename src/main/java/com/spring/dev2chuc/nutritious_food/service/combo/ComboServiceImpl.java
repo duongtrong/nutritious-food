@@ -69,6 +69,7 @@ public class ComboServiceImpl implements ComboService{
         if (comboRequest.getVitaminD() != 0.0f) combo.setVitaminD(comboRequest.getVitaminD());
         if (comboRequest.getVitaminE() != 0.0f) combo.setVitaminE(comboRequest.getVitaminE());
         if (comboRequest.getCalorie() != 0.0f) combo.setCalorie(comboRequest.getCalorie());
+        if (comboRequest.getWeight() != 0.0f) combo.setWeight(comboRequest.getWeight());
         if (comboRequest.getFoodIds().size() > 0) {
             List<Category> categories = categoryService.findAllByIdIn(comboRequest.getFoodIds());
             Set<Category> categorySet = new HashSet<>(categories);
@@ -104,6 +105,7 @@ public class ComboServiceImpl implements ComboService{
         combo.setVitaminD(comboRequest.getVitaminD());
         combo.setVitaminE(comboRequest.getVitaminE());
         combo.setCalorie(comboRequest.getCalorie());
+        combo.setWeight(comboRequest.getWeight());
         combo.setStatus(Status.ACTIVE.getValue());
 
         List<Category> categories = categoryService.findAllByIdIn(comboRequest.getCategoryIds());
