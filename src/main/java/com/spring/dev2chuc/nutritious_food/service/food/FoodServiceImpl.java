@@ -120,14 +120,14 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<Food> findAllByIdIn(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            throw new RuntimeException("Null pointer exception...");
-        }
-        List<Food> list = foodRepository.findAllByIdIn(ids);
-        if (list == null) {
-            throw new RuntimeException("Null pointer exception...");
-        }
-        return list;
+//        if (CollectionUtils.isEmpty(ids)) {
+//            throw new RuntimeException("Null pointer exception...");
+//        }
+        return foodRepository.findAllByIdIn(ids);
+//        if (list == null) {
+//            throw new RuntimeException("Null pointer exception...");
+//        }
+//        return list;
     }
 
     @Override
