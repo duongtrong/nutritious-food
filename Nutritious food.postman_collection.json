@@ -47,6 +47,18 @@
 			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73"
 		},
 		{
+			"name": "Food",
+			"description": "",
+			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
+			"order": [
+				"588f0103-d0ff-eb91-167b-92a933c0b8a0",
+				"f3892c72-80c8-1d0d-efa4-cbeb882abd63"
+			],
+			"owner": "9350909",
+			"folders_order": [],
+			"id": "03ef040a-df7a-18be-9e94-3b04d946b509"
+		},
+		{
 			"name": "Order",
 			"description": "",
 			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
@@ -117,7 +129,8 @@
 		"99de74b8-0eb0-1a2c-6bae-49fad87ddb76",
 		"fb9867e1-001f-f62a-2482-773b1e4e73b8",
 		"e153b4f8-f678-f595-d9cc-43932ea388ed",
-		"99b18dc0-b201-8f07-15cf-b6ddb56bdca7"
+		"99b18dc0-b201-8f07-15cf-b6ddb56bdca7",
+		"03ef040a-df7a-18be-9e94-3b04d946b509"
 	],
 	"timestamp": 0,
 	"owner": "9350909",
@@ -155,33 +168,39 @@
 		},
 		{
 			"id": "15302d56-89ae-7088-c229-c6ef98f6a931",
-			"name": "Combo Update",
-			"description": "",
-			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
-			"method": "PUT",
-			"headers": "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTcyODM5OTQ4LCJleHAiOjE1NzM0NDQ3NDh9.JcJK3JhHtZ93KDIv5TYsoMTjiD7oxRvBhZ5whP5Pn5cFYlJRMNPVv5Ub59zBTmJ7ebMrLUbY_c8ceiPupU9pPg\nContent-Type: application/json",
-			"dataMode": "raw",
-			"data": [],
-			"rawModeData": "{\n\t\"name\": \"Bữa trưa cay xew\", \n\t\"description\" : \"ngon vv\",\n\t\"image\" : \"12\",\n\t\"price\" : 230,\n\t\"carbonhydrates\" : 230,\n\t\"protein\" : 230,\n\t\"lipid\" : 230,\n\t\"xenluloza\" : 230,\n\t\"canxi\" : 230,\n\t\"iron\" : 230,\n\t\"zinc\" : 230,\n\t\"vitaminA\" : 230,\n\t\"vitaminB\" : 230,\n\t\"vitaminC\" : 230,\n\t\"vitaminD\" : 230,\n\t\"vitaminE\" : 230,\n\t\"foodIds\" : [],\n\t\"categoryIds\" : []\n}",
-			"url": "localhost:8080/api/combo/1/update",
-			"responses": [],
-			"pathVariableData": [],
-			"queryParams": [],
+			"headers": "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw\nContent-Type: application/json\n",
 			"headerData": [
 				{
 					"key": "Authorization",
-					"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTcyODM5OTQ4LCJleHAiOjE1NzM0NDQ3NDh9.JcJK3JhHtZ93KDIv5TYsoMTjiD7oxRvBhZ5whP5Pn5cFYlJRMNPVv5Ub59zBTmJ7ebMrLUbY_c8ceiPupU9pPg",
-					"type": "text"
+					"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw",
+					"description": "",
+					"enabled": true
 				},
 				{
 					"key": "Content-Type",
-					"name": "Content-Type",
 					"value": "application/json",
-					"type": "text"
+					"description": "",
+					"enabled": true
 				}
 			],
-			"collection_id": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
-			"folder": "99de74b8-0eb0-1a2c-6bae-49fad87ddb76"
+			"url": "localhost:9000/api/combo/update/1",
+			"folder": "99de74b8-0eb0-1a2c-6bae-49fad87ddb76",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "PUT",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1574181949013,
+			"name": "Combo Update",
+			"description": "",
+			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
+			"responses": [],
+			"rawModeData": "{\n\n\t\"categoryIds\" : [1]\n}"
 		},
 		{
 			"id": "1544ecc5-5979-d9c5-5285-95286f3507fb",
@@ -216,33 +235,39 @@
 		},
 		{
 			"id": "172d9a95-373d-aef3-b7d4-8aabe6427a8e",
-			"name": "Combo create",
-			"description": "",
-			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
-			"method": "POST",
-			"headers": "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTcyODM5OTQ4LCJleHAiOjE1NzM0NDQ3NDh9.JcJK3JhHtZ93KDIv5TYsoMTjiD7oxRvBhZ5whP5Pn5cFYlJRMNPVv5Ub59zBTmJ7ebMrLUbY_c8ceiPupU9pPg\nContent-Type: application/json",
-			"dataMode": "raw",
-			"data": [],
-			"rawModeData": "{\n\t\"name\": \"Bữa trưa cay đắng\", \n\t\"description\" : \"ngon vv\",\n\t\"image\" : \"12\",\n\t\"price\" : 230,\n\t\"carbonhydrates\" : 230,\n\t\"protein\" : 230,\n\t\"lipid\" : 230,\n\t\"xenluloza\" : 230,\n\t\"canxi\" : 230,\n\t\"iron\" : 230,\n\t\"zinc\" : 230,\n\t\"vitaminA\" : 230,\n\t\"vitaminB\" : 230,\n\t\"vitaminC\" : 230,\n\t\"vitaminD\" : 230,\n\t\"vitaminE\" : 230,\n\t\"foodIds\" : [],\n\t\"categoryIds\" : [1, 2]\n}",
-			"url": "localhost:8080/api/combo/create",
-			"responses": [],
-			"pathVariableData": [],
-			"queryParams": [],
+			"headers": "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw\nContent-Type: application/json\n",
 			"headerData": [
 				{
 					"key": "Authorization",
-					"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTcyODM5OTQ4LCJleHAiOjE1NzM0NDQ3NDh9.JcJK3JhHtZ93KDIv5TYsoMTjiD7oxRvBhZ5whP5Pn5cFYlJRMNPVv5Ub59zBTmJ7ebMrLUbY_c8ceiPupU9pPg",
-					"type": "text"
+					"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw",
+					"description": "",
+					"enabled": true
 				},
 				{
 					"key": "Content-Type",
-					"name": "Content-Type",
 					"value": "application/json",
-					"type": "text"
+					"description": "",
+					"enabled": true
 				}
 			],
-			"collection_id": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
-			"folder": "99de74b8-0eb0-1a2c-6bae-49fad87ddb76"
+			"url": "localhost:8080/api/combo/create",
+			"folder": "99de74b8-0eb0-1a2c-6bae-49fad87ddb76",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1574164519368,
+			"name": "Combo create",
+			"description": "",
+			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
+			"responses": [],
+			"rawModeData": "{\n\t\"name\": \"Bữa trưa cay đắng 123\", \n\t\"description\" : \"ngon vv\",\n\t\"image\" : \"12\",\n\t\"price\" : 230,\n\t\"carbonhydrates\" : 230,\n\t\"protein\" : 230,\n\t\"lipid\" : 230,\n\t\"xenluloza\" : 230,\n\t\"canxi\" : 230,\n\t\"iron\" : 230,\n\t\"zinc\" : 230,\n\t\"vitaminA\" : 230,\n\t\"vitaminB\" : 230,\n\t\"vitaminC\" : 230,\n\t\"vitaminD\" : 230,\n\t\"vitaminE\" : 230,\n\t\"foodIds\" : [],\n\t\"categoryIds\" : [2]\n}"
 		},
 		{
 			"id": "1824d8e2-e0d5-0c5d-c76b-85f2b58f3f7b",
@@ -440,6 +465,47 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"folder": "ef500588-134e-66ea-71ac-f3f642ea14a9"
+		},
+		{
+			"id": "588f0103-d0ff-eb91-167b-92a933c0b8a0",
+			"headers": "Content-Type: application/json\nAuthorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw\nAccept: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Accept",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/api/food/create",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1574186304495,
+			"name": "Food create",
+			"description": "",
+			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
+			"responses": [],
+			"rawModeData": "{\n\t\"name\": \"Com rang thap cam\", \n\t\"description\" : \"ngon vv\",\n\t\"image\" : \"12\",\n\t\"price\" : 230,\n\t\"carbonhydrates\" : 1230,\n\t\"protein\" : 1400,\n\t\"lipid\" : 230,\n\t\"xenluloza\" : 230,\n\t\"canxi\" : 230,\n\t\"iron\" : 230,\n\t\"zinc\" : 230,\n\t\"vitaminA\" : 230,\n\t\"vitaminB\" : 230,\n\t\"vitaminC\" : 230,\n\t\"vitaminD\" : 230,\n\t\"vitaminE\" : 230,\n\t\"cateId\" : [2],\n\t\"combos\" : [2]\n}"
 		},
 		{
 			"id": "5f0847af-dd9c-522c-9889-7750ae633464",
@@ -795,6 +861,44 @@
 			"helperAttributes": {},
 			"folder": "ef500588-134e-66ea-71ac-f3f642ea14a9",
 			"rawModeData": "{\n\t\"name\" : \"quyen196\",\n\t\"username\" : \"quyen196\",\n\t\"email\" : \"quyen196@gmail.com\",\n\t\"phone\" : \"0288044008\",\n\t\"password\" : \"9876543210\"\n}"
+		},
+		{
+			"id": "f3892c72-80c8-1d0d-efa4-cbeb882abd63",
+			"headers": "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw\nContent-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTc0MTYzOTAwLCJleHAiOjE1NzQ3Njg3MDB9.JzYnOzMlD0IkWCinzl3F-aH-ISg0dKDPR2Hc1cg2DjYQHVigEcpxd-1Dgcn1H2ZGhp-HWF3HvKGZlG83uM_4Dw",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/api/food/update/11",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "PUT",
+			"collectionId": "0bd42bc2-a55b-c1e3-bc75-958914d81f73",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Food update",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1574186584316,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "03ef040a-df7a-18be-9e94-3b04d946b509",
+			"rawModeData": "{\n\t\"name\": \"Com rang thap cam 222\", \n\t\"description\" : \"ngon vv\",\n\t\"image\" : \"12\",\n\t\"price\" : 230,\n\t\"carbonhydrates\" : 230,\n\t\"protein\" : 1400,\n\t\"lipid\" : 230,\n\t\"xenluloza\" : 230,\n\t\"canxi\" : 230,\n\t\"iron\" : 230,\n\t\"zinc\" : 230,\n\t\"vitaminA\" : 230,\n\t\"vitaminB\" : 230,\n\t\"vitaminC\" : 230,\n\t\"vitaminD\" : 230,\n\t\"vitaminE\" : 230,\n\t\"cateId\" : [2],\n\t\"combos\" : [1]\n}"
 		},
 		{
 			"id": "fd43a240-5b37-f6cd-4aa6-2e17aca081bc",

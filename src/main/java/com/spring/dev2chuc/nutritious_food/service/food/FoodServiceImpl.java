@@ -1,11 +1,13 @@
 package com.spring.dev2chuc.nutritious_food.service.food;
 
 import com.spring.dev2chuc.nutritious_food.model.Category;
+import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
+import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,9 @@ public class FoodServiceImpl implements FoodService {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    ComboService comboService;
 
     @Override
     public Food merge(Food food) {
@@ -70,7 +75,19 @@ public class FoodServiceImpl implements FoodService {
             food.setCategories(categorySet);
         }
 
-        return foodRepository.save(food);
+        List<Combo> combos = new ArrayList<>();
+        if (foodRequest.getCombos() != null && foodRequest.getCombos().size() > 0) {
+            combos = comboService.findAllByIdIn(foodRequest.getCombos());
+            Set<Combo> comboSet = new HashSet<>(combos);
+            food.setCombos(comboSet);
+        }
+
+        Food result = foodRepository.save(food);
+        for (Combo combo : combos) {
+            comboService.updateByListFood(combo);
+        }
+
+        return result;
     }
 
     @Override
@@ -95,13 +112,25 @@ public class FoodServiceImpl implements FoodService {
         food.setWeight(foodRequest.getWeight());
         food.setStatus(Status.ACTIVE.getValue());
 
-        if (foodRequest.getCateId().size() > 0) {
+        if (foodRequest.getCateId() != null && foodRequest.getCateId().size() > 0) {
             List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCateId());
             Set<Category> categorySet = new HashSet<>(categories);
             food.setCategories(categorySet);
         }
 
-        return foodRepository.save(food);
+        List<Combo> combos = new ArrayList<>();
+        if (foodRequest.getCombos() != null && foodRequest.getCombos().size() > 0) {
+            combos = comboService.findAllByIdIn(foodRequest.getCombos());
+            Set<Combo> comboSet = new HashSet<>(combos);
+            food.setCombos(comboSet);
+        }
+
+        Food result = foodRepository.save(food);
+        for (Combo combo : combos) {
+            comboService.updateByListFood(combo);
+        }
+
+        return result;
     }
 
     @Override

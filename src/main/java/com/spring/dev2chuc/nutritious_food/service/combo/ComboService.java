@@ -22,4 +22,8 @@ public interface ComboService {
     Combo findByStatusAndId(Integer status, Long id);
 
     Page<Combo> foodsWithPaginate(Specification specification, int page, int limit);
+
+    List<Combo> findAllByIdIn(List<Long> combos);
+
+    void updateByListFood(Combo combo);
 }
