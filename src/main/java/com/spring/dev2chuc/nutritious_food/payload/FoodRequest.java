@@ -29,4 +29,5 @@ public class FoodRequest {
     private float calorie;
     private float weight;
     private List<Long> cateId;
+    private List<Long> combos;
 }

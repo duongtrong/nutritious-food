@@ -15,4 +15,6 @@ public interface ComboRepository extends JpaRepository<Combo, Long>, JpaSpecific
     List<Combo> findAllByStatus(int Status);
 
     List<Combo> findAllByStatusIs(Integer status);
+
+    List<Combo> findAllByStatusAndIdIn(Integer status, List<Long> ids);
 }

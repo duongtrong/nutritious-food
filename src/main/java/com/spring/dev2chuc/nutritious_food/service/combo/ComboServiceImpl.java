@@ -81,7 +81,27 @@ public class ComboServiceImpl implements ComboService{
             combo.setFoods(foodSet);
         }
 
+        updateByListFood(combo);
         return comboRepository.save(combo);
+    }
+
+    @Override
+    public void updateByListFood(Combo combo) {
+        combo.setCalorie((float) combo.getFoods().stream().filter(o -> o.getCalorie() > 0).mapToDouble(Food::getCalorie).sum());
+        combo.setCarbonhydrates((float) combo.getFoods().stream().filter(o -> o.getCarbonhydrates() > 0).mapToDouble(Food::getCarbonhydrates).sum());
+        combo.setProtein((float) combo.getFoods().stream().filter(o -> o.getProtein() > 0).mapToDouble(Food::getProtein).sum());
+        combo.setLipid((float) combo.getFoods().stream().filter(o -> o.getLipid() > 0).mapToDouble(Food::getLipid).sum());
+        combo.setXenluloza((float) combo.getFoods().stream().filter(o -> o.getXenluloza() > 0).mapToDouble(Food::getXenluloza).sum());
+        combo.setCanxi((float) combo.getFoods().stream().filter(o -> o.getCanxi() > 0).mapToDouble(Food::getCanxi).sum());
+        combo.setIron((float) combo.getFoods().stream().filter(o -> o.getIron() > 0).mapToDouble(Food::getIron).sum());
+        combo.setZinc((float) combo.getFoods().stream().filter(o -> o.getZinc() > 0).mapToDouble(Food::getZinc).sum());
+        combo.setVitaminA((float) combo.getFoods().stream().filter(o -> o.getVitaminA() > 0).mapToDouble(Food::getVitaminA).sum());
+        combo.setVitaminB((float) combo.getFoods().stream().filter(o -> o.getVitaminB() > 0).mapToDouble(Food::getVitaminB).sum());
+        combo.setVitaminC((float) combo.getFoods().stream().filter(o -> o.getVitaminC() > 0).mapToDouble(Food::getVitaminC).sum());
+        combo.setVitaminD((float) combo.getFoods().stream().filter(o -> o.getVitaminD() > 0).mapToDouble(Food::getVitaminD).sum());
+        combo.setVitaminE((float) combo.getFoods().stream().filter(o -> o.getVitaminE() > 0).mapToDouble(Food::getVitaminE).sum());
+        combo.setWeight((float) combo.getFoods().stream().filter(o -> o.getWeight() > 0).mapToDouble(Food::getWeight).sum());
+        comboRepository.save(combo);
     }
 
     @Override
@@ -115,8 +135,9 @@ public class ComboServiceImpl implements ComboService{
         List<Food> foodList = foodService.findAllByIdIn(foodIds);
         Set<Food> foodSet = new HashSet<>(foodList);
         combo.setFoods(foodSet);
-
-        return comboRepository.save(combo);
+        Combo result = comboRepository.save(combo);
+        updateByListFood(result);
+        return result;
     }
 
     @Override
@@ -127,5 +148,10 @@ public class ComboServiceImpl implements ComboService{
     @Override
     public Page<Combo> foodsWithPaginate(Specification specification, int page, int limit) {
         return comboRepository.findAll(specification, PageRequest.of(page - 1, limit));
+    }
+
+    @Override
+    public List<Combo> findAllByIdIn(List<Long> comboIds) {
+        return comboRepository.findAllByStatusAndIdIn(Status.ACTIVE.getValue(), comboIds);
     }
 }
