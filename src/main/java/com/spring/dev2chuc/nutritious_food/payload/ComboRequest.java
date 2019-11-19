@@ -27,6 +27,7 @@ public class ComboRequest {
     private float vitaminD;
     private float vitaminE;
     private float calorie;
+    private float weight;
     private List<Long> foodIds;
     private List<Long> categoryIds;
 }

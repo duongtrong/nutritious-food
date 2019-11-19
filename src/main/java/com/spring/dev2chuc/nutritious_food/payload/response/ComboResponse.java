@@ -31,6 +31,7 @@ public class ComboResponse {
     private float vitaminD;
     private float vitaminE;
     private float calorie;
+    private float weight;
     private int status;
     private Set<OnlyFoodResponse> foods = new HashSet<>();
     private Set<OnlyCategoryResponse> categories = new HashSet<>();
@@ -54,6 +55,7 @@ public class ComboResponse {
         this.vitaminD = combo.getVitaminD();
         this.vitaminE = combo.getVitaminE();
         this.calorie = combo.getCalorie();
+        this.calorie = combo.getWeight();
         this.status = combo.getStatus();
         this.foods = combo.getFoods().stream().map(x -> new OnlyFoodResponse(x)).collect(Collectors.toSet());
         this.categories = combo.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());

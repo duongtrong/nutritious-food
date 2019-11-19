@@ -29,6 +29,7 @@ public class OnlyComboResponse {
     private float vitaminD;
     private float vitaminE;
     private float calorie;
+    private float weight;
     private int status;
 
     public OnlyComboResponse(Combo combo) {
@@ -50,6 +51,7 @@ public class OnlyComboResponse {
         this.vitaminD = combo.getVitaminD();
         this.vitaminE = combo.getVitaminE();
         this.calorie = combo.getCalorie();
+        this.weight = combo.getWeight();
         this.status = combo.getStatus();
     }
 }
