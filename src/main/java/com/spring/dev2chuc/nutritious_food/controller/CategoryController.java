@@ -51,7 +51,7 @@ public class CategoryController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Category result = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (result == null) {
-            return new ResponseEntity<>(new ApiResponseCustom(HttpStatus.OK.value(), "Category not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponseCustom(HttpStatus.NOT_FOUND.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
         result.setStatus(Status.DEACTIVE.getValue());
         categoryService.merge(result);
