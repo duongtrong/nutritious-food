@@ -1,6 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
-import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +35,22 @@ public class OnlyFoodResponse {
     private Set<OnlyComboResponse> combos = new HashSet<>();
 
     public OnlyFoodResponse(Food food) {
+        clone(food);
+        this.categories = food.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());
+        this.combos = food.getCombos().stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toSet());
+    }
+
+    public OnlyFoodResponse(Food food, boolean withCategory, boolean withCombo) {
+        clone(food);
+        if (withCategory) {
+            this.categories = food.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());
+        }
+        if (withCombo) {
+            this.combos = food.getCombos().stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toSet());
+        }
+    }
+
+    private void clone(Food food) {
         this.id = food.getId();
         this.name = food.getName();
         this.description = food.getDescription();
@@ -56,7 +71,7 @@ public class OnlyFoodResponse {
         this.calorie = food.getCalorie();
         this.weight = food.getWeight();
         this.status = food.getStatus();
-        this.categories = food.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());
-        this.combos = food.getCombos().stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toSet());
+        this.categories = new HashSet<>();
+        this.combos = new HashSet<>();
     }
 }
