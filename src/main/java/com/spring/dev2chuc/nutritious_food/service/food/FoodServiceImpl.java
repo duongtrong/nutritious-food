@@ -69,8 +69,8 @@ public class FoodServiceImpl implements FoodService {
         if (foodRequest.getCalorie() != 0.0f) food.setCalorie(foodRequest.getCalorie());
         if (foodRequest.getWeight() != 0.0f) food.setWeight(foodRequest.getWeight());
 
-        if (foodRequest.getCateId().size() > 0) {
-            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCateId());
+        if (foodRequest.getCategories().size() > 0) {
+            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCategories());
             Set<Category> categorySet = new HashSet<>(categories);
             food.setCategories(categorySet);
         }
@@ -112,8 +112,8 @@ public class FoodServiceImpl implements FoodService {
         food.setWeight(foodRequest.getWeight());
         food.setStatus(Status.ACTIVE.getValue());
 
-        if (foodRequest.getCateId() != null && foodRequest.getCateId().size() > 0) {
-            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCateId());
+        if (foodRequest.getCategories() != null && foodRequest.getCategories().size() > 0) {
+            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCategories());
             Set<Category> categorySet = new HashSet<>(categories);
             food.setCategories(categorySet);
         }
