@@ -39,7 +39,7 @@ public class ComboServiceImpl implements ComboService{
 
     @Override
     public List<Combo> findAll() {
-        return comboRepository.findAll();
+        return comboRepository.findAllByStatus(Status.ACTIVE.getValue());
     }
 
     @Override
