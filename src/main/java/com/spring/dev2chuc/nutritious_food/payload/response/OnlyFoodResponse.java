@@ -31,19 +31,19 @@ public class OnlyFoodResponse {
     private float calorie;
     private float weight;
     private int status;
-    private Set<OnlyCategoryResponse> categories = new HashSet<> ();
+    private Set<CategoryDTO> categories = new HashSet<> ();
     private Set<OnlyComboResponse> combos = new HashSet<>();
 
     public OnlyFoodResponse(Food food) {
         clone(food);
-        this.categories = food.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());
+        this.categories = food.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
         this.combos = food.getCombos().stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toSet());
     }
 
     public OnlyFoodResponse(Food food, boolean withCategory, boolean withCombo) {
         clone(food);
         if (withCategory) {
-            this.categories = food.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());
+            this.categories = food.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
         }
         if (withCombo) {
             this.combos = food.getCombos().stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toSet());

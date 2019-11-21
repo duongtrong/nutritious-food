@@ -1,6 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
-import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ public class UserProfileResponse {
     private Integer weight;
     private Integer age;
     private Integer status;
-    private Set<OnlyCategoryResponse> categories;
+    private Set<CategoryDTO> categories;
 
 
     public UserProfileResponse(UserProfile userProfile) {
@@ -28,6 +27,6 @@ public class UserProfileResponse {
         this.weight = userProfile.getWeight();
         this.age = LocalDate.now().getYear() - userProfile.getYearOfBirth();
         this.status = userProfile.getStatus();
-        this.categories = userProfile.getCategories().stream().map(x -> new OnlyCategoryResponse(x)).collect(Collectors.toSet());
+        this.categories = userProfile.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
     }
 }
