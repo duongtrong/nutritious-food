@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -29,13 +30,16 @@ public class CategoryController {
     public ResponseEntity<?> store(@Valid @RequestBody CategoryRequest categoryRequest) {
         Category current = new Category();
         Category result = categoryService.merge(current, categoryRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", new CategoryDTO(result, true, true)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable("id") Long id) {
         Category result = categoryService.findByIdAndStatus(id, Status.ACTIVE.getValue());
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(),
+                "OK",
+                new CategoryDTO(result, true, true)
+        ), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -45,7 +49,7 @@ public class CategoryController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Category not found"), HttpStatus.NOT_FOUND);
         }
         Category result = categoryService.merge(category, categoryRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", result), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", new CategoryDTO(result, true, true)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -62,13 +66,15 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> listAll() {
         List<Category> result = categoryService.findAllByStatusIs(Status.ACTIVE.getValue());
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", categoryDTO), HttpStatus.OK);
     }
 
     @GetMapping("/parent/{id}")
     public ResponseEntity<?> getByParentId(@PathVariable("id") Long id) {
         List<Category> result = categoryService.findByCategoriesByParentIdAndStatus(id, Status.ACTIVE.getValue());
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
+        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", categoryDTO), HttpStatus.OK);
     }
 
     @GetMapping("/latest")
@@ -98,9 +104,10 @@ public class CategoryController {
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
 
-        Page<Category> categories = categoryService.categoriesWithPaginate(specification, page, limit);
+        Page<Category> categories = categoryService.categoriesWithPaginate((Specification) specification, page, limit);
+        List<CategoryDTO> categoryDTO = categories.stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toList());
         return new ResponseEntity<>(new ApiResponsePage<>(
-                HttpStatus.OK.value(), "OK", categories,
+                HttpStatus.OK.value(), "OK", categoryDTO,
                 new RESTPagination(page, limit, categories.getTotalPages(), categories.getTotalElements())), HttpStatus.OK);
     }
 }

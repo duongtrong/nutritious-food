@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,14 +40,14 @@ public class FoodController {
     public ResponseEntity<?> getDetails(@PathVariable Long id){
         Food food = foodService.findById (id);
         if (food == null) return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Food not found"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "OK", new FoodResponse(food)), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "OK", new FoodDTO(food)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest) {
         Food food = new Food();
         Food current = foodService.merge(food, foodRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create new food success", new FoodResponse(current)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create new food success", new FoodDTO(current)), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
@@ -58,7 +57,7 @@ public class FoodController {
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
         }
         Food result = foodService.update(food, foodRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", new FoodResponse(result)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", new FoodDTO(result)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
