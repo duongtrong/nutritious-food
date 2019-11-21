@@ -68,7 +68,8 @@ public class UserProfileServiceImpl implements UserProfileService{
 
 
     public static void main(String[] args) {
-        System.out.println(mathCalories(52, 173, 20, Gender.MALE.getValue(), ExerciseIntensity.LIGHT_ACTIVITY.getValue()));
+//        System.out.println(mathCalories(52, 173, 20, Gender.MALE.getValue(), ExerciseIntensity.LIGHT_ACTIVITY.getValue()));
+        String strDouble = String.format("%.3f", 20.0000); System.out.println(strDouble);
     }
 
     private static int mathCalories(int weight, int height, int age, int gender, double intensity) {
