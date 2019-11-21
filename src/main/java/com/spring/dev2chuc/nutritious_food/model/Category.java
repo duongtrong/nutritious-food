@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,6 +26,14 @@ public class Category extends DateAudit {
     @Column(columnDefinition = "TEXT")
     private String description;
     private Integer status;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "category_food", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
+    private Set<Food> foods = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "combo_category", joinColumns = @JoinColumn(name = "combo_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Combo> combos = new HashSet<>();
 
     public Category(Long parentId, String name, String image, String description) {
         this.parentId = parentId;
