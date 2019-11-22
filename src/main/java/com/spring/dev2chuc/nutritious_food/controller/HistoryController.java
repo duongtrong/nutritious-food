@@ -8,7 +8,6 @@ import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import com.spring.dev2chuc.nutritious_food.service.history.HistoryService;
-import com.spring.dev2chuc.nutritious_food.service.history.HistoryServiceImpl;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +57,7 @@ public class HistoryController {
             History history = historyService.store(historyRequest, user, food);
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(),
                     "Store history success",
-                    new HistoryResponse(history)),
+                    new HistoryDTO(history)),
                 HttpStatus.CREATED
             );
         }

@@ -139,7 +139,6 @@ public class AuthController {
     }
 
     // private for permission admin
-
     @PostMapping("/admin/signin")
     public ResponseEntity<?> authenticateAdmin(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -212,38 +211,10 @@ public class AuthController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
             List<UserProfile> userProfiles = userProfileService.getAllByUser(user);
-            List<UserProfileResponse> userProfileResponses = userProfiles.stream().map(x -> new UserProfileResponse(x)).collect(Collectors.toList());;
+            List<UserProfileDTO> userProfileResponses = userProfiles.stream().map(x -> new UserProfileDTO(x, true, false)).collect(Collectors.toList());;
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "success", userProfileResponses), HttpStatus.OK);
         }
     }
-
-//    @PutMapping("/password/change")
-//    public DeferredResult<ResponseEntity> securityChangePassword(
-//            @RequestBody @Validated PasswordChange passwordChange, BindingResult bindingResult,
-//            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//        return toDeferredResult(
-//                new DeferredResult<>(),
-//                toObservable(bindingResult)
-//                        .flatMap(
-//                                v -> userService.findUserWith(passwordEncoder,
-//                                        passwordChange.getEmail(),
-//                                        passwordChange.getOldPassword())
-//
-//                                        .flatMap(
-//                                                u -> userService.changePassword(passwordEncoder,
-//                                                        passwordChange.getEmail(),
-//                                                        passwordChange.getPassword(),
-//                                                        passwordChange.getOldPassword())
-//                                                        .subscribeOn(Schedulers.io())
-//                                ),
-//                                e -> Observable.error(new RuntimeException("{password.incorrect}")),
-//                                () -> Observable.empty()
-//                        )
-//                        .subscribeOn(Schedulers.io()),
-//                bindingResult,
-//                Locale.getDefault()
-//        );
-//    }
 
     @PutMapping("/password/change")
     public ResponseEntity<?> securityChangePassword(@RequestBody @Validated PasswordChange passwordChange) {

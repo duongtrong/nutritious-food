@@ -66,14 +66,14 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> listAll() {
         List<Category> result = categoryService.findAllByStatusIs(Status.ACTIVE.getValue());
-        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toList());
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", categoryDTO), HttpStatus.OK);
     }
 
     @GetMapping("/parent/{id}")
     public ResponseEntity<?> getByParentId(@PathVariable("id") Long id) {
         List<Category> result = categoryService.findByCategoriesByParentIdAndStatus(id, Status.ACTIVE.getValue());
-        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toList());
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", categoryDTO), HttpStatus.OK);
     }
 

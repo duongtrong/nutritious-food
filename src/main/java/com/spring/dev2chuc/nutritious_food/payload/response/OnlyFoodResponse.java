@@ -36,14 +36,14 @@ public class OnlyFoodResponse {
 
     public OnlyFoodResponse(Food food) {
         clone(food);
-        this.categories = food.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
+        this.categories = food.getCategories().stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toSet());
         this.combos = food.getCombos().stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toSet());
     }
 
     public OnlyFoodResponse(Food food, boolean withCategory, boolean withCombo) {
         clone(food);
         if (withCategory) {
-            this.categories = food.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
+            this.categories = food.getCategories().stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toSet());
         }
         if (withCombo) {
             this.combos = food.getCombos().stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toSet());

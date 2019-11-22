@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Getter
 @Setter
-public class HistoryResponse {
+public class HistoryDTO {
     private Long id;
     private float calorie;
     private String comment;
@@ -16,17 +16,17 @@ public class HistoryResponse {
     private int status;
     private Instant createdAt;
     private OnlyUserResponse user;
-    private OnlyFoodResponse food;
+    private FoodDTO food;
 
 
-    public HistoryResponse(History history) {
+    public HistoryDTO(History history) {
         this.id = history.getId();
         this.calorie = history.getCalorie();
         this.comment = history.getComment();
         this.type = history.getType();
         this.status = history.getStatus();
         this.user = new OnlyUserResponse(history.getUser());
-        this.food = new OnlyFoodResponse(history.getFood());
+        this.food = new FoodDTO(history.getFood(), false, false);
         this.createdAt = history.getCreatedAt();
     }
 }
