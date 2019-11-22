@@ -31,13 +31,13 @@ public class ComboController {
     public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest) {
         Combo current = new Combo();
         Combo result = comboService.merge(current, comboRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", new ComboDTO(result)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", new ComboDTO(result, false, false)), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> getList() {
         List<Combo> combos = comboService.findAll();
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", combos.stream().map(x -> new ComboDTO(x)).collect(Collectors.toList())), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", combos.stream().map(x -> new ComboDTO(x, true, false)).collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -48,7 +48,7 @@ public class ComboController {
         }
 
         Combo result = comboService.update(combo, comboRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success",  new ComboDTO(result)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success",  new ComboDTO(result, false, false)), HttpStatus.OK);
     }
 
 
@@ -59,7 +59,7 @@ public class ComboController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK",  new ComboDTO(combo)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK",  new ComboDTO(combo, false, false)), HttpStatus.OK);
     }
 
 

@@ -40,7 +40,7 @@ public class CategoryDTO {
         this.parentId = category.getParentId();
         this.image = category.getImage();
         this.status = category.getStatus();
-        if (hasFood) this.foods = category.getFoods().stream().map(x -> new FoodDTO(x)).collect(Collectors.toSet());
-        if (hasCombo) this.combos = category.getCombos().stream().map(x -> new ComboDTO(x)).collect(Collectors.toSet());
+        if (hasFood) this.foods = category.getFoods().stream().map(x -> new FoodDTO(x, false, false)).collect(Collectors.toSet());
+        if (hasCombo) this.combos = category.getCombos().stream().map(x -> new ComboDTO(x, false, false)).collect(Collectors.toSet());
     }
 }

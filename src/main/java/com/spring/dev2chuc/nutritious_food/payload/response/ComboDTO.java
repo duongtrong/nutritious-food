@@ -32,33 +32,8 @@ public class ComboDTO {
     private float calorie;
     private float weight;
     private int status;
-    private Set<OnlyFoodResponse> foods = new HashSet<>();
+    private Set<FoodDTO> foods = new HashSet<>();
     private Set<CategoryDTO> categories = new HashSet<>();
-
-    public ComboDTO(Combo combo) {
-        this.id = combo.getId();
-        this.name = combo.getName();
-        this.description = combo.getDescription();
-        this.image = combo.getImage();
-        this.price = combo.getPrice();
-        this.carbonhydrates = combo.getCarbonhydrates();
-        this.protein = combo.getProtein();
-        this.lipid = combo.getLipid();
-        this.xenluloza = combo.getXenluloza();
-        this.canxi = combo.getCanxi();
-        this.iron = combo.getIron();
-        this.zinc = combo.getZinc();
-        this.vitaminA = combo.getVitaminA();
-        this.vitaminB = combo.getVitaminB();
-        this.vitaminC = combo.getVitaminC();
-        this.vitaminD = combo.getVitaminD();
-        this.vitaminE = combo.getVitaminE();
-        this.calorie = combo.getCalorie();
-        this.calorie = combo.getWeight();
-        this.status = combo.getStatus();
-//        this.foods = combo.getFoods().stream().map(x -> new OnlyFoodResponse(x)).collect(Collectors.toSet());
-//        this.categories = combo.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
-    }
 
     public ComboDTO(Combo combo, boolean hasFood, boolean hasCategory) {
         this.id = combo.getId();
@@ -81,7 +56,7 @@ public class ComboDTO {
         this.calorie = combo.getCalorie();
         this.calorie = combo.getWeight();
         this.status = combo.getStatus();
-        if (hasFood) this.foods = combo.getFoods().stream().map(x -> new OnlyFoodResponse(x)).collect(Collectors.toSet());
-        if (hasCategory) this.categories = combo.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
+        if (hasFood) this.foods = combo.getFoods().stream().map(x -> new FoodDTO(x, false, false)).collect(Collectors.toSet());
+        if (hasCategory) this.categories = combo.getCategories().stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toSet());
     }
 }
