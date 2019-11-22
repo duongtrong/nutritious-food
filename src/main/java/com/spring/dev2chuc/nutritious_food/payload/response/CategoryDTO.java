@@ -24,15 +24,6 @@ public class CategoryDTO {
     private Set<ComboDTO> combos = new HashSet<>();
     private Set<FoodDTO> foods = new HashSet<>();
 
-    public CategoryDTO(Category category) {
-        this.id = category.getId();
-        this.name = category.getName();
-        this.description = category.getDescription();
-        this.parentId = category.getParentId();
-        this.image = category.getImage();
-        this.status = category.getStatus();
-    }
-
     public CategoryDTO(Category category, boolean hasFood, boolean hasCombo) {
         this.id = category.getId();
         this.name = category.getName();

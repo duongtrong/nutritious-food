@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -40,29 +41,34 @@ public class UserProfileServiceImpl implements UserProfileService{
                 userProfileRequest.getAge(),
                 userProfileRequest.getBodyFat(),
                 userProfileRequest.getExerciseIntensity(),
-                userProfileRequest.getLbmIndex(),
-                userProfileRequest.getBmrIndex(),
-                userProfileRequest.getTdeeIndex(),
-                userProfileRequest.getCaloriesConsumed(),
-                userProfileRequest.getDesiredWeight(),
-                userProfileRequest.getDietTime(),
-                userProfileRequest.getCaloriesChange()
+                userProfileRequest.getCaloriesConsumed()
         );
         return userProfileRepository.save(userProfile);
     }
 
     @Override
-    public Optional<UserProfile> getDetail(Long id) {
+    public UserProfile getDetail(Long id) {
         if (CollectionUtils.isEmpty (Collections.singleton (id))) {
             return null;
         }
         System.out.println(id);
-        Optional<UserProfile> userProfile = userProfileRepository.findById(id);
-        return userProfile;
+        return userProfileRepository.findById(id).orElseThrow(null);
     }
 
     @Override
-    public UserProfile update(UserProfile userProfile) {
+    public UserProfile update(UserProfileRequest userProfileRequest, UserProfile userProfile) {
+        if (userProfileRequest.getHeight() != null) userProfile.setHeight(userProfileRequest.getHeight());
+        if (userProfileRequest.getWeight() != null) userProfile.setWeight(userProfileRequest.getWeight());
+        if (userProfileRequest.getAge() != null) userProfile.setYearOfBirth(LocalDate.now().getYear() - userProfileRequest.getHeight());
+        if (userProfileRequest.getBodyFat() != null) userProfile.setBodyFat(userProfileRequest.getBodyFat());
+        if (userProfileRequest.getExerciseIntensity() != null) userProfile.setExerciseIntensity(userProfileRequest.getExerciseIntensity());
+        if (userProfileRequest.getCaloriesConsumed() != null) userProfile.setCaloriesConsumed(userProfileRequest.getCaloriesConsumed());
+
+        return userProfileRepository.save(userProfile);
+    }
+
+    @Override
+    public UserProfile updateCategory(UserProfile userProfile) {
         return userProfileRepository.save(userProfile);
     }
 

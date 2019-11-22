@@ -13,8 +13,9 @@ public interface UserProfileService {
 
     UserProfile store(User user, UserProfileRequest userProfileRequest);
 
-    Optional<UserProfile> getDetail(Long id);
+    UserProfile getDetail(Long id);
 
-    UserProfile update(UserProfile userProfile);
+    UserProfile update(UserProfileRequest userProfileRequest, UserProfile userProfile);
+    UserProfile updateCategory(UserProfile userProfile);
 
 }

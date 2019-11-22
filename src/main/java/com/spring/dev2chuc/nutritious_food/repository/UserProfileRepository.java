@@ -11,9 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long>, JpaSpecificationExecutor<UserProfile> {
-
     List<UserProfile> findByUser(User user);
-
-    Optional<UserProfile> findById(Long id);
-
 }

@@ -92,7 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<Category> categoriesWithPaginate(Specification specification, int page, int limit) {
         List<Category> categories = categoryRepository.findAllByStatusIs(Status.ACTIVE.getValue());
-//        List<CategoryDTO> categoryDTO = categories.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+//        List<CategoryDTO> categoryDTO = categories.stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toList());
 
         return categoryRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
