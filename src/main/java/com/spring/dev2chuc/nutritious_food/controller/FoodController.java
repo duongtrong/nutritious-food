@@ -40,14 +40,14 @@ public class FoodController {
     public ResponseEntity<?> getDetails(@PathVariable Long id){
         Food food = foodService.findById (id);
         if (food == null) return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Food not found"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "OK", new FoodDTO(food, false, false)), HttpStatus.OK);
+        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "OK", new FoodDTO(food, true, true)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody FoodRequest foodRequest) {
         Food food = new Food();
         Food current = foodService.merge(food, foodRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create new food success", new FoodDTO(current, false, false)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create new food success", new FoodDTO(current, true, true)), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
@@ -57,7 +57,7 @@ public class FoodController {
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
         }
         Food result = foodService.update(food, foodRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", new FoodDTO(result, false, false)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", new FoodDTO(result, true, true)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
