@@ -1,8 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.Category;
-import com.spring.dev2chuc.nutritious_food.model.User;
-import com.spring.dev2chuc.nutritious_food.model.UserProfile;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
@@ -40,6 +38,12 @@ public class UserProfileController {
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
+            if (userProfileRequest.getGender() != null && !Gender.hasValue(userProfileRequest.getGender())) {
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Gender not found"), HttpStatus.NOT_FOUND);
+            }
+            if (userProfileRequest.getExerciseIntensity() != null && !ExerciseIntensity.hasValue(userProfileRequest.getExerciseIntensity())) {
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "ExerciseIntensity not found"), HttpStatus.NOT_FOUND);
+            }
             UserProfile profile = userProfileService.store(user, userProfileRequest);
             return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileDTO(profile, false, true)), HttpStatus.CREATED);
         }
@@ -52,6 +56,13 @@ public class UserProfileController {
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
+            if (userProfileRequest.getGender() != null && !Gender.hasValue(userProfileRequest.getGender())) {
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Gender not found"), HttpStatus.NOT_FOUND);
+            }
+
+            if (userProfileRequest.getExerciseIntensity() != null && !ExerciseIntensity.hasValue(userProfileRequest.getExerciseIntensity())) {
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "ExerciseIntensity not found"), HttpStatus.NOT_FOUND);
+            }
             UserProfile profile = userProfileService.getDetail(id);
             if (profile == null ) return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.NOT_FOUND.value (), "Profile not found"), HttpStatus.NOT_FOUND);
 

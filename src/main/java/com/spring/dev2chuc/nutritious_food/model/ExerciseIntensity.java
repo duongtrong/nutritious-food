@@ -17,21 +17,11 @@ public enum ExerciseIntensity {
         return value;
     }
 
-//    public ExerciseIntensity getName(string value) {
-//        switch (value) {
-//            case LIGHT_ACTIVITY.getValue():
-//                return LIGHT_ACTIVITY;
-//            case LIGHT_MANUAL_LIMBS.getValue():
-//                return LIGHT_MANUAL_LIMBS;
-//            case MODERATE_ACTIVITY.getValue():
-//                return MODERATE_ACTIVITY;
-//            case ACTIVE_MUCH.getValue():
-//                return ACTIVE_MUCH;
-//            case WORKS_A_LOT.getValue():
-//                return WORKS_A_LOT;
-//            default:
-//                return LIGHT_MANUAL_LIMBS;
-//        }
-//        return LIGHT_MANUAL_LIMBS;
-//    }
+    public static boolean hasValue(double value) {
+        for (ExerciseIntensity _this : ExerciseIntensity.values()) {
+            if (_this.getValue() == value)
+                return true;
+        }
+        return false;
+    }
 }

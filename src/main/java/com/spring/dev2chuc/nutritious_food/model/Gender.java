@@ -14,4 +14,12 @@ public enum Gender {
     public Integer getValue() {
         return value;
     }
+
+    public static boolean hasValue(Integer value) {
+        for (Gender _this : Gender.values()) {
+            if (_this.getValue() == value)
+                return true;
+        }
+        return false;
+    }
 }
