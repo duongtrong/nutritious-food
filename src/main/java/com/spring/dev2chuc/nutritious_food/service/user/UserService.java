@@ -40,4 +40,5 @@ public interface UserService {
 
     boolean updatePassword(String password, User user);
 
+    boolean checkRoleByUser(User user, RoleName roleName);
 }

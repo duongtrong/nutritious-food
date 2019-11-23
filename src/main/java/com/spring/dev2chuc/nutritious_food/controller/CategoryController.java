@@ -66,14 +66,14 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> listAll() {
         List<Category> result = categoryService.findAllByStatusIs(Status.ACTIVE.getValue());
-        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toList());
+        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x, true, true)).collect(Collectors.toList());
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", categoryDTO), HttpStatus.OK);
     }
 
     @GetMapping("/parent/{id}")
     public ResponseEntity<?> getByParentId(@PathVariable("id") Long id) {
         List<Category> result = categoryService.findByCategoriesByParentIdAndStatus(id, Status.ACTIVE.getValue());
-        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toList());
+        List<CategoryDTO> categoryDTO = result.stream().map(x -> new CategoryDTO(x, true, true)).collect(Collectors.toList());
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", categoryDTO), HttpStatus.OK);
     }
 
@@ -105,7 +105,7 @@ public class CategoryController {
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
 
         Page<Category> categories = categoryService.categoriesWithPaginate((Specification) specification, page, limit);
-        List<CategoryDTO> categoryDTO = categories.stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toList());
+        List<CategoryDTO> categoryDTO = categories.stream().map(x -> new CategoryDTO(x, true, true)).collect(Collectors.toList());
         return new ResponseEntity<>(new ApiResponsePage<>(
                 HttpStatus.OK.value(), "OK", categoryDTO,
                 new RESTPagination(page, limit, categories.getTotalPages(), categories.getTotalElements())), HttpStatus.OK);

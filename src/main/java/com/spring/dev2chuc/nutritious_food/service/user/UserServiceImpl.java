@@ -152,4 +152,16 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
         return true;
     }
+
+    @Override
+    public boolean checkRoleByUser(User user, RoleName roleName) {
+        Set<Role> roles = user.getRoles();
+        Role role = roleRepository.findByName(roleName);
+        if (roles.contains(role)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }
