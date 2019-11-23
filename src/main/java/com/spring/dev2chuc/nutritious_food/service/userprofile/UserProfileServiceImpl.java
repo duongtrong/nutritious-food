@@ -41,7 +41,8 @@ public class UserProfileServiceImpl implements UserProfileService{
                 userProfileRequest.getAge(),
                 userProfileRequest.getBodyFat(),
                 userProfileRequest.getExerciseIntensity(),
-                userProfileRequest.getCaloriesConsumed()
+                userProfileRequest.getCaloriesConsumed(),
+                userProfileRequest.getGender()
         );
         return userProfileRepository.save(userProfile);
     }
