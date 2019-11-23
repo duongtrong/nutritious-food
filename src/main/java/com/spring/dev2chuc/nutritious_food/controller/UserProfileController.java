@@ -41,7 +41,7 @@ public class UserProfileController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
             UserProfile profile = userProfileService.store(user, userProfileRequest);
-            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileDTO(profile, false, false)), HttpStatus.CREATED);
+            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileDTO(profile, false, true)), HttpStatus.CREATED);
         }
     }
 
@@ -56,7 +56,7 @@ public class UserProfileController {
             if (profile == null ) return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.NOT_FOUND.value (), "Profile not found"), HttpStatus.NOT_FOUND);
 
             UserProfile result = userProfileService.update(userProfileRequest, profile);
-            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileDTO(result, false, false)), HttpStatus.CREATED);
+            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileDTO(result, true, true)), HttpStatus.CREATED);
         }
     }
 
@@ -67,7 +67,7 @@ public class UserProfileController {
         System.out.println(id);
         UserProfile userProfile = userProfileService.getDetail(id);
         if (userProfile == null) return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Profile not found"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Get detail success", new UserProfileDTO(userProfile, false, false)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Get detail success", new UserProfileDTO(userProfile, true, true)), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/category")
@@ -80,6 +80,6 @@ public class UserProfileController {
         Set<Category> categorySet = new HashSet<>(categories);
         userProfile.setCategories(categorySet);
         UserProfile profile = userProfileService.updateCategory(userProfile);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Create new category success", new UserProfileDTO(profile, false, false)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Create new category success", new UserProfileDTO(profile, true, true)), HttpStatus.OK);
     }
 }

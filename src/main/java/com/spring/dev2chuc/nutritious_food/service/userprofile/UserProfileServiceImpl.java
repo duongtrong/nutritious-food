@@ -72,6 +72,11 @@ public class UserProfileServiceImpl implements UserProfileService{
         return userProfileRepository.save(userProfile);
     }
 
+    @Override
+    public UserProfile getLatestByUser(User user) {
+        return userProfileRepository.findTop1ByUserOrderByIdDesc(user);
+    }
+
 
     public static void main(String[] args) {
 //        System.out.println(mathCalories(52, 173, 20, Gender.MALE.getValue(), ExerciseIntensity.LIGHT_ACTIVITY.getValue()));

@@ -1,8 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.PasswordChange;
-import com.spring.dev2chuc.nutritious_food.model.User;
-import com.spring.dev2chuc.nutritious_food.model.UserProfile;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,9 +50,8 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         Optional<User> user = userService.findByUsernameOrPhone(loginRequest.getAccount(), loginRequest.getAccount());
-        if (user.isPresent()) {
+        if (user.isPresent() && userService.checkRoleByUser(user.get(), RoleName.ROLE_USER)) {
             User userCurrent = user.get();
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
@@ -143,7 +141,7 @@ public class AuthController {
     public ResponseEntity<?> authenticateAdmin(@Valid @RequestBody LoginRequest loginRequest) {
 
         Optional<User> user = userService.findByUsernameOrPhone(loginRequest.getAccount(), loginRequest.getAccount());
-        if (user.isPresent()) {
+        if (user.isPresent() && userService.checkRoleByUser(user.get(), RoleName.ROLE_ADMIN)) {
             User userCurrent = user.get();
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
@@ -213,6 +211,19 @@ public class AuthController {
             List<UserProfile> userProfiles = userProfileService.getAllByUser(user);
             List<UserProfileDTO> userProfileResponses = userProfiles.stream().map(x -> new UserProfileDTO(x, true, false)).collect(Collectors.toList());;
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "success", userProfileResponses), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/me-profile/last")
+    public ResponseEntity<?> getUserProfileLast() {
+        User user = userService.getUserAuth();
+
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            UserProfile userProfile = userProfileService.getLatestByUser(user);
+            UserProfileDTO userProfileDTO = new UserProfileDTO(userProfile, true, false);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "success", userProfileDTO), HttpStatus.OK);
         }
     }
 

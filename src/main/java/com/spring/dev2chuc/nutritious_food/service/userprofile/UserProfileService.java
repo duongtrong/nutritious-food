@@ -18,4 +18,6 @@ public interface UserProfileService {
     UserProfile update(UserProfileRequest userProfileRequest, UserProfile userProfile);
     UserProfile updateCategory(UserProfile userProfile);
 
+    UserProfile getLatestByUser(User user);
+
 }
