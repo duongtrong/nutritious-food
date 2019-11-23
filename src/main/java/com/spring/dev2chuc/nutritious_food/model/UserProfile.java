@@ -26,8 +26,9 @@ public class UserProfile extends DateAudit {
     private Integer height;
     private Integer weight;
     private Integer yearOfBirth;
+    private Gender gender;
     private Integer bodyFat;
-    private Integer exerciseIntensity;
+    private Float exerciseIntensity;
     private Integer lbmIndex;
     private Integer bmrIndex;
     private Integer tdeeIndex;
@@ -47,7 +48,7 @@ public class UserProfile extends DateAudit {
             Integer weight,
             Integer age,
             Integer bodyFat,
-            Integer exerciseIntensity,
+            Float exerciseIntensity,
             Integer caloriesConsumed
     ) {
         this.user = user;

@@ -17,7 +17,7 @@ public class UserProfileDTO {
     private Integer height;
     private Integer weight;
     private Integer bodyFat;
-    private Integer exerciseIntensity;
+    private Float exerciseIntensity;
     private Integer lbmIndex;
     private Integer bmrIndex;
     private Integer tdeeIndex;

@@ -41,7 +41,7 @@ public class Food extends DateAudit {
     private int status;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "category_food", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
+    @JoinTable(name = "category_food", joinColumns = @JoinColumn(name = "food_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
