@@ -28,11 +28,13 @@ public class Category extends DateAudit {
     private Integer status;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "category_food", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "food_id"))
+    @JoinTable(name = "category_food",
+            joinColumns = { @JoinColumn(name = "category_id") },
+            inverseJoinColumns = { @JoinColumn(name = "food_id") })
     private Set<Food> foods = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "combo_category", joinColumns = @JoinColumn(name = "combo_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @JoinTable(name = "combo_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "combo_id"))
     private Set<Combo> combos = new HashSet<>();
 
     public Category(Long parentId, String name, String image, String description) {

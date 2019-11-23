@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.payload;
 
+import com.spring.dev2chuc.nutritious_food.model.ExerciseIntensity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +13,8 @@ public class UserProfileRequest {
     private Integer weight;
     private Integer age;
     private Integer bodyFat;
-    private Integer exerciseIntensity;
+    private Float exerciseIntensity;
     private Integer caloriesConsumed;
     private Integer status;
-    private Set<Long> cateId;
+    private Set<Long> categoryIds;
 }

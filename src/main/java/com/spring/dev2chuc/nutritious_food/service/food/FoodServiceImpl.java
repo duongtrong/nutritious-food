@@ -69,15 +69,15 @@ public class FoodServiceImpl implements FoodService {
         if (foodRequest.getCalorie() != 0.0f) food.setCalorie(foodRequest.getCalorie());
         if (foodRequest.getWeight() != 0.0f) food.setWeight(foodRequest.getWeight());
 
-        if (foodRequest.getCategories().size() > 0) {
-            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCategories());
+        if (foodRequest.getCategoryIds().size() > 0) {
+            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCategoryIds());
             Set<Category> categorySet = new HashSet<>(categories);
             food.setCategories(categorySet);
         }
 
         List<Combo> combos = new ArrayList<>();
-        if (foodRequest.getCombos() != null && foodRequest.getCombos().size() > 0) {
-            combos = comboService.findAllByIdIn(foodRequest.getCombos());
+        if (foodRequest.getComboIds() != null && foodRequest.getComboIds().size() > 0) {
+            combos = comboService.findAllByIdIn(foodRequest.getComboIds());
             Set<Combo> comboSet = new HashSet<>(combos);
             food.setCombos(comboSet);
         }
@@ -112,15 +112,16 @@ public class FoodServiceImpl implements FoodService {
         food.setWeight(foodRequest.getWeight());
         food.setStatus(Status.ACTIVE.getValue());
 
-        if (foodRequest.getCategories() != null && foodRequest.getCategories().size() > 0) {
-            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCategories());
+        System.out.println(foodRequest.getCategoryIds().size());
+        if (foodRequest.getCategoryIds() != null && foodRequest.getCategoryIds().size() > 0) {
+            List<Category> categories = categoryService.findAllByIdIn(foodRequest.getCategoryIds());
             Set<Category> categorySet = new HashSet<>(categories);
             food.setCategories(categorySet);
         }
 
         List<Combo> combos = new ArrayList<>();
-        if (foodRequest.getCombos() != null && foodRequest.getCombos().size() > 0) {
-            combos = comboService.findAllByIdIn(foodRequest.getCombos());
+        if (foodRequest.getComboIds() != null && foodRequest.getComboIds().size() > 0) {
+            combos = comboService.findAllByIdIn(foodRequest.getComboIds());
             Set<Combo> comboSet = new HashSet<>(combos);
             food.setCombos(comboSet);
         }
