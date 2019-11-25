@@ -31,6 +31,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
+    @Transactional
+    @Modifying
+    @Query(value = "alter  table users AUTO_INCREMENT = 1 ", nativeQuery = true)
+    void resetIncrement();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "SET FOREIGN_KEY_CHECKS=0;")
+    void disableForeignKeyCheck();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "SET FOREIGN_KEY_CHECKS=1;")
+    void enableForeignKeyCheck();
+
+
 //    @Query(value = "SELECT * FROM users INNER JOIN user_roles ON users.id = user_roles.user_idINNER JOIN roles ON user_roles.role_id = roles.id WHERE roles.name = \"ROLE_USER\"", nativeQuery = true)
 //    List<User> findAllByRoles(RoleName name);
 //
