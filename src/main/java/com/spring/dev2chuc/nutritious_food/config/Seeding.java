@@ -67,7 +67,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         LOGGER.log(Level.INFO, String.format("Start seeding..."));
         userRepository.disableForeignKeyCheck();
-        seedingUser();
+//        seedingUser();
         userRepository.enableForeignKeyCheck();
         LOGGER.log(Level.INFO, String.format("Seeding success!"));
     }
