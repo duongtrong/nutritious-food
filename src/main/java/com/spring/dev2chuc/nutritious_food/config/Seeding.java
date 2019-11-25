@@ -8,9 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +25,9 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    HistoryRepository historyRepository;
 
     @Autowired
     AddressRepository addressRepository;
@@ -52,7 +53,8 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     OrderRepository orderRepository;
 
-    private List<User> userList = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
     private List<Address> addresses = new ArrayList<>();
     private List<UserProfile> userProfiles = new ArrayList<>();
     private List<History> histories = new ArrayList<>();
@@ -66,51 +68,84 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         LOGGER.log(Level.INFO, String.format("Start seeding..."));
-        userRepository.disableForeignKeyCheck();
-//        seedingUser();
-        userRepository.enableForeignKeyCheck();
+        deleteAll();
+        seedingRole();
+        seedingUser();
+        seedingUserProfile();
         LOGGER.log(Level.INFO, String.format("Seeding success!"));
     }
 
-    private void seedingUser() {
+    private void deleteAll() {
+        historyRepository.deleteAll();
+        userProfileRepository.deleteAll();
+        addressRepository.deleteAll();
+        orderDetailRepository.deleteAll();
+        orderRepository.deleteAll();
+        scheduleRepository.deleteAll();
+        comboRepository.deleteAll();
+        foodRepository.deleteAll();
+        categoryRepository.deleteAll();
         userRepository.deleteAll();
-        userRepository.resetIncrement();
+        roleRepository.deleteAll();
 
+        historyRepository.resetIncrement();
+        userProfileRepository.resetIncrement();
+        addressRepository.resetIncrement();
+        orderDetailRepository.resetIncrement();
+        orderRepository.resetIncrement();
+        scheduleRepository.resetIncrement();
+        comboRepository.resetIncrement();
+        foodRepository.resetIncrement();
+        categoryRepository.resetIncrement();
+        userRepository.resetIncrement();
+        roleRepository.resetIncrement();    }
+
+    private void seedingRole () {
+        Role role;
+        role = new Role(RoleName.ROLE_USER);
+        roles.add(role);
+
+        role = new Role(RoleName.ROLE_ADMIN);
+        roles.add(role);
+
+        roleRepository.saveAll(roles);
+    }
+    private void seedingUser() {
         User user;
         Role userRole;
 
         user  = new User();
         user.setName("admin001");
         user.setUsername("admin001");
-        user.setEmail("admin001@gmail.com");
+        user.setEmail("admin@gmail.com");
         user.setPhone("09646548390");
         user.setPassword("$2a$10$ec18uzSdzaCDF0wi3dI0KOWYDoaDKY13Oq3MlkbHW4T.uQ61VcDr.");
         user.setStatus(1);
         userRole = roleRepository.findByName(RoleName.ROLE_USER);
         user.setRoles(Collections.singleton(userRole));
-        userList.add(user);
+        users.add(user);
 
         user  = new User();
-        user.setName("user001");
-        user.setUsername("user001");
-        user.setEmail("user001@gmail.com");
-        user.setPhone("00002020");
+        user.setName("user0001");
+        user.setUsername("user0001");
+        user.setEmail("user0001@gmail.com");
+        user.setPhone("user0001");
         user.setPassword("$2a$10$/x3FAKtcbeW1Qcd7793/fO5Mhi4.qs6UqNW3VqlTl67iZLmr0y6Rm");
         user.setStatus(1);
         userRole = roleRepository.findByName(RoleName.ROLE_USER);
         user.setRoles(Collections.singleton(userRole));
-        userList.add(user);
+        users.add(user);
 
         user  = new User();
-        user.setName("Danh Vượng");
-        user.setUsername("danhvuong");
+        user.setName("Nguyễn Danh Vượng");
+        user.setUsername("danhvuong1");
         user.setEmail("danhvuong@gmail.com");
         user.setPhone("0964654839");
         user.setPassword("$2a$10$avr1IOz4x/JHFcY1jtFFcODTxVShctRezaXV9TYzZfXt7uN8Xr.WS");
         user.setStatus(1);
         userRole = roleRepository.findByName(RoleName.ROLE_ADMIN);
         user.setRoles(Collections.singleton(userRole));
-        userList.add(user);
+        users.add(user);
 
         user  = new User();
         user.setName("NguyenDanhVuong");
@@ -121,7 +156,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         user.setStatus(1);
         userRole = roleRepository.findByName(RoleName.ROLE_ADMIN);
         user.setRoles(Collections.singleton(userRole));
-        userList.add(user);
+        users.add(user);
 
         user  = new User();
         user.setName("NDVHades");
@@ -132,31 +167,48 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         user.setStatus(1);
         userRole = roleRepository.findByName(RoleName.ROLE_ADMIN);
         user.setRoles(Collections.singleton(userRole));
-        userList.add(user);
+        users.add(user);
 
         user  = new User();
-        user.setName("quyen1112");
-        user.setUsername("quyen1112");
-        user.setEmail("quyen1112@gmail.com");
+        user.setName("quyen1412");
+        user.setUsername("quyen1412");
+        user.setEmail("quyen1412@gmail.com");
         user.setPhone("0388044009");
-        user.setPassword("$2a$10$CMdrksmbttGDZdpoaAQ5WeUmhhvvtWRR2oXyUqmRG7lU.flH0TaOe");
-        user.setStatus(1);
-        userRole = roleRepository.findByName(RoleName.ROLE_ADMIN);
-        user.setRoles(Collections.singleton(userRole));
-        userList.add(user);
-
-        user  = new User();
-        user.setName("quyen1996");
-        user.setUsername("quyen1996");
-        user.setEmail("quyen1996@gmail.com");
-        user.setPhone("0288044009");
-        user.setPassword("$2a$10$3Sfim4heMCt9d8cdETaeROJgpwh/OQ/foQ5bEr9Wdhfa1dIzRhTC6");
+        user.setPassword("$2a$10$M3S9XsFcc/VHwQ6vB/f/pu9LzMrRiRTOOp8GSIDvMeNhwuje8n3Sm");
         user.setStatus(1);
         userRole = roleRepository.findByName(RoleName.ROLE_USER);
         user.setRoles(Collections.singleton(userRole));
-        userList.add(user);
+        users.add(user);
 
+        userRepository.saveAll(users);
+    }
+    private void seedingUserProfile () {
+        UserProfile userProfile;
+        Optional<User> user;
+        List<Category> categoryList;
+        List<Long> categoryIds = new ArrayList<>();
+        
 
-        userRepository.saveAll(userList);
+        user = userRepository.findById((long) 6);
+        categoryList = categoryRepository.findAllByIdIn(categoryIds);
+        Set<Category> categorySet = new HashSet<>(categoryList);
+        userProfile = new UserProfile();
+        userProfile.setHeight(180);
+        userProfile.setWeight(70);
+        userProfile.setYearOfBirth(1999);
+        userProfile.setGender(2);
+        userProfile.setExerciseIntensity(1.4);
+        userProfile.setBodyFat(null);
+        userProfile.setBmrIndex(null);
+        userProfile.setLbmIndex(null);
+        userProfile.setTdeeIndex(null);
+        userProfile.setStatus(1);
+        userProfile.setCaloriesConsumed(1225);
+        userProfile.setUser(user.get());
+        userProfile.setCategories(categorySet);
+        userProfiles.add(userProfile);
+
+        userProfileRepository.saveAll(userProfiles);
     }
 }
+ 
