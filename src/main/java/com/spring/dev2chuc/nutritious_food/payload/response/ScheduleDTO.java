@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OnlyScheduleResponse {
+public class ScheduleDTO {
     private Long id;
     private String name;
     private String description;
@@ -14,7 +14,7 @@ public class OnlyScheduleResponse {
     private String image;
     private Integer status;
 
-    public OnlyScheduleResponse(Schedule schedule) {
+    public ScheduleDTO(Schedule schedule) {
         this.id = schedule.getId();
         this.name = schedule.getName();
         this.description = schedule.getDescription();

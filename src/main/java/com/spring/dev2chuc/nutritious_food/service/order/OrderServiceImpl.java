@@ -1,9 +1,10 @@
 package com.spring.dev2chuc.nutritious_food.service.order;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.response.OnlyOrderDetailResponse;
+import com.spring.dev2chuc.nutritious_food.payload.OrderDetailRequest;
+import com.spring.dev2chuc.nutritious_food.payload.response.OrderDetailDTO;
 import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
-import com.spring.dev2chuc.nutritious_food.payload.response.OrderResponse;
+import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
 import com.spring.dev2chuc.nutritious_food.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AddressRepository addressRepository;
 
     @Autowired
     ScheduleRepository scheduleRepository;
@@ -35,47 +39,50 @@ public class OrderServiceImpl implements OrderService {
     OrderDetailRepository orderDetailRepository;
 
     @Override
-    public List<OrderResponse> getAllByUser(User user) {
-        return orderRepository.findAllByUser(user).stream().map(x -> new OrderResponse(x)).collect(Collectors.toList());
+    public List<OrderDTO> getAllByUser(User user) {
+        List<Address> addresses = addressRepository.findAllByUserAndStatus(user, Status.ACTIVE.getValue());
+        return orderRepository.findAllByAddressIn(addresses).stream().map(x -> new OrderDTO(x, true)).collect(Collectors.toList());
     }
 
     @Override
-    public OrderResponse saveOrderByUser(User user, List<OrderRequest> orderRequests) {
-
-        Order order = new Order(user, (float) 0);
+    public OrderDTO saveOrderByUser(OrderRequest orderRequest) {
+        System.out.println(orderRequest.getAddressId());
+        Address address = addressRepository.findByIdAndStatus(orderRequest.getAddressId(), Status.ACTIVE.getValue());
+        if (address == null) return null;
+        Order order = new Order(address, (float) 0);
         Order orderSave = orderRepository.save(order);
         float totalPrice = 0;
 
         Set<OrderDetail> orderDetails = new HashSet<>();
-        for (OrderRequest orderRequest : orderRequests) {
+        for (OrderDetailRequest orderDetailRequest : orderRequest.getOrderDetails()) {
             OrderDetail orderDetailCurrent = null;
-            if (orderRequest.getFoodId() != null) {
-                Food food = foodRepository.findByIdAndStatus(orderRequest.getFoodId(), Status.ACTIVE.getValue());
+            if (orderDetailRequest.getFoodId() != null) {
+                Food food = foodRepository.findByIdAndStatus(orderDetailRequest.getFoodId(), Status.ACTIVE.getValue());
                 if (food == null) return null;
                 orderDetailCurrent = new OrderDetail(
                         orderSave,
                         food,
-                        orderRequest.getQuantity(),
-                        orderRequest.getPrice()
+                        orderDetailRequest.getQuantity(),
+                        orderDetailRequest.getPrice()
                 );
 
-            } else if (orderRequest.getComboId() != null) {
-                Combo combo = comboRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderRequest.getComboId());
+            } else if (orderDetailRequest.getComboId() != null) {
+                Combo combo = comboRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderDetailRequest.getComboId());
                 if (combo == null) return null;
                 orderDetailCurrent = new OrderDetail(
                         orderSave,
                         combo,
-                        orderRequest.getQuantity(),
-                        orderRequest.getPrice()
+                        orderDetailRequest.getQuantity(),
+                        orderDetailRequest.getPrice()
                 );
-            } else if (orderRequest.getScheduleId() != null) {
-                Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderRequest.getScheduleId());
+            } else if (orderDetailRequest.getScheduleId() != null) {
+                Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderDetailRequest.getScheduleId());
                 if (schedule == null) return null;
                 orderDetailCurrent = new OrderDetail(
                         orderSave,
                         schedule,
-                        orderRequest.getQuantity(),
-                        orderRequest.getPrice()
+                        orderDetailRequest.getQuantity(),
+                        orderDetailRequest.getPrice()
                 );
             } else {
                 return null;
@@ -86,29 +93,29 @@ public class OrderServiceImpl implements OrderService {
 //            onlyOrderDetailResponses.add(onlyOrderDetailResponse);
             orderDetails.add(orderDetail);
             System.out.println(orderDetail.getType());
-            totalPrice += orderRequest.getPrice() * orderRequest.getQuantity();
+            totalPrice += orderDetailRequest.getPrice() * orderDetailRequest.getQuantity();
         }
         orderSave.setTotalPrice(totalPrice);
         orderSave.setOrderDetails(orderDetails);
         Order orderSavePrice = orderRepository.save(orderSave);
         System.out.println(orderSavePrice.getOrderDetails().size());
-        return new OrderResponse(orderSavePrice);
+        return new OrderDTO(orderSavePrice, true);
     }
 
     @Override
-    public OrderResponse getById(Long id) {
+    public OrderDTO getById(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(null);
         if (order == null) {
             return null;
         }
 
         List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderAndStatus(order, Status.ACTIVE.getValue());
-        Set<OnlyOrderDetailResponse> onlyOrderDetailResponses = new HashSet<>();
+        Set<OrderDetailDTO> onlyOrderDetailResponses = new HashSet<>();
         for (OrderDetail orderDetail : orderDetails) {
-            OnlyOrderDetailResponse onlyOrderDetailResponse = new OnlyOrderDetailResponse(orderDetail);
+            OrderDetailDTO onlyOrderDetailResponse = new OrderDetailDTO(orderDetail, true);
             onlyOrderDetailResponses.add(onlyOrderDetailResponse);
         }
-        OrderResponse orderResponse = new OrderResponse(order, onlyOrderDetailResponses);
-        return orderResponse;
+
+        return new OrderDTO(order, onlyOrderDetailResponses);
     }
 }

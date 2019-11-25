@@ -1,16 +1,14 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
 import com.spring.dev2chuc.nutritious_food.helper.DateTimeHelper;
-import com.spring.dev2chuc.nutritious_food.model.Combo;
-import com.spring.dev2chuc.nutritious_food.model.Food;
+import com.spring.dev2chuc.nutritious_food.model.Order;
 import com.spring.dev2chuc.nutritious_food.model.OrderDetail;
-import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OnlyOrderDetailResponse {
+public class OrderDetailDTO {
     private Long id;
     private Long orderId;
     private Long foodId;
@@ -22,12 +20,12 @@ public class OnlyOrderDetailResponse {
     private Integer status;
     private String createdAt;
     private String updatedAt;
-    private OnlyFoodResponse food;
-    private OnlyComboResponse combo;
-    private OnlyScheduleResponse schedule;
+    private FoodDTO food;
+    private ComboDTO combo;
+    private ScheduleDTO schedule;
+    private OrderDTO order;
 
-
-    public OnlyOrderDetailResponse(OrderDetail orderDetail) {
+    public OrderDetailDTO(OrderDetail orderDetail, boolean hasOrder) {
         this.id = orderDetail.getId();
         this.orderId = orderDetail.getOrder().getId();
         this.foodId = orderDetail.getFood() != null ? orderDetail.getFood().getId() : null;
@@ -37,9 +35,10 @@ public class OnlyOrderDetailResponse {
         this.type = orderDetail.getType();
         this.price = orderDetail.getPrice();
         this.status = orderDetail.getStatus();
-        this.food = orderDetail.getFood() != null ? new OnlyFoodResponse(orderDetail.getFood()) : null;
-        this.combo = orderDetail.getCombo() != null ? new OnlyComboResponse(orderDetail.getCombo()) : null;
-        this.schedule = orderDetail.getSchedule() != null ? new OnlyScheduleResponse(orderDetail.getSchedule()) : null;
+        this.food = orderDetail.getFood() != null ? new FoodDTO(orderDetail.getFood(), false, false) : null;
+        this.combo = orderDetail.getCombo() != null ? new ComboDTO(orderDetail.getCombo(), false, false) : null;
+        this.schedule = orderDetail.getSchedule() != null ? new ScheduleDTO(orderDetail.getSchedule()) : null;
+        if (hasOrder) this.order = new OrderDTO(orderDetail.getOrder(), false);
         this.createdAt = DateTimeHelper.formatDateFromLong(orderDetail.getCreatedAt());
         this.updatedAt = DateTimeHelper.formatDateFromLong(orderDetail.getUpdatedAt());
     }

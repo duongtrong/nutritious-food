@@ -2,27 +2,32 @@ package com.spring.dev2chuc.nutritious_food.payload.response;
 
 import com.spring.dev2chuc.nutritious_food.helper.DateTimeHelper;
 import com.spring.dev2chuc.nutritious_food.model.Order;
-import com.spring.dev2chuc.nutritious_food.payload.response.OnlyOrderDetailResponse;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class OrderResponse {
+@Getter
+@Setter
+public class OrderDTO {
     private Long id;
     private Long userId;
     private String userName;
+    private String address;
     private float totalPrice;
     private int type;
     private int status;
     private String createdAt;
     private String updatedAt;
 
-    private Set<OnlyOrderDetailResponse> orderDetail;
+    private Set<OrderDetailDTO> orderDetail;
 
-    public OrderResponse(Order order, Set<OnlyOrderDetailResponse> orderDetails) {
+    public OrderDTO(Order order, Set<OrderDetailDTO> orderDetails) {
         this.id = order.getId();
-        this.userId = order.getUser().getId();
-        this.userName = order.getUser().getUsername();
+        this.userId = order.getAddress().getUser().getId();
+        this.userName = order.getAddress().getUser().getUsername();
+        this.address = order.getAddress().getTitle();
         this.totalPrice = order.getTotalPrice();
         this.type = order.getType();
         this.status = order.getStatus();
@@ -31,14 +36,15 @@ public class OrderResponse {
         this.updatedAt = DateTimeHelper.formatDateFromLong(order.getUpdatedAt());
     }
 
-    public OrderResponse(Order order) {
+    public OrderDTO(Order order, boolean hasOrderDetail) {
         this.id = order.getId();
-        this.userId = order.getUser().getId();
-        this.userName = order.getUser().getUsername();
+        this.userId = order.getAddress().getUser().getId();
+        this.userName = order.getAddress().getUser().getUsername();
+        this.address = order.getAddress().getTitle();
         this.totalPrice = order.getTotalPrice();
         this.type = order.getType();
         this.status = order.getStatus();
-        this.orderDetail = order.getOrderDetails().stream().map(orderDetail -> new OnlyOrderDetailResponse(orderDetail)).collect(Collectors.toSet());
+        if (hasOrderDetail) this.orderDetail = order.getOrderDetails().stream().map(orderDetail -> new OrderDetailDTO(orderDetail, false)).collect(Collectors.toSet());
         this.createdAt = DateTimeHelper.formatDateFromLong(order.getCreatedAt());
         this.updatedAt = DateTimeHelper.formatDateFromLong(order.getUpdatedAt());
     }
@@ -59,11 +65,11 @@ public class OrderResponse {
         this.updatedAt = updatedAt;
     }
 
-    public Set<OnlyOrderDetailResponse> getOrderDetail() {
+    public Set<OrderDetailDTO> getOrderDetail() {
         return orderDetail;
     }
 
-    public void setOrderDetail(Set<OnlyOrderDetailResponse> orderDetail) {
+    public void setOrderDetail(Set<OrderDetailDTO> orderDetail) {
         this.orderDetail = orderDetail;
     }
 
@@ -83,7 +89,7 @@ public class OrderResponse {
         this.userName = userName;
     }
 
-    public void setOnlyOrderDetailResponses(Set<OnlyOrderDetailResponse> onlyOrderDetailResponses) {
+    public void setOnlyOrderDetailResponses(Set<OrderDetailDTO> onlyOrderDetailResponses) {
         this.orderDetail = onlyOrderDetailResponses;
     }
 
