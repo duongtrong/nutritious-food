@@ -1,6 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
-import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import lombok.Getter;
 import lombok.Setter;
