@@ -1,10 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.config.Seeding;
-import com.spring.dev2chuc.nutritious_food.model.Role;
-import com.spring.dev2chuc.nutritious_food.model.RoleName;
-import com.spring.dev2chuc.nutritious_food.model.User;
-import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.io.*;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/db")
 public class DbController {
 
-    private static final Logger LOGGER = Logger.getLogger(Seeding.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(DbController.class.getSimpleName());
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -60,15 +56,19 @@ public class DbController {
     @GetMapping("/{name}")
     public ResponseEntity<?> authenticateUser(@PathVariable("name") String name) {
         try {
-
-            //Bước 1: Tạo đối tượng luồng và liên kết nguồn dữ liệu
             String fileName = "src/main/java/com/spring/dev2chuc/nutritious_food/config/Seeding.java";
             FileWriter fileWriter = new FileWriter(fileName);
             PrintWriter printWriter = new PrintWriter(fileWriter);
             String getStartOfFile = getStartOfFile();
+            String getFunctionSeedingRole = getFunctionSeedingRole();
             String getFunctionSeedingUser = getFunctionSeedingUser();
+            String getFunctionSeedingUserProfile = getFunctionSeedingUserProfile();
             String getEndOfFile = getEndOfFile();
-            printWriter.print( getStartOfFile + getFunctionSeedingUser + getEndOfFile);
+            printWriter.print( getStartOfFile +
+                    getFunctionSeedingRole +
+                    getFunctionSeedingUser +
+                    getFunctionSeedingUserProfile +
+                    getEndOfFile);
             printWriter.close();
             System.out.println("Done!");
         } catch (IOException e) {
@@ -92,9 +92,7 @@ public class DbController {
                 "import org.springframework.security.crypto.password.PasswordEncoder;\n" +
                 "import org.springframework.stereotype.Component;\n" +
                 "\n" +
-                "import java.util.ArrayList;\n" +
-                "import java.util.Collections;\n" +
-                "import java.util.List;\n" +
+                "import java.util.*;\n" +
                 "import java.util.logging.Level;\n" +
                 "import java.util.logging.Logger;\n" +
                 "\n" +
@@ -111,6 +109,9 @@ public class DbController {
                 "\n" +
                 "    @Autowired\n" +
                 "    UserRepository userRepository;\n" +
+                "\n" +
+                "    @Autowired\n" +
+                "    HistoryRepository historyRepository;\n" +
                 "\n" +
                 "    @Autowired\n" +
                 "    AddressRepository addressRepository;\n" +
@@ -136,7 +137,8 @@ public class DbController {
                 "    @Autowired\n" +
                 "    OrderRepository orderRepository;\n" +
                 "\n" +
-                "    private List<User> userList = new ArrayList<>();\n" +
+                "    private List<Role> roles = new ArrayList<>();\n" +
+                "    private List<User> users = new ArrayList<>();\n" +
                 "    private List<Address> addresses = new ArrayList<>();\n" +
                 "    private List<UserProfile> userProfiles = new ArrayList<>();\n" +
                 "    private List<History> histories = new ArrayList<>();\n" +
@@ -150,9 +152,38 @@ public class DbController {
                 "    @Override\n" +
                 "    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {\n" +
                 "        LOGGER.log(Level.INFO, String.format(\"Start seeding...\"));\n" +
+                "        deleteAll();\n" +
+                "        seedingRole();\n" +
                 "        seedingUser();\n" +
+                "        seedingUserProfile();\n" +
                 "        LOGGER.log(Level.INFO, String.format(\"Seeding success!\"));\n" +
                 "    }\n" +
+                "\n" +
+                "    private void deleteAll() {\n" +
+                "        historyRepository.deleteAll();\n" +
+                "        userProfileRepository.deleteAll();\n" +
+                "        addressRepository.deleteAll();\n" +
+                "        orderDetailRepository.deleteAll();\n" +
+                "        orderRepository.deleteAll();\n" +
+                "        scheduleRepository.deleteAll();\n" +
+                "        comboRepository.deleteAll();\n" +
+                "        foodRepository.deleteAll();\n" +
+                "        categoryRepository.deleteAll();\n" +
+                "        userRepository.deleteAll();\n" +
+                "        roleRepository.deleteAll();\n" +
+                "\n" +
+                "        historyRepository.resetIncrement();\n" +
+                "        userProfileRepository.resetIncrement();\n" +
+                "        addressRepository.resetIncrement();\n" +
+                "        orderDetailRepository.resetIncrement();\n" +
+                "        orderRepository.resetIncrement();\n" +
+                "        scheduleRepository.resetIncrement();\n" +
+                "        comboRepository.resetIncrement();\n" +
+                "        foodRepository.resetIncrement();\n" +
+                "        categoryRepository.resetIncrement();\n" +
+                "        userRepository.resetIncrement();\n" +
+                "        roleRepository.resetIncrement();" +
+                "    }" +
                 "\n";
     }
 
@@ -160,11 +191,22 @@ public class DbController {
         return "}\n ";
     }
 
+    private String getFunctionSeedingRole() {
+        return "\n" +
+                "    private void seedingRole () {\n" +
+                "        Role role;\n" +
+                "        role = new Role(RoleName.ROLE_USER);\n" +
+                "        roles.add(role);\n" +
+                "\n" +
+                "        role = new Role(RoleName.ROLE_ADMIN);\n" +
+                "        roles.add(role);\n" +
+                "\n" +
+                "        roleRepository.saveAll(roles);\n" +
+                "    }\n";
+    }
+
     private String getFunctionSeedingUser() {
         String str = "    private void seedingUser() {\n" +
-                "        userRepository.deleteAll();\n" +
-                "        userRepository.resetIncrement();\n" +
-                "\n" +
                 "        User user;\n" +
                 "        Role userRole;\n\n";
         List<User> users = userRepository.findAll();
@@ -186,44 +228,53 @@ public class DbController {
                     "        user.setStatus("+ user.getStatus() +");\n" +
                     "        userRole = roleRepository.findByName("+ roleName +");\n" +
                     "        user.setRoles(Collections.singleton(userRole));\n" +
-                    "        userList.add(user);\n\n";
+                    "        users.add(user);\n\n";
         }
-        str += "        userRepository.saveAll(userList);\n" +
+        str += "        userRepository.saveAll(users);\n" +
                 "    }\n";
 
         return str;
     }
 
-
     private String getFunctionSeedingUserProfile() {
-        String str = "    private void seedingUser() {\n" +
-                "        userRepository.deleteAll();\n" +
-                "        userRepository.resetIncrement();\n" +
-                "\n" +
-                "        User user;\n" +
-                "        Role userRole;\n\n";
+        String str = "    private void seedingUserProfile () {\n" +
+                "        UserProfile userProfile;\n" +
+                "        Optional<User> user;\n" +
+                "        List<Category> categoryList;\n" +
+                "        List<Long> categoryIds = new ArrayList<>();\n" +
+                "        \n";
         List<User> users = userRepository.findAll();
         for (User user : users) {
-            Role roleAdmin = roleRepository.findByName(RoleName.ROLE_ADMIN);
-            String roleName;
-            if (user.getRoles().contains(roleAdmin)) {
-                roleName = "RoleName.ROLE_ADMIN";
-            } else {
-                roleName = "RoleName.ROLE_USER";
-            }
+            Set<UserProfile> userProfiles = user.getUserProfiles();
+            for (UserProfile userProfile : userProfiles) {
+                Set<Category> categorySet = userProfile.getCategories();
+                for (Category category : categorySet) {
+                    str += "        categoryIds.add((long) " + category.getId() + ");\n";
+                }
 
-            str +=  "        user  = new User();\n" +
-                    "        user.setName(\""+ user.getName() +"\");\n" +
-                    "        user.setUsername(\""+ user.getUsername() +"\");\n" +
-                    "        user.setEmail(\""+ user.getEmail() +"\");\n" +
-                    "        user.setPhone(\""+ user.getPhone() +"\");\n" +
-                    "        user.setPassword(\""+ user.getPassword() +"\");\n" +
-                    "        user.setStatus("+ user.getStatus() +");\n" +
-                    "        userRole = roleRepository.findByName("+ roleName +");\n" +
-                    "        user.setRoles(Collections.singleton(userRole));\n" +
-                    "        userRepository.save(user);\n\n";
+                str += "\n" +
+                        "        user = userRepository.findById((long) "+ user.getId() +");\n" +
+                        "        categoryList = categoryRepository.findAllByIdIn(categoryIds);\n" +
+                        "        Set<Category> categorySet = new HashSet<>(categoryList);\n" +
+                        "        userProfile = new UserProfile();\n" +
+                        "        userProfile.setHeight(" + userProfile.getHeight() + ");\n" +
+                        "        userProfile.setWeight(" + userProfile.getWeight() + ");\n" +
+                        "        userProfile.setYearOfBirth(" + userProfile.getYearOfBirth() + ");\n" +
+                        "        userProfile.setGender(" + userProfile.getGender() + ");\n" +
+                        "        userProfile.setExerciseIntensity(" + userProfile.getExerciseIntensity() + ");\n" +
+                        "        userProfile.setBodyFat(" + userProfile.getBodyFat() + ");\n" +
+                        "        userProfile.setBmrIndex(" + userProfile.getBmrIndex() + ");\n" +
+                        "        userProfile.setLbmIndex(" + userProfile.getLbmIndex() + ");\n" +
+                        "        userProfile.setTdeeIndex(" + userProfile.getTdeeIndex() + ");\n" +
+                        "        userProfile.setStatus(" + userProfile.getStatus() + ");\n" +
+                        "        userProfile.setCaloriesConsumed(" + userProfile.getCaloriesConsumed()+ ");\n" +
+                        "        userProfile.setUser(user.get());\n" +
+                        "        userProfile.setCategories(categorySet);\n" +
+                        "        userProfiles.add(userProfile);\n";
+            }
         }
-        str += "        userRepository.saveAll(userList);\n" +
+        str += "\n" +
+                "        userProfileRepository.saveAll(userProfiles);\n" +
                 "    }\n";
 
         return str;
