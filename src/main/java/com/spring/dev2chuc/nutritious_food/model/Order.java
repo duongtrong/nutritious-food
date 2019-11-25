@@ -17,8 +17,8 @@ public class Order extends DateAudit {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
 
     private float totalPrice;
     private int type;
@@ -27,8 +27,8 @@ public class Order extends DateAudit {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private Set<OrderDetail> orderDetails;
 
-    public Order(User user, float totalPrice) {
-        this.user = user;
+    public Order(Address address, float totalPrice) {
+        this.address = address;
         this.totalPrice = totalPrice;
         this.status = Status.ACTIVE.getValue();
     }
