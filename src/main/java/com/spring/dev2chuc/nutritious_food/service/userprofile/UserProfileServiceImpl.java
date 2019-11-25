@@ -41,7 +41,13 @@ public class UserProfileServiceImpl implements UserProfileService{
                 userProfileRequest.getAge(),
                 userProfileRequest.getBodyFat(),
                 userProfileRequest.getExerciseIntensity(),
-                userProfileRequest.getCaloriesConsumed(),
+                userProfileRequest.getCaloriesConsumed(
+                        mathCalories(userProfileRequest.getWeight(),
+                                userProfileRequest.getWeight(),
+                                userProfileRequest.getAge(),
+                                userProfileRequest.getGender(),
+                                Math.round(userProfileRequest.getExerciseIntensity()))
+                ),
                 userProfileRequest.getGender()
         );
         return userProfileRepository.save(userProfile);
@@ -79,16 +85,18 @@ public class UserProfileServiceImpl implements UserProfileService{
     }
 
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        System.out.println(mathCalories(52, 173, 20, Gender.MALE.getValue(), ExerciseIntensity.LIGHT_ACTIVITY.getValue()));
-        String strDouble = String.format("%.3f", 20.0000); System.out.println(strDouble);
-    }
+//        String strDouble = String.format("%.3f", 20.0000); System.out.println(strDouble);
+//    }
 
-    private static int mathCalories(int weight, int height, int age, int gender, double intensity) {
+    private static Integer mathCalories(int weight, int height, int age, int gender, double intensity) {
         int index = gender == Gender.MALE.getValue() ? 88362 : 447593;
         int indexWeight = gender == Gender.MALE.getValue() ? 13397 : 9247;
         int indexHeight = gender == Gender.MALE.getValue() ? 4799 : 3098;
         int indexAge = gender == Gender.MALE.getValue() ? 5677 : 4330;
         return (int) (((index + (indexWeight * weight) + (indexHeight * height) - (indexAge * age)) * intensity)) / 1000;
     }
+
+
 }
