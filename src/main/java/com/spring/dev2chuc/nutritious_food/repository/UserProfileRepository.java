@@ -10,11 +10,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long>, JpaSpecificationExecutor<UserProfile> {
+
     List<UserProfile> findByUser(User user);
+
     UserProfile findTop1ByUserOrderByIdDesc(User user);
 
     @Transactional
