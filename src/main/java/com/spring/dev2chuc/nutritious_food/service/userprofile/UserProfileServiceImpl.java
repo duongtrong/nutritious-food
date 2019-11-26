@@ -62,7 +62,9 @@ public class UserProfileServiceImpl implements UserProfileService{
             return null;
         }
         System.out.println(id);
-        return userProfileRepository.findById(id).orElseThrow(null);
+        Optional<UserProfile> userProfile =  userProfileRepository.findById(id);
+        return userProfile.get();
+
     }
 
     @Override
