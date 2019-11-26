@@ -17,8 +17,4 @@ public class UserProfileRequest {
     private Integer caloriesConsumed;
     private Integer status;
     private Set<Long> categoryIds;
-
-    public Integer getCaloriesConsumed(Integer mathCalories) {
-        return mathCalories;
-    }
 }

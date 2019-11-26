@@ -68,10 +68,10 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         LOGGER.log(Level.INFO, String.format("Start seeding..."));
-        deleteAll();
-        seedingRole();
-        seedingUser();
-        seedingUserProfile();
+//        deleteAll();
+//        seedingRole();
+//        seedingUser();
+//        seedingUserProfile();
         LOGGER.log(Level.INFO, String.format("Seeding success!"));
     }
 
