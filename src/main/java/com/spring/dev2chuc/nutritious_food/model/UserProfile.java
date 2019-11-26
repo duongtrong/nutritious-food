@@ -50,6 +50,7 @@ public class UserProfile extends DateAudit {
             Integer bodyFat,
             double exerciseIntensity,
             Integer caloriesConsumed,
+            Integer tdeeIndex,
             Integer gender
     ) {
         this.user = user;
@@ -60,6 +61,7 @@ public class UserProfile extends DateAudit {
         this.bodyFat = bodyFat;
         this.exerciseIntensity = exerciseIntensity;
         this.caloriesConsumed = caloriesConsumed;
+        this.tdeeIndex = tdeeIndex;
         this.gender = gender;
     }
 

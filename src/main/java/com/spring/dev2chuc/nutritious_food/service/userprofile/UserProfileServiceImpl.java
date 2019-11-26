@@ -34,6 +34,12 @@ public class UserProfileServiceImpl implements UserProfileService{
 
     @Override
     public UserProfile store(User user, UserProfileRequest userProfileRequest) {
+        Integer calories = mathCalories(userProfileRequest.getWeight(),
+                userProfileRequest.getWeight(),
+                userProfileRequest.getAge(),
+                userProfileRequest.getGender(),
+                Math.round(userProfileRequest.getExerciseIntensity())
+        );
         UserProfile userProfile = new UserProfile(
                 user,
                 userProfileRequest.getHeight(),
@@ -41,13 +47,8 @@ public class UserProfileServiceImpl implements UserProfileService{
                 userProfileRequest.getAge(),
                 userProfileRequest.getBodyFat(),
                 userProfileRequest.getExerciseIntensity(),
-                userProfileRequest.getCaloriesConsumed(
-                        mathCalories(userProfileRequest.getWeight(),
-                                userProfileRequest.getWeight(),
-                                userProfileRequest.getAge(),
-                                userProfileRequest.getGender(),
-                                Math.round(userProfileRequest.getExerciseIntensity()))
-                ),
+                calories,
+                calories,
                 userProfileRequest.getGender()
         );
         return userProfileRepository.save(userProfile);
