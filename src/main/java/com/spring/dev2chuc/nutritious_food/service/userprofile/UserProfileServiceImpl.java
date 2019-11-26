@@ -1,6 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.service.userprofile;
 
-import com.spring.dev2chuc.nutritious_food.model.ExerciseIntensity;
 import com.spring.dev2chuc.nutritious_food.model.Gender;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
@@ -35,11 +34,12 @@ public class UserProfileServiceImpl implements UserProfileService{
     @Override
     public UserProfile store(User user, UserProfileRequest userProfileRequest) {
         Integer calories = mathCalories(userProfileRequest.getWeight(),
-                userProfileRequest.getWeight(),
+                userProfileRequest.getHeight(),
                 userProfileRequest.getAge(),
                 userProfileRequest.getGender(),
-                Math.round(userProfileRequest.getExerciseIntensity())
+                userProfileRequest.getExerciseIntensity()
         );
+        System.out.println(calories);
         UserProfile userProfile = new UserProfile(
                 user,
                 userProfileRequest.getHeight(),
@@ -49,6 +49,8 @@ public class UserProfileServiceImpl implements UserProfileService{
                 userProfileRequest.getExerciseIntensity(),
                 calories,
                 calories,
+                mathLbm(userProfileRequest.getWeight(), userProfileRequest.getBodyFat()),
+                mathBmr(userProfileRequest.getWeight(), userProfileRequest.getBodyFat()),
                 userProfileRequest.getGender()
         );
         return userProfileRepository.save(userProfile);
@@ -85,18 +87,23 @@ public class UserProfileServiceImpl implements UserProfileService{
         return userProfileRepository.findTop1ByUserOrderByIdDesc(user);
     }
 
-
-//    public static void main(String[] args) {
-//        System.out.println(mathCalories(52, 173, 20, Gender.MALE.getValue(), ExerciseIntensity.LIGHT_ACTIVITY.getValue()));
-//        String strDouble = String.format("%.3f", 20.0000); System.out.println(strDouble);
-//    }
-
     private static Integer mathCalories(int weight, int height, int age, int gender, double intensity) {
         int index = gender == Gender.MALE.getValue() ? 88362 : 447593;
         int indexWeight = gender == Gender.MALE.getValue() ? 13397 : 9247;
         int indexHeight = gender == Gender.MALE.getValue() ? 4799 : 3098;
         int indexAge = gender == Gender.MALE.getValue() ? 5677 : 4330;
-        return (int) (((index + (indexWeight * weight) + (indexHeight * height) - (indexAge * age)) * intensity)) / 1000;
+        return (int) ((index + (indexWeight * weight) + (indexHeight * height) - (indexAge * age)) * intensity) / 1000;
+    }
+
+    private static Integer mathBmr(int weight, int bodyFat) {
+        int index = 370;
+        double numberIndex = 21.6;
+        return (int) (index + (numberIndex * mathLbm(weight, bodyFat)));
+    }
+
+    private static Integer mathLbm(int weight, int bodyFat) {
+        int index = 100;
+        return  (weight * (index - bodyFat)) / index;
     }
 
 
