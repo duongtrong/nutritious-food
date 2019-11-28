@@ -45,7 +45,7 @@ public class UserProfileController {
                 return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "ExerciseIntensity not found"), HttpStatus.NOT_FOUND);
             }
             UserProfile profile = userProfileService.store(user, userProfileRequest);
-            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileDTO(profile, false, true)), HttpStatus.CREATED);
+            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save user profile success", new UserProfileDTO(profile, false, true)), HttpStatus.CREATED);
         }
     }
 
@@ -67,7 +67,7 @@ public class UserProfileController {
             if (profile == null ) return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.NOT_FOUND.value (), "Profile not found"), HttpStatus.NOT_FOUND);
 
             UserProfile result = userProfileService.update(userProfileRequest, profile);
-            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.CREATED.value (), "Save order success", new UserProfileDTO(result, true, true)), HttpStatus.CREATED);
+            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "Update user profile success", new UserProfileDTO(result, true, true)), HttpStatus.OK);
         }
     }
 
@@ -91,6 +91,6 @@ public class UserProfileController {
         Set<Category> categorySet = new HashSet<>(categories);
         userProfile.setCategories(categorySet);
         UserProfile profile = userProfileService.updateCategory(userProfile);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Create new category success", new UserProfileDTO(profile, true, true)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Merge new category success", new UserProfileDTO(profile, true, true)), HttpStatus.OK);
     }
 }
