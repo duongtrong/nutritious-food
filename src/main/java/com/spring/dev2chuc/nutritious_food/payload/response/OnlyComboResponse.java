@@ -34,7 +34,7 @@ public class OnlyComboResponse {
         this.name = combo.getName();
         this.description = combo.getDescription();
         this.image = combo.getImage();
-        this.price = combo.getId();
+        this.price = combo.getPrice();
         this.carbonhydrates = combo.getCarbonhydrates();
         this.protein = combo.getProtein();
         this.lipid = combo.getLipid();

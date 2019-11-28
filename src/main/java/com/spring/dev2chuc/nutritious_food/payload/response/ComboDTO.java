@@ -40,7 +40,7 @@ public class ComboDTO {
         this.name = combo.getName();
         this.description = combo.getDescription();
         this.image = combo.getImage();
-        this.price = combo.getId();
+        this.price = combo.getPrice();
         this.carbonhydrates = combo.getCarbonhydrates();
         this.protein = combo.getProtein();
         this.lipid = combo.getLipid();
@@ -54,7 +54,7 @@ public class ComboDTO {
         this.vitaminD = combo.getVitaminD();
         this.vitaminE = combo.getVitaminE();
         this.calorie = combo.getCalorie();
-        this.calorie = combo.getWeight();
+        this.weight = combo.getWeight();
         this.status = combo.getStatus();
         if (hasFood)
             this.foods = combo.getFoods().stream().map(x -> new FoodDTO(x, false, false)).collect(Collectors.toSet());
