@@ -97,4 +97,36 @@ public class FoodController {
                 .collect(Collectors.toList()),
                 new RESTPagination(page, limit, foodPage.getTotalPages(), foodPage.getTotalElements())), HttpStatus.OK);
     }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<?> getListByCategory(
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "to", required = false) String to,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "12", required = false) int limit,
+            @PathVariable("id") Long id) {
+        List<Food> foodList = foodService.findAllByCategory(id);
+        Specification specification = Specification.where(null);
+        if (search != null && search.length() > 0) {
+            specification = specification
+                    .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
+                    .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
+        }
+
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("id", ":", "(1)")));
+
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
+
+        Page<Food> foodPage = foodService.foodsWithPaginate(specification, page, limit);
+        return new ResponseEntity<>(new ApiResponsePage<>(
+                HttpStatus.OK.value(), "OK", foodPage.stream()
+                .map(x -> new OnlyFoodResponse(x))
+                .collect(Collectors.toList()),
+                new RESTPagination(page, limit, foodPage.getTotalPages(), foodPage.getTotalElements())), HttpStatus.OK);
+    }
+
+
 }

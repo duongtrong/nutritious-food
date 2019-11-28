@@ -25,5 +25,7 @@ public interface FoodService {
 
     List<Food> findAllByIdIn(Collection<Long> ids);
 
+    List<Food> findAllByCategory(Long categoryId);
+
     Page<Food> foodsWithPaginate(Specification specification, int page, int limit);
 }
