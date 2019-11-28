@@ -39,7 +39,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getDtail(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
         Schedule schedule = scheduleService.findByStatusAndId(Status.ACTIVE.getValue(), id);
         if (schedule == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);

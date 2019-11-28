@@ -57,7 +57,7 @@ public class AddressController {
             Address address = addressService.store(user, addressRequest);
             if (address == null)
                 return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), "Item not match"), HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Save order success", new AddressDTO(address, true)), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create address success", new AddressDTO(address, true)), HttpStatus.CREATED);
         }
     }
 
@@ -71,10 +71,10 @@ public class AddressController {
             if (address == null) {
                 return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Address not found"), HttpStatus.NOT_FOUND);
             }
-            if (address.getUser().getId() != user.getId()) {
+            if (!address.getUser().getId().equals(user.getId())) {
                 return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Address not accept for you"), HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Save order success", new AddressDTO(address, true)), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Save address success", new AddressDTO(address, true)), HttpStatus.OK);
         }
     }
 
@@ -91,7 +91,7 @@ public class AddressController {
 
             if (address == null)
                 return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), "Item not match"), HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Save order success", new AddressDTO(address, true)), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Save address success", new AddressDTO(address, true)), HttpStatus.OK);
         }
     }
 

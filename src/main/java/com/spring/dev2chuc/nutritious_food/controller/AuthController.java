@@ -197,7 +197,7 @@ public class AuthController {
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Save order success", new OnlyUserResponse(user)), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Save user success", new OnlyUserResponse(user)), HttpStatus.OK);
         }
     }
 
