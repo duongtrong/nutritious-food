@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class RattingScheduleServiceImpl implements RattingScheduleService{
+public class RattingScheduleServiceImpl implements RattingScheduleService {
 
     @Autowired
     RattingScheduleRepository rattingScheduleRepository;
@@ -28,49 +28,50 @@ public class RattingScheduleServiceImpl implements RattingScheduleService{
 
     @Override
     public List<RattingSchedule> list() {
-        return rattingScheduleRepository.findAll ();
+        return rattingScheduleRepository.findAll();
     }
 
     @Override
     public RattingSchedule merge(RattingSchedule rattingSchedule, RattingScheduleRequest rattingScheduleRequest) {
-        rattingSchedule.setRate (rattingScheduleRequest.getRate());
-        rattingSchedule.setComment (rattingScheduleRequest.getComment());
-        rattingSchedule.setImage (rattingScheduleRequest.getImage());
+        rattingSchedule.setRate(rattingScheduleRequest.getRate());
+        rattingSchedule.setComment(rattingScheduleRequest.getComment());
+        rattingSchedule.setImage(rattingScheduleRequest.getImage());
 
-        User user = userService.getById (rattingScheduleRequest.getUserId());
+        User user = userService.getById(rattingScheduleRequest.getUserId());
         Schedule schedule = scheduleService.findById(rattingScheduleRequest.getScheduleId());
 
         rattingSchedule.setUser(user);
         rattingSchedule.setSchedule(schedule);
-        return rattingScheduleRepository.save (rattingSchedule);
+        return rattingScheduleRepository.save(rattingSchedule);
     }
 
     @Override
     public RattingSchedule getDetail(Long id) {
-        if (CollectionUtils.isEmpty (Collections.singleton (id))) {
-            throw new RuntimeException ("Null pointer exception");
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new RuntimeException("Null pointer exception");
         }
-        return rattingScheduleRepository.findById (id).orElseThrow (null);
+        return rattingScheduleRepository.findById(id).orElseThrow(null);
     }
 
     @Override
     public RattingSchedule update(RattingSchedule rattingSchedule, RattingScheduleRequest rattingScheduleRequest) {
         if (rattingScheduleRequest.getRate() != null) rattingSchedule.setRate(rattingScheduleRequest.getRate());
-        if (rattingScheduleRequest.getComment() != null) rattingSchedule.setComment(rattingScheduleRequest.getComment());
+        if (rattingScheduleRequest.getComment() != null)
+            rattingSchedule.setComment(rattingScheduleRequest.getComment());
         if (rattingScheduleRequest.getImage() != null) rattingSchedule.setImage(rattingScheduleRequest.getImage());
 
-        User user = userService.getById (rattingScheduleRequest.getUserId());
+        User user = userService.getById(rattingScheduleRequest.getUserId());
         if (user == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
 
         Schedule schedule = scheduleService.findById(rattingScheduleRequest.getScheduleId());
         if (schedule == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
 
         rattingSchedule.setUser(user);
         rattingSchedule.setSchedule(schedule);
-        return rattingScheduleRepository.save (rattingSchedule);
+        return rattingScheduleRepository.save(rattingSchedule);
     }
 }

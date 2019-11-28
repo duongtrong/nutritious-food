@@ -7,9 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -60,7 +66,7 @@ public class DbController {
             FileWriter fileWriter = new FileWriter(fileName);
             PrintWriter printWriter = new PrintWriter(fileWriter);
 
-            printWriter.print( getStartOfFile() +
+            printWriter.print(getStartOfFile() +
                     getFunctionSeedingRole() +
                     getFunctionSeedingUser() +
                     getFunctionSeedingUserProfile() +
@@ -221,14 +227,14 @@ public class DbController {
                 roleName = "RoleName.ROLE_USER";
             }
 
-            str +=  "        user  = new User();\n" +
-                    "        user.setName(\""+ user.getName() +"\");\n" +
-                    "        user.setUsername(\""+ user.getUsername() +"\");\n" +
-                    "        user.setEmail(\""+ user.getEmail() +"\");\n" +
-                    "        user.setPhone(\""+ user.getPhone() +"\");\n" +
-                    "        user.setPassword(\""+ user.getPassword() +"\");\n" +
-                    "        user.setStatus("+ user.getStatus() +");\n" +
-                    "        userRole = roleRepository.findByName("+ roleName +");\n" +
+            str += "        user  = new User();\n" +
+                    "        user.setName(\"" + user.getName() + "\");\n" +
+                    "        user.setUsername(\"" + user.getUsername() + "\");\n" +
+                    "        user.setEmail(\"" + user.getEmail() + "\");\n" +
+                    "        user.setPhone(\"" + user.getPhone() + "\");\n" +
+                    "        user.setPassword(\"" + user.getPassword() + "\");\n" +
+                    "        user.setStatus(" + user.getStatus() + ");\n" +
+                    "        userRole = roleRepository.findByName(" + roleName + ");\n" +
                     "        user.setRoles(Collections.singleton(userRole));\n" +
                     "        users.add(user);\n\n";
         }
@@ -256,7 +262,7 @@ public class DbController {
                 }
 
                 str += "\n" +
-                        "        user = userRepository.findById((long) "+ user.getId() +");\n" +
+                        "        user = userRepository.findById((long) " + user.getId() + ");\n" +
                         "        categoryList = categoryRepository.findAllByIdIn(categoryIds);\n" +
                         "        categorySet = new HashSet<>(categoryList);\n" +
                         "        userProfile = new UserProfile();\n" +
@@ -270,7 +276,7 @@ public class DbController {
                         "        userProfile.setLbmIndex(" + userProfile.getLbmIndex() + ");\n" +
                         "        userProfile.setTdeeIndex(" + userProfile.getTdeeIndex() + ");\n" +
                         "        userProfile.setStatus(" + userProfile.getStatus() + ");\n" +
-                        "        userProfile.setCaloriesConsumed(" + userProfile.getCaloriesConsumed()+ ");\n" +
+                        "        userProfile.setCaloriesConsumed(" + userProfile.getCaloriesConsumed() + ");\n" +
                         "        userProfile.setUser(user.get());\n" +
                         "        userProfile.setCategories(categorySet);\n" +
                         "        userProfiles.add(userProfile);\n";
@@ -328,7 +334,7 @@ public class DbController {
         return str;
     }
 
-    private String getFunctionSeedingFood () {
+    private String getFunctionSeedingFood() {
         String str = "    private void seedingFood () {\n" +
                 "        Food food;\n" +
                 "        List<Category> categoryList;\n" +

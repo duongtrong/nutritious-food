@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class RattingFoodServiceImpl implements RattingFoodService{
+public class RattingFoodServiceImpl implements RattingFoodService {
 
     @Autowired
     RattingFoodRepository rattingFoodRepository;
@@ -28,23 +28,23 @@ public class RattingFoodServiceImpl implements RattingFoodService{
 
     @Override
     public List<RattingFood> list() {
-        return rattingFoodRepository.findAll ();
+        return rattingFoodRepository.findAll();
     }
 
     @Override
     public RattingFood merge(RattingFood rattingFood, RattingFoodRequest rattingFoodRequest) {
-        rattingFood.setRate (rattingFoodRequest.getRate ());
-        rattingFood.setComment (rattingFoodRequest.getComment ());
-        rattingFood.setImage (rattingFoodRequest.getImage ());
+        rattingFood.setRate(rattingFoodRequest.getRate());
+        rattingFood.setComment(rattingFoodRequest.getComment());
+        rattingFood.setImage(rattingFoodRequest.getImage());
 
-        User user = userService.getById (rattingFoodRequest.getUserId());
-        if (CollectionUtils.isEmpty (Collections.singleton (user))) {
-            throw new RuntimeException ("Null pointer exception");
+        User user = userService.getById(rattingFoodRequest.getUserId());
+        if (CollectionUtils.isEmpty(Collections.singleton(user))) {
+            throw new RuntimeException("Null pointer exception");
         }
 
         Food food = foodService.findById(rattingFoodRequest.getFoodId());
         if (food == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
 
         rattingFood.setUser(user);
@@ -55,10 +55,10 @@ public class RattingFoodServiceImpl implements RattingFoodService{
 
     @Override
     public RattingFood getDetail(Long id) {
-        if (CollectionUtils.isEmpty (Collections.singleton (id))) {
-            throw new RuntimeException ("Null pointer exception");
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new RuntimeException("Null pointer exception");
         }
-        return rattingFoodRepository.findById (id).orElseThrow (null);
+        return rattingFoodRepository.findById(id).orElseThrow(null);
     }
 
     @Override
@@ -67,18 +67,18 @@ public class RattingFoodServiceImpl implements RattingFoodService{
         if (rattingFoodRequest.getComment() != null) rattingFood.setComment(rattingFoodRequest.getComment());
         if (rattingFoodRequest.getImage() != null) rattingFood.setImage(rattingFoodRequest.getImage());
 
-        User user = userService.getById (rattingFoodRequest.getUserId());
+        User user = userService.getById(rattingFoodRequest.getUserId());
         if (user == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
 
         Food food = foodService.findById(rattingFoodRequest.getFoodId());
         if (food == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
 
         rattingFood.setUser(user);
         rattingFood.setFood(food);
-        return rattingFoodRepository.save (rattingFood);
+        return rattingFoodRepository.save(rattingFood);
     }
 }

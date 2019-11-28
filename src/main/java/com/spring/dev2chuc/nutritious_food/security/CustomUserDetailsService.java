@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsernameOrPhone(usernameOrPhone, usernameOrPhone)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username or phone : " + usernameOrPhone)
-        );
+                );
 
         return UserPrincipal.create(user);
     }
@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-            () -> new ResourceNotFoundException("User", "id", id)
+                () -> new ResourceNotFoundException("User", "id", id)
         );
 
         return UserPrincipal.create(user);

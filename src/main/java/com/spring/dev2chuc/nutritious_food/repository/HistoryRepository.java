@@ -1,7 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.repository;
 
 import com.spring.dev2chuc.nutritious_food.model.History;
-import com.spring.dev2chuc.nutritious_food.model.Order;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +13,6 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
     List<History> queryAllByUserAndStatus(User user, Integer status);
 
     List<History> findAllByUser(User user);
-
 
     @Transactional
     @Modifying

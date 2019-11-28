@@ -6,13 +6,13 @@ import java.util.List;
 
 public class CategoryHelper {
 
-    private static  List<Category> resultLocal;
+    private static List<Category> resultLocal;
 
     public static List<Category> recusiveCategory(List<Category> data, Long parentId, String text, List<Category> result) {
         resultLocal = result;
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getId() == parentId || data.get(i).getParentId() == parentId) {
-                data.get(i).setName(text+data.get(i).getName());
+                data.get(i).setName(text + data.get(i).getName());
                 resultLocal.add(i, data.get(i));
                 Long newParentId = data.get(i).getId();
                 data.remove(i);
@@ -20,7 +20,7 @@ public class CategoryHelper {
                     System.out.println(resultLocal.get(j).getId() + resultLocal.get(j).getName());
                 }
 
-                recusiveCategory(data, newParentId, text+" -- ", resultLocal);
+                recusiveCategory(data, newParentId, text + " -- ", resultLocal);
             }
         }
         return resultLocal;

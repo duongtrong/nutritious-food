@@ -1,8 +1,8 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.response.UserProfileDTO;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController

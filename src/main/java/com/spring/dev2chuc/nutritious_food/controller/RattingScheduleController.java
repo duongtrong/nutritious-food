@@ -1,9 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.*;
+import com.spring.dev2chuc.nutritious_food.model.RattingSchedule;
+import com.spring.dev2chuc.nutritious_food.payload.RattingScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
-import com.spring.dev2chuc.nutritious_food.payload.RattingScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.RattingScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
@@ -42,24 +42,24 @@ public class RattingScheduleController {
 
     @GetMapping
     public ResponseEntity<?> getList() {
-        List<RattingSchedule> list = rattingScheduleService.list ();
+        List<RattingSchedule> list = rattingScheduleService.list();
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", list), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody RattingScheduleRequest rattingScheduleRequest){
+    public ResponseEntity<?> create(@Valid @RequestBody RattingScheduleRequest rattingScheduleRequest) {
         RattingSchedule rattingSchedule = new RattingSchedule();
-        RattingSchedule result = rattingScheduleService.merge (rattingSchedule, rattingScheduleRequest);
+        RattingSchedule result = rattingScheduleService.merge(rattingSchedule, rattingScheduleRequest);
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", result), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody RattingScheduleRequest rattingScheduleRequest, @PathVariable Long id){
-        RattingSchedule rattingSchedule = rattingScheduleService.getDetail (id);
+    public ResponseEntity<?> update(@Valid @RequestBody RattingScheduleRequest rattingScheduleRequest, @PathVariable Long id) {
+        RattingSchedule rattingSchedule = rattingScheduleService.getDetail(id);
         if (rattingSchedule == null) {
-            return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Ratting schedule not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Ratting schedule not found"), HttpStatus.NOT_FOUND);
         }
-        RattingSchedule result = rattingScheduleService.update (rattingSchedule, rattingScheduleRequest);
+        RattingSchedule result = rattingScheduleService.update(rattingSchedule, rattingScheduleRequest);
         return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", result), HttpStatus.OK);
     }
 }

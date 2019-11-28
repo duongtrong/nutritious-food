@@ -2,9 +2,9 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.Status;
+import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
-import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.service.schedule.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ScheduleController {
     @GetMapping("/")
     public ResponseEntity<?> getList() {
         List<Schedule> schedules = scheduleService.findAllByStatusIs(Status.ACTIVE.getValue());
-        return new ResponseEntity<> (new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", schedules), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", schedules), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -44,7 +44,7 @@ public class ScheduleController {
         if (schedule == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Schedule not found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<> (new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", schedule), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", schedule), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")

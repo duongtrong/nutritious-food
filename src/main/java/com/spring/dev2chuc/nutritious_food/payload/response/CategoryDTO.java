@@ -1,12 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
 import com.spring.dev2chuc.nutritious_food.model.Category;
-import com.spring.dev2chuc.nutritious_food.model.Combo;
-import com.spring.dev2chuc.nutritious_food.model.Food;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +12,6 @@ import java.util.stream.Collectors;
 @Setter
 public class CategoryDTO {
     private Long id;
-
     private Long parentId;
     private String name;
     private String image;
@@ -31,7 +27,9 @@ public class CategoryDTO {
         this.parentId = category.getParentId();
         this.image = category.getImage();
         this.status = category.getStatus();
-        if (hasFood) this.foods = category.getFoods().stream().map(x -> new FoodDTO(x, false, false)).collect(Collectors.toSet());
-        if (hasCombo) this.combos = category.getCombos().stream().map(x -> new ComboDTO(x, false, false)).collect(Collectors.toSet());
+        if (hasFood)
+            this.foods = category.getFoods().stream().map(x -> new FoodDTO(x, false, false)).collect(Collectors.toSet());
+        if (hasCombo)
+            this.combos = category.getCombos().stream().map(x -> new ComboDTO(x, false, false)).collect(Collectors.toSet());
     }
 }

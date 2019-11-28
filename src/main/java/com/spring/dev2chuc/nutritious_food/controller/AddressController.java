@@ -3,11 +3,9 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.model.Address;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.AddressRequest;
-import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.AddressDTO;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
-import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
 import com.spring.dev2chuc.nutritious_food.service.address.AddressService;
 import com.spring.dev2chuc.nutritious_food.service.order.OrderService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
@@ -43,8 +41,8 @@ public class AddressController {
                     HttpStatus.OK.value(),
                     "OK",
                     addresses.stream().map(x -> new AddressDTO(x, false)
-                ).collect(Collectors.toList())),
-            HttpStatus.OK);
+                    ).collect(Collectors.toList())),
+                    HttpStatus.OK);
         }
     }
 
@@ -74,7 +72,7 @@ public class AddressController {
             if (!address.getUser().getId().equals(user.getId())) {
                 return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Address not accept for you"), HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Save address success", new AddressDTO(address, true)), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Get address success", new AddressDTO(address, true)), HttpStatus.OK);
         }
     }
 
@@ -91,7 +89,7 @@ public class AddressController {
 
             if (address == null)
                 return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), "Item not match"), HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Save address success", new AddressDTO(address, true)), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update address success", new AddressDTO(address, true)), HttpStatus.OK);
         }
     }
 

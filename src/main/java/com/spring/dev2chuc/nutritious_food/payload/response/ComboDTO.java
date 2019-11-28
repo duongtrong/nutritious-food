@@ -56,7 +56,9 @@ public class ComboDTO {
         this.calorie = combo.getCalorie();
         this.calorie = combo.getWeight();
         this.status = combo.getStatus();
-        if (hasFood) this.foods = combo.getFoods().stream().map(x -> new FoodDTO(x, false, false)).collect(Collectors.toSet());
-        if (hasCategory) this.categories = combo.getCategories().stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toSet());
+        if (hasFood)
+            this.foods = combo.getFoods().stream().map(x -> new FoodDTO(x, false, false)).collect(Collectors.toSet());
+        if (hasCategory)
+            this.categories = combo.getCategories().stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toSet());
     }
 }

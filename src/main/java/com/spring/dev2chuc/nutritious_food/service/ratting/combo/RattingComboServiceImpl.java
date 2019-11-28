@@ -28,36 +28,36 @@ public class RattingComboServiceImpl implements RattingComboService {
 
     @Override
     public List<RattingCombo> list() {
-        return rattingComboRepository.findAll ();
+        return rattingComboRepository.findAll();
     }
 
     @Override
     public RattingCombo merge(RattingCombo rattingCombo, RattingComboRequest rattingComboRequest) {
-        rattingCombo.setRate (rattingComboRequest.getRate ());
-        rattingCombo.setComment (rattingComboRequest.getComment ());
-        rattingCombo.setImage (rattingComboRequest.getImage ());
+        rattingCombo.setRate(rattingComboRequest.getRate());
+        rattingCombo.setComment(rattingComboRequest.getComment());
+        rattingCombo.setImage(rattingComboRequest.getImage());
 
-        User user = userService.getById (rattingComboRequest.getUserId());
+        User user = userService.getById(rattingComboRequest.getUserId());
         if (user == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
         Combo combo = comboService.findById(rattingComboRequest.getComboId());
         if (combo == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
 
         rattingCombo.setUser(user);
         rattingCombo.setCombo(combo);
-        RattingCombo result = rattingComboRepository.save (rattingCombo);
+        RattingCombo result = rattingComboRepository.save(rattingCombo);
         return result;
     }
 
     @Override
     public RattingCombo getDetail(Long id) {
-        if (CollectionUtils.isEmpty (Collections.singleton (id))) {
-            throw new RuntimeException ("Null pointer exception...");
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new RuntimeException("Null pointer exception...");
         }
-        return rattingComboRepository.findById (id).orElseThrow (null);
+        return rattingComboRepository.findById(id).orElseThrow(null);
     }
 
     @Override
@@ -66,15 +66,15 @@ public class RattingComboServiceImpl implements RattingComboService {
         if (rattingComboRequest.getComment() != null) rattingCombo.setComment(rattingComboRequest.getComment());
         if (rattingComboRequest.getImage() != null) rattingCombo.setImage(rattingComboRequest.getImage());
 
-        User user = userService.getById (rattingComboRequest.getUserId());
+        User user = userService.getById(rattingComboRequest.getUserId());
         if (user == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
         rattingCombo.setUser(user);
 
-        Combo combo = comboService.findById (rattingComboRequest.getComboId());
+        Combo combo = comboService.findById(rattingComboRequest.getComboId());
         if (combo == null) {
-            throw new RuntimeException ("Null pointer exception");
+            throw new RuntimeException("Null pointer exception");
         }
         rattingCombo.setCombo(combo);
 

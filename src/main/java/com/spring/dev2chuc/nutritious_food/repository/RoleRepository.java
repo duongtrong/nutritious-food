@@ -15,7 +15,6 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, Long> {
     Role findByName(RoleName roleName);
 
-
     @Transactional
     @Modifying
     @Query(value = "alter  table roles AUTO_INCREMENT = 1 ", nativeQuery = true)

@@ -101,9 +101,10 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         foodRepository.resetIncrement();
         categoryRepository.resetIncrement();
         userRepository.resetIncrement();
-        roleRepository.resetIncrement();    }
+        roleRepository.resetIncrement();
+    }
 
-    private void seedingRole () {
+    private void seedingRole() {
         Role role;
         role = new Role(RoleName.ROLE_USER);
         roles.add(role);
@@ -113,11 +114,12 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
 
         roleRepository.saveAll(roles);
     }
+
     private void seedingUser() {
         User user;
         Role userRole;
 
-        user  = new User();
+        user = new User();
         user.setName("admin002");
         user.setUsername("admin001");
         user.setEmail("admin@gmail.com");
@@ -128,7 +130,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         user.setRoles(Collections.singleton(userRole));
         users.add(user);
 
-        user  = new User();
+        user = new User();
         user.setName("user0001");
         user.setUsername("user0001");
         user.setEmail("user0001@gmail.com");
@@ -139,7 +141,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         user.setRoles(Collections.singleton(userRole));
         users.add(user);
 
-        user  = new User();
+        user = new User();
         user.setName("Nguyễn Danh Vượng");
         user.setUsername("danhvuong1");
         user.setEmail("danhvuong@gmail.com");
@@ -150,7 +152,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         user.setRoles(Collections.singleton(userRole));
         users.add(user);
 
-        user  = new User();
+        user = new User();
         user.setName("NguyenDanhVuong");
         user.setUsername("admin2");
         user.setEmail("admin2g@gmail.com");
@@ -161,7 +163,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         user.setRoles(Collections.singleton(userRole));
         users.add(user);
 
-        user  = new User();
+        user = new User();
         user.setName("NDVHades");
         user.setUsername("admindemo");
         user.setEmail("admindemog@gmail.com");
@@ -172,7 +174,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         user.setRoles(Collections.singleton(userRole));
         users.add(user);
 
-        user  = new User();
+        user = new User();
         user.setName("quyen1412");
         user.setUsername("quyen1412");
         user.setEmail("quyen1412@gmail.com");
@@ -186,7 +188,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         userRepository.saveAll(users);
     }
 
-    private void seedingUserProfile () {
+    private void seedingUserProfile() {
         UserProfile userProfile;
         Optional<User> user;
         List<Category> categoryList;
@@ -234,7 +236,8 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
 
         userProfileRepository.saveAll(userProfiles);
     }
-    private void seedingAddress () {
+
+    private void seedingAddress() {
         Address address;
         Optional<User> user;
 
@@ -255,7 +258,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         addressRepository.saveAll(addresses);
     }
 
-    private void seedingCategory () {
+    private void seedingCategory() {
         Category category;
 
         category = new Category();
@@ -285,7 +288,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         categoryRepository.saveAll(categories);
     }
 
-    private void seedingFood () {
+    private void seedingFood() {
         Food food;
         List<Category> categoryList;
         List<Long> categoryIds = new ArrayList<>();
@@ -301,23 +304,23 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         food.setCategories(categorySet);
         food.setName("a");
         food.setImage("a");
-        food.setPrice((float)1.0);
-        food.setCarbonhydrates((float)1.0);
-        food.setProtein((float)1.0);
-        food.setLipid((float)1.0);
-        food.setXenluloza((float)1.0);
-        food.setCanxi((float)1.0);
-        food.setIron((float)1.0);
-        food.setZinc((float)1.0);
-        food.setVitaminA((float)1.0);
-        food.setVitaminB((float)1.0);
-        food.setVitaminC((float)1.0);
-        food.setVitaminD((float)1.0);
-        food.setVitaminE((float)1.0);
-        food.setCalorie((float)1.0);
-        food.setWeight((float)1.0);
+        food.setPrice((float) 1.0);
+        food.setCarbonhydrates((float) 1.0);
+        food.setProtein((float) 1.0);
+        food.setLipid((float) 1.0);
+        food.setXenluloza((float) 1.0);
+        food.setCanxi((float) 1.0);
+        food.setIron((float) 1.0);
+        food.setZinc((float) 1.0);
+        food.setVitaminA((float) 1.0);
+        food.setVitaminB((float) 1.0);
+        food.setVitaminC((float) 1.0);
+        food.setVitaminD((float) 1.0);
+        food.setVitaminE((float) 1.0);
+        food.setCalorie((float) 1.0);
+        food.setWeight((float) 1.0);
         food.setStatus(1);
-        food.setPrice((float)1.0);
+        food.setPrice((float) 1.0);
         foods.add(food);
 
         foodRepository.saveAll(foods);

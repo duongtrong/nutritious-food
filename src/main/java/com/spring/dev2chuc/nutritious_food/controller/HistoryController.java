@@ -4,7 +4,10 @@ import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.History;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.HistoryRequest;
-import com.spring.dev2chuc.nutritious_food.payload.response.*;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.HistoryDTO;
+import com.spring.dev2chuc.nutritious_food.payload.response.OnlyHistoryResponse;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import com.spring.dev2chuc.nutritious_food.service.history.HistoryService;
@@ -58,7 +61,7 @@ public class HistoryController {
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(),
                     "Store history success",
                     new HistoryDTO(history)),
-                HttpStatus.CREATED
+                    HttpStatus.CREATED
             );
         }
 

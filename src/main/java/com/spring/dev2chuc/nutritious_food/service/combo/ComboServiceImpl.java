@@ -18,7 +18,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 
 @Service
-public class ComboServiceImpl implements ComboService{
+public class ComboServiceImpl implements ComboService {
 
     @Autowired
     ComboRepository comboRepository;
@@ -67,7 +67,7 @@ public class ComboServiceImpl implements ComboService{
         if (comboRequest.getVitaminE() != 0.0f) combo.setVitaminE(comboRequest.getVitaminE());
         if (comboRequest.getCalorie() != 0.0f) combo.setCalorie(comboRequest.getCalorie());
         if (comboRequest.getWeight() != 0.0f) combo.setWeight(comboRequest.getWeight());
-      
+
         if (comboRequest.getCategoryIds() != null && comboRequest.getCategoryIds().size() > 0) {
             List<Category> categories = categoryService.findAllByIdIn(comboRequest.getCategoryIds());
             Set<Category> categorySet = new HashSet<>(categories);
