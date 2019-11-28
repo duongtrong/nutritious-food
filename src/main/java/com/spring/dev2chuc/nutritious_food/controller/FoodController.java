@@ -2,8 +2,8 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
+import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,10 +37,11 @@ public class FoodController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getDetails(@PathVariable Long id){
-        Food food = foodService.findById (id);
-        if (food == null) return new ResponseEntity<> (new ApiResponseError (HttpStatus.NOT_FOUND.value (), "Food not found"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "OK", new FoodDTO(food, true, true)), HttpStatus.OK);
+    public ResponseEntity<?> getDetails(@PathVariable Long id) {
+        Food food = foodService.findById(id);
+        if (food == null)
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", new FoodDTO(food, true, true)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -77,7 +78,7 @@ public class FoodController {
             @RequestParam(value = "form", required = false) String form,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "12", required = false) int limit){
+            @RequestParam(defaultValue = "12", required = false) int limit) {
 
         Specification specification = Specification.where(null);
         if (search != null && search.length() > 0) {
@@ -92,8 +93,8 @@ public class FoodController {
         Page<Food> foodPage = foodService.foodsWithPaginate(specification, page, limit);
         return new ResponseEntity<>(new ApiResponsePage<>(
                 HttpStatus.OK.value(), "OK", foodPage.stream()
-                                                                .map(x -> new OnlyFoodResponse(x))
-                                                                .collect(Collectors.toList()),
+                .map(x -> new OnlyFoodResponse(x))
+                .collect(Collectors.toList()),
                 new RESTPagination(page, limit, foodPage.getTotalPages(), foodPage.getTotalElements())), HttpStatus.OK);
     }
 }

@@ -1,6 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.*;
+import com.spring.dev2chuc.nutritious_food.model.PasswordChange;
+import com.spring.dev2chuc.nutritious_food.model.RoleName;
+import com.spring.dev2chuc.nutritious_food.model.User;
+import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.LoginRequest;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
@@ -21,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,11 +44,6 @@ public class AuthController {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
-
-//    private static final String EMAIL_PATTERN
-//            = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
-    // signup for permission user
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

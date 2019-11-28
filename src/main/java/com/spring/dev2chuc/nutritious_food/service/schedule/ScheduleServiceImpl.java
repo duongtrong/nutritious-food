@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ScheduleServiceImpl implements ScheduleService{
+public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     ScheduleRepository scheduleRepository;
@@ -39,18 +39,15 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<Schedule> findAllByStatusIs(Integer status) {
         List<Schedule> list = scheduleRepository.findAllByStatusIs(status);
-        if (list == null) {
-            return null;
-        }
         return list;
     }
 
     @Override
     public Schedule update(Schedule schedule, ScheduleRequest scheduleRequest) {
         if (scheduleRequest.getName() != null) schedule.setName(scheduleRequest.getName());
-        if (scheduleRequest.getDescription() != null)  schedule.setDescription(scheduleRequest.getDescription());
+        if (scheduleRequest.getDescription() != null) schedule.setDescription(scheduleRequest.getDescription());
         if (scheduleRequest.getPrice() != 0) schedule.setPrice(scheduleRequest.getPrice());
-        if (scheduleRequest.getImage() != null)  schedule.setImage(scheduleRequest.getImage());
+        if (scheduleRequest.getImage() != null) schedule.setImage(scheduleRequest.getImage());
         Schedule result = scheduleRepository.save(schedule);
         return result;
     }
@@ -58,9 +55,6 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public Schedule findByStatusAndId(Integer status, Long id) {
         Schedule schedule = scheduleRepository.findByStatusAndId(status, id);
-        if (schedule == null) {
-            return null;
-        }
         return schedule;
     }
 }

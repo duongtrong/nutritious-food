@@ -1,7 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
-import com.spring.dev2chuc.nutritious_food.model.Gender;
-import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +41,8 @@ public class UserProfileDTO {
         this.age = LocalDate.now().getYear() - userProfile.getYearOfBirth();
         this.gender = userProfile.getGender();
         this.status = userProfile.getStatus();
-        if (hasCategory) this.categories = userProfile.getCategories().stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toSet());
+        if (hasCategory)
+            this.categories = userProfile.getCategories().stream().map(x -> new CategoryDTO(x, false, false)).collect(Collectors.toSet());
         if (hasUser) this.user = new UserDTO(userProfile.getUser(), false, false, false, false, false);
     }
 }

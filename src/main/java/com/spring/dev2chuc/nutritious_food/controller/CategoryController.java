@@ -3,8 +3,8 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.helper.CategoryHelper;
 import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.payload.CategoryRequest;
+import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -92,7 +92,7 @@ public class CategoryController {
             @RequestParam(value = "form", required = false) String form,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "10", required = false) int limit){
+            @RequestParam(defaultValue = "10", required = false) int limit) {
 
         Specification specification = Specification.where(null);
         if (search != null && search.length() > 0) {
@@ -104,7 +104,7 @@ public class CategoryController {
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
 
-        Page<Category> categories = categoryService.categoriesWithPaginate((Specification) specification, page, limit);
+        Page<Category> categories = categoryService.categoriesWithPaginate(specification, page, limit);
         List<CategoryDTO> categoryDTO = categories.stream().map(x -> new CategoryDTO(x, true, true)).collect(Collectors.toList());
         return new ResponseEntity<>(new ApiResponsePage<>(
                 HttpStatus.OK.value(), "OK", categoryDTO,

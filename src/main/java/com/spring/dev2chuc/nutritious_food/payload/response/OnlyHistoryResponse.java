@@ -18,7 +18,6 @@ public class OnlyHistoryResponse {
     private Long userId;
     private Long foodId;
 
-
     public OnlyHistoryResponse(History history) {
         this.id = history.getId();
         this.calorie = history.getCalorie();

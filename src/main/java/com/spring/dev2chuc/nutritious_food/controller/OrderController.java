@@ -1,7 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.*;
-import com.spring.dev2chuc.nutritious_food.payload.*;
+import com.spring.dev2chuc.nutritious_food.model.User;
+import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
@@ -61,7 +61,7 @@ public class OrderController {
             if (orderResponse.getUserId() != user.getId()) {
                 return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Order not accept for you"), HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Save order success", orderResponse), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", orderResponse), HttpStatus.OK);
         }
     }
 }

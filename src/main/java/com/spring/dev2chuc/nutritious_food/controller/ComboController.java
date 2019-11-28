@@ -2,8 +2,8 @@ package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
+import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class ComboController {
         }
 
         Combo result = comboService.update(combo, comboRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success",  new ComboDTO(result, true, true)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Update success", new ComboDTO(result, true, true)), HttpStatus.OK);
     }
 
 
@@ -59,7 +59,7 @@ public class ComboController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.OK.value(), "Combo not found"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK",  new ComboDTO(combo, true, true)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", new ComboDTO(combo, true, true)), HttpStatus.OK);
     }
 
 
@@ -80,7 +80,7 @@ public class ComboController {
             @RequestParam(value = "form", required = false) String form,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "12", required = false) int limit){
+            @RequestParam(defaultValue = "12", required = false) int limit) {
 
         Specification specification = Specification.where(null);
         if (search != null && search.length() > 0) {

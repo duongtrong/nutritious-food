@@ -1,6 +1,5 @@
 package com.spring.dev2chuc.nutritious_food.service.user;
 
-import com.spring.dev2chuc.nutritious_food.exception.AppException;
 import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.RoleName;
 import com.spring.dev2chuc.nutritious_food.model.User;
@@ -17,11 +16,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -111,9 +113,6 @@ public class UserServiceImpl implements UserService{
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String username = authentication.getName();
             User user = userRepository.findByUsername(username);
-            if (user == null) {
-                return null;
-            }
             return user;
         }
         return null;
@@ -121,10 +120,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getById(Long id) {
-        if (CollectionUtils.isEmpty (Collections.singleton (id))) {
-            throw new RuntimeException ("{user.id.not.found}");
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
+            throw new RuntimeException("{user.id.not.found}");
         }
-        return userRepository.findById (id).orElseThrow (null);
+        return userRepository.findById(id).orElseThrow(null);
     }
 
 //    @Override
@@ -157,11 +156,6 @@ public class UserServiceImpl implements UserService{
     public boolean checkRoleByUser(User user, RoleName roleName) {
         Set<Role> roles = user.getRoles();
         Role role = roleRepository.findByName(roleName);
-        if (roles.contains(role)) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return roles.contains(role);
     }
 }

@@ -12,7 +12,9 @@ import java.util.List;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
+
     List<Address> findAllByUserAndStatus(User user, Integer value);
+
     Address findByIdAndStatus(Long id, Integer status);
 
     @Transactional

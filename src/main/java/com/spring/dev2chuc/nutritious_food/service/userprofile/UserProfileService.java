@@ -5,7 +5,6 @@ import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.UserProfileRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserProfileService {
 
@@ -16,6 +15,7 @@ public interface UserProfileService {
     UserProfile getDetail(Long id);
 
     UserProfile update(UserProfileRequest userProfileRequest, UserProfile userProfile);
+
     UserProfile updateCategory(UserProfile userProfile);
 
     UserProfile getLatestByUser(User user);

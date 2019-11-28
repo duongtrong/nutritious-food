@@ -31,7 +31,7 @@ public class OnlyFoodResponse {
     private float calorie;
     private float weight;
     private int status;
-    private Set<CategoryDTO> categories = new HashSet<> ();
+    private Set<CategoryDTO> categories = new HashSet<>();
     private Set<OnlyComboResponse> combos = new HashSet<>();
 
     public OnlyFoodResponse(Food food) {

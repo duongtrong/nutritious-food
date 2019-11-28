@@ -1,7 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
 import com.spring.dev2chuc.nutritious_food.helper.DateTimeHelper;
-import com.spring.dev2chuc.nutritious_food.model.Order;
 import com.spring.dev2chuc.nutritious_food.model.OrderDetail;
 import lombok.Getter;
 import lombok.Setter;

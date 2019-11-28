@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserProfileServiceImpl implements UserProfileService{
+public class UserProfileServiceImpl implements UserProfileService {
 
     @Autowired
     UserProfileRepository userProfileRepository;
@@ -25,6 +27,25 @@ public class UserProfileServiceImpl implements UserProfileService{
 
     @Autowired
     CategoryService categoryService;
+
+    private static Integer mathCalories(int weight, int height, int age, int gender, double intensity) {
+        int index = gender == Gender.MALE.getValue() ? 88362 : 447593;
+        int indexWeight = gender == Gender.MALE.getValue() ? 13397 : 9247;
+        int indexHeight = gender == Gender.MALE.getValue() ? 4799 : 3098;
+        int indexAge = gender == Gender.MALE.getValue() ? 5677 : 4330;
+        return (int) ((index + (indexWeight * weight) + (indexHeight * height) - (indexAge * age)) * intensity) / 1000;
+    }
+
+    private static Integer mathBmr(int weight, int bodyFat) {
+        int index = 370;
+        double numberIndex = 21.6;
+        return (int) (index + (numberIndex * mathLbm(weight, bodyFat)));
+    }
+
+    private static Integer mathLbm(int weight, int bodyFat) {
+        int index = 100;
+        return (weight * (index - bodyFat)) / index;
+    }
 
     @Override
     public List<UserProfile> getAllByUser(User user) {
@@ -58,11 +79,11 @@ public class UserProfileServiceImpl implements UserProfileService{
 
     @Override
     public UserProfile getDetail(Long id) {
-        if (CollectionUtils.isEmpty (Collections.singleton (id))) {
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
             return null;
         }
         System.out.println(id);
-        Optional<UserProfile> userProfile =  userProfileRepository.findById(id);
+        Optional<UserProfile> userProfile = userProfileRepository.findById(id);
         return userProfile.get();
 
     }
@@ -71,10 +92,13 @@ public class UserProfileServiceImpl implements UserProfileService{
     public UserProfile update(UserProfileRequest userProfileRequest, UserProfile userProfile) {
         if (userProfileRequest.getHeight() != null) userProfile.setHeight(userProfileRequest.getHeight());
         if (userProfileRequest.getWeight() != null) userProfile.setWeight(userProfileRequest.getWeight());
-        if (userProfileRequest.getAge() != null) userProfile.setYearOfBirth(LocalDate.now().getYear() - userProfileRequest.getHeight());
+        if (userProfileRequest.getAge() != null)
+            userProfile.setYearOfBirth(LocalDate.now().getYear() - userProfileRequest.getHeight());
         if (userProfileRequest.getBodyFat() != null) userProfile.setBodyFat(userProfileRequest.getBodyFat());
-        if (userProfileRequest.getExerciseIntensity() != null) userProfile.setExerciseIntensity(userProfileRequest.getExerciseIntensity());
-        if (userProfileRequest.getCaloriesConsumed() != null) userProfile.setCaloriesConsumed(userProfileRequest.getCaloriesConsumed());
+        if (userProfileRequest.getExerciseIntensity() != null)
+            userProfile.setExerciseIntensity(userProfileRequest.getExerciseIntensity());
+        if (userProfileRequest.getCaloriesConsumed() != null)
+            userProfile.setCaloriesConsumed(userProfileRequest.getCaloriesConsumed());
 
         return userProfileRepository.save(userProfile);
     }
@@ -88,25 +112,4 @@ public class UserProfileServiceImpl implements UserProfileService{
     public UserProfile getLatestByUser(User user) {
         return userProfileRepository.findTop1ByUserOrderByIdDesc(user);
     }
-
-    private static Integer mathCalories(int weight, int height, int age, int gender, double intensity) {
-        int index = gender == Gender.MALE.getValue() ? 88362 : 447593;
-        int indexWeight = gender == Gender.MALE.getValue() ? 13397 : 9247;
-        int indexHeight = gender == Gender.MALE.getValue() ? 4799 : 3098;
-        int indexAge = gender == Gender.MALE.getValue() ? 5677 : 4330;
-        return (int) ((index + (indexWeight * weight) + (indexHeight * height) - (indexAge * age)) * intensity) / 1000;
-    }
-
-    private static Integer mathBmr(int weight, int bodyFat) {
-        int index = 370;
-        double numberIndex = 21.6;
-        return (int) (index + (numberIndex * mathLbm(weight, bodyFat)));
-    }
-
-    private static Integer mathLbm(int weight, int bodyFat) {
-        int index = 100;
-        return  (weight * (index - bodyFat)) / index;
-    }
-
-
 }

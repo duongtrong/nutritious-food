@@ -5,7 +5,6 @@ import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.AddressRequest;
 import com.spring.dev2chuc.nutritious_food.repository.AddressRepository;
-import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +14,6 @@ import java.util.List;
 public class AddressServiceImpl implements AddressService {
     @Autowired
     AddressRepository addressRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
 
     @Override
     public List<Address> getAllByUser(User user) {

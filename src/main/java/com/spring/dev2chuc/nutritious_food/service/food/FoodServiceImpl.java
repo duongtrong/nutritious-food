@@ -41,10 +41,10 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public Food findById(Long id) {
-        if (CollectionUtils.isEmpty(Collections.singleton(id))){
+        if (CollectionUtils.isEmpty(Collections.singleton(id))) {
             throw new RuntimeException("Null pointer exception...");
         }
-        Food food = foodRepository.findByIdAndStatus(id, Status.ACTIVE.getValue()) ;
+        Food food = foodRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
         return food;
     }
 

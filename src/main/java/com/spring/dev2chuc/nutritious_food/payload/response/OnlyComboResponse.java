@@ -1,11 +1,8 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
-import com.spring.dev2chuc.nutritious_food.model.*;
+import com.spring.dev2chuc.nutritious_food.model.Combo;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter

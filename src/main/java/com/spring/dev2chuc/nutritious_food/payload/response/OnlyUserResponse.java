@@ -18,7 +18,6 @@ public class OnlyUserResponse {
     private Set<Role> roles;
     private int status;
 
-
     public OnlyUserResponse(User user) {
         this.id = user.getId();
         this.name = user.getName();
