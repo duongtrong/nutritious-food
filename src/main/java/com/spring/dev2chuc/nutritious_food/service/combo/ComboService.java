@@ -1,6 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.service.combo;
 
 import com.spring.dev2chuc.nutritious_food.model.Combo;
+import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,4 +27,6 @@ public interface ComboService {
     List<Combo> findAllByIdIn(List<Long> combos);
 
     void updateByListFood(Combo combo);
+
+    List<Combo> suggest(UserProfile userProfile);
 }

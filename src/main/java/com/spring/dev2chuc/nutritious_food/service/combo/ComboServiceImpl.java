@@ -1,13 +1,11 @@
 package com.spring.dev2chuc.nutritious_food.service.combo;
 
-import com.spring.dev2chuc.nutritious_food.model.Category;
-import com.spring.dev2chuc.nutritious_food.model.Combo;
-import com.spring.dev2chuc.nutritious_food.model.Food;
-import com.spring.dev2chuc.nutritious_food.model.Status;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ComboRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import com.spring.dev2chuc.nutritious_food.service.food.FoodService;
+import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ComboServiceImpl implements ComboService {
@@ -28,6 +27,9 @@ public class ComboServiceImpl implements ComboService {
 
     @Autowired
     FoodService foodService;
+
+    @Autowired
+    UserService userService;
 
     @Override
     public Combo findById(Long id) {
@@ -102,6 +104,17 @@ public class ComboServiceImpl implements ComboService {
         combo.setVitaminE((float) combo.getFoods().stream().filter(o -> o.getVitaminE() > 0).mapToDouble(Food::getVitaminE).sum());
         combo.setWeight((float) combo.getFoods().stream().filter(o -> o.getWeight() > 0).mapToDouble(Food::getWeight).sum());
         comboRepository.save(combo);
+    }
+
+    @Override
+    public List<Combo> suggest(UserProfile userProfile) {
+        Set<Category> categories = userProfile.getCategories();
+        List<Category> categoryList = new ArrayList<>(categories);
+        if (!categoryList.isEmpty()) {
+            categoryList = categoryService.findAll();
+        }
+        float calories = userProfile.getCaloriesConsumed();
+        return comboRepository.findAllByStatusAndCategoriesInAndCalorieBetween(Status.ACTIVE.getValue(), categoryList, calories - 100, calories + 100);
     }
 
     @Override

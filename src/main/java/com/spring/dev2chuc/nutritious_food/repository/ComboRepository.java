@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.repository;
 
+import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Combo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -19,6 +20,8 @@ public interface ComboRepository extends JpaRepository<Combo, Long>, JpaSpecific
     List<Combo> findAllByStatusIs(Integer status);
 
     List<Combo> findAllByStatusAndIdIn(Integer status, List<Long> ids);
+
+    List<Combo> findAllByStatusAndCategoriesInAndCalorieBetween(Integer status, List<Category> categories, float minCalories, float maxCalories);
 
     @Transactional
     @Modifying
