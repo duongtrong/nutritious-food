@@ -59,16 +59,15 @@ public class DbController {
             String fileName = "src/main/java/com/spring/dev2chuc/nutritious_food/config/Seeding.java";
             FileWriter fileWriter = new FileWriter(fileName);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            String getStartOfFile = getStartOfFile();
-            String getFunctionSeedingRole = getFunctionSeedingRole();
-            String getFunctionSeedingUser = getFunctionSeedingUser();
-            String getFunctionSeedingUserProfile = getFunctionSeedingUserProfile();
-            String getEndOfFile = getEndOfFile();
-            printWriter.print( getStartOfFile +
-                    getFunctionSeedingRole +
-                    getFunctionSeedingUser +
-                    getFunctionSeedingUserProfile +
-                    getEndOfFile);
+
+            printWriter.print( getStartOfFile() +
+                    getFunctionSeedingRole() +
+                    getFunctionSeedingUser() +
+                    getFunctionSeedingUserProfile() +
+                    getFunctionSeedingAddress() +
+                    getFunctionSeedingCategory() +
+                    getFunctionSeedingFood() +
+                    getEndOfFile());
             printWriter.close();
             System.out.println("Done!");
         } catch (IOException e) {
@@ -156,6 +155,9 @@ public class DbController {
                 "        seedingRole();\n" +
                 "        seedingUser();\n" +
                 "        seedingUserProfile();\n" +
+                "        seedingAddress();\n" +
+                "        seedingCategory();\n" +
+                "        seedingFood();\n" +
                 "        LOGGER.log(Level.INFO, String.format(\"Seeding success!\"));\n" +
                 "    }\n" +
                 "\n" +
@@ -231,7 +233,7 @@ public class DbController {
                     "        users.add(user);\n\n";
         }
         str += "        userRepository.saveAll(users);\n" +
-                "    }\n";
+                "    }\n\n";
 
         return str;
     }
@@ -242,6 +244,7 @@ public class DbController {
                 "        Optional<User> user;\n" +
                 "        List<Category> categoryList;\n" +
                 "        List<Long> categoryIds = new ArrayList<>();\n" +
+                "        Set<Category> categorySet;\n" +
                 "        \n";
         List<User> users = userRepository.findAll();
         for (User user : users) {
@@ -255,7 +258,7 @@ public class DbController {
                 str += "\n" +
                         "        user = userRepository.findById((long) "+ user.getId() +");\n" +
                         "        categoryList = categoryRepository.findAllByIdIn(categoryIds);\n" +
-                        "        Set<Category> categorySet = new HashSet<>(categoryList);\n" +
+                        "        categorySet = new HashSet<>(categoryList);\n" +
                         "        userProfile = new UserProfile();\n" +
                         "        userProfile.setHeight(" + userProfile.getHeight() + ");\n" +
                         "        userProfile.setWeight(" + userProfile.getWeight() + ");\n" +
@@ -276,6 +279,102 @@ public class DbController {
         str += "\n" +
                 "        userProfileRepository.saveAll(userProfiles);\n" +
                 "    }\n";
+
+        return str;
+    }
+
+    private String getFunctionSeedingAddress() {
+        String str = "    private void seedingAddress () {\n" +
+                "        Address address;\n" +
+                "        Optional<User> user;\n" +
+                "\n";
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            Set<Address> addressSet = user.getAddresses();
+            for (Address address : addressSet) {
+
+                str += "        user = userRepository.findById((long) " + address.getUser().getId() + ");\n" +
+                        "        address = new Address();\n" +
+                        "        address.setTitle(\"Ha Noi\");\n" +
+                        "        address.setUser(user.get());\n" +
+                        "        address.setStatus(1);\n" +
+                        "        addresses.add(address);\n" +
+                        "\n";
+            }
+        }
+        str += "        addressRepository.saveAll(addresses);\n" +
+                "    }\n\n";
+        return str;
+    }
+
+    private String getFunctionSeedingCategory() {
+        String str = "    private void seedingCategory () {\n" +
+                "        Category category;\n" +
+                "\n";
+
+        List<Category> categories = categoryRepository.findAll();
+        for (Category category : categories) {
+            str += "        category = new Category();\n" +
+                    "        category.setName(\"" + category.getName() + "\");\n" +
+                    "        category.setParentId((long) " + category.getParentId() + ");\n" +
+                    "        category.setDescription(\"" + category.getDescription() + "\");\n" +
+                    "        category.setImage(\"" + category.getImage() + "\");\n" +
+                    "        category.setStatus(" + category.getStatus() + ");\n" +
+                    "        categories.add(category);\n\n";
+        }
+
+        str += "        categoryRepository.saveAll(categories);\n" +
+                "    }\n\n";
+        return str;
+    }
+
+    private String getFunctionSeedingFood () {
+        String str = "    private void seedingFood () {\n" +
+                "        Food food;\n" +
+                "        List<Category> categoryList;\n" +
+                "        List<Long> categoryIds = new ArrayList<>();\n" +
+                "        Set<Category> categorySet;\n" +
+                "\n";
+
+        List<Food> foods = foodRepository.findAll();
+        for (Food food : foods) {
+            Set<Category> categorySet = food.getCategories();
+            for (Category category : categorySet) {
+                str += "        categoryIds.add((long) " + category.getId() + ");\n" +
+                        "\n";
+            }
+
+            str += "        categoryIds.add((long) 1);\n" +
+                    "\n" +
+                    "        categoryList = categoryRepository.findAllByIdIn(categoryIds);\n" +
+                    "        categorySet = new HashSet<>(categoryList);\n" +
+                    "        food = new Food();\n" +
+                    "        food.setCategories(categorySet);\n" +
+                    "        food.setName(\"" + food.getName() + "\");\n" +
+                    "        food.setImage(\"" + food.getImage() + "\");\n" +
+                    "        food.setPrice((float)" + food.getPrice() + ");\n" +
+                    "        food.setCarbonhydrates((float)" + food.getCarbonhydrates() + ");\n" +
+                    "        food.setProtein((float)" + food.getProtein() + ");\n" +
+                    "        food.setLipid((float)" + food.getLipid() + ");\n" +
+                    "        food.setXenluloza((float)" + food.getXenluloza() + ");\n" +
+                    "        food.setCanxi((float)" + food.getCanxi() + ");\n" +
+                    "        food.setIron((float)" + food.getIron() + ");\n" +
+                    "        food.setZinc((float)" + food.getZinc() + ");\n" +
+                    "        food.setVitaminA((float)" + food.getVitaminA() + ");\n" +
+                    "        food.setVitaminB((float)" + food.getVitaminB() + ");\n" +
+                    "        food.setVitaminC((float)" + food.getVitaminC() + ");\n" +
+                    "        food.setVitaminD((float)" + food.getVitaminD() + ");\n" +
+                    "        food.setVitaminE((float)" + food.getVitaminE() + ");\n" +
+                    "        food.setCalorie((float)" + food.getCalorie() + ");\n" +
+                    "        food.setWeight((float)" + food.getWeight() + ");\n" +
+                    "        food.setStatus(" + food.getStatus() + ");\n" +
+                    "        food.setPrice((float)" + food.getPrice() + ");\n" +
+                    "        foods.add(food);\n" +
+                    "\n";
+        }
+
+        str += "        foodRepository.saveAll(foods);\n" +
+                "    }\n\n";
 
         return str;
     }

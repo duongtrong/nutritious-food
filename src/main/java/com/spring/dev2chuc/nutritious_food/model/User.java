@@ -63,6 +63,9 @@ public class User extends DateAudit {
     private Set<UserProfile> userProfiles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Address> addresses;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<RattingFood> rattingFoods;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")

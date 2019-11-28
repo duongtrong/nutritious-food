@@ -72,6 +72,9 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
 //        seedingRole();
 //        seedingUser();
 //        seedingUserProfile();
+//        seedingAddress();
+//        seedingCategory();
+//        seedingFood();
         LOGGER.log(Level.INFO, String.format("Seeding success!"));
     }
 
@@ -115,7 +118,7 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         Role userRole;
 
         user  = new User();
-        user.setName("admin001");
+        user.setName("admin002");
         user.setUsername("admin001");
         user.setEmail("admin@gmail.com");
         user.setPhone("09646548390");
@@ -182,16 +185,18 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
 
         userRepository.saveAll(users);
     }
+
     private void seedingUserProfile () {
         UserProfile userProfile;
         Optional<User> user;
         List<Category> categoryList;
         List<Long> categoryIds = new ArrayList<>();
-        
+        Set<Category> categorySet;
+
 
         user = userRepository.findById((long) 6);
         categoryList = categoryRepository.findAllByIdIn(categoryIds);
-        Set<Category> categorySet = new HashSet<>(categoryList);
+        categorySet = new HashSet<>(categoryList);
         userProfile = new UserProfile();
         userProfile.setHeight(180);
         userProfile.setWeight(70);
@@ -208,7 +213,115 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         userProfile.setCategories(categorySet);
         userProfiles.add(userProfile);
 
+        user = userRepository.findById((long) 6);
+        categoryList = categoryRepository.findAllByIdIn(categoryIds);
+        categorySet = new HashSet<>(categoryList);
+        userProfile = new UserProfile();
+        userProfile.setHeight(180);
+        userProfile.setWeight(70);
+        userProfile.setYearOfBirth(1999);
+        userProfile.setGender(2);
+        userProfile.setExerciseIntensity(1.4);
+        userProfile.setBodyFat(null);
+        userProfile.setBmrIndex(null);
+        userProfile.setLbmIndex(null);
+        userProfile.setTdeeIndex(1225);
+        userProfile.setStatus(1);
+        userProfile.setCaloriesConsumed(1225);
+        userProfile.setUser(user.get());
+        userProfile.setCategories(categorySet);
+        userProfiles.add(userProfile);
+
         userProfileRepository.saveAll(userProfiles);
     }
+    private void seedingAddress () {
+        Address address;
+        Optional<User> user;
+
+        user = userRepository.findById((long) 1);
+        address = new Address();
+        address.setTitle("Ha Noi");
+        address.setUser(user.get());
+        address.setStatus(1);
+        addresses.add(address);
+
+        user = userRepository.findById((long) 2);
+        address = new Address();
+        address.setTitle("Ha Noi");
+        address.setUser(user.get());
+        address.setStatus(1);
+        addresses.add(address);
+
+        addressRepository.saveAll(addresses);
+    }
+
+    private void seedingCategory () {
+        Category category;
+
+        category = new Category();
+        category.setName("Đồ ăn dinh dưỡng");
+        category.setParentId((long) 0);
+        category.setDescription("123");
+        category.setImage("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/1200px-Good_Food_Display_-_NCI_Visuals_Online.jpg");
+        category.setStatus(1);
+        categories.add(category);
+
+        category = new Category();
+        category.setName("Đồ ăn healthy");
+        category.setParentId((long) 0);
+        category.setDescription("123");
+        category.setImage("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/1200px-Good_Food_Display_-_NCI_Visuals_Online.jpg");
+        category.setStatus(1);
+        categories.add(category);
+
+        category = new Category();
+        category.setName("Đồ ăn cho người tập gym");
+        category.setParentId((long) 0);
+        category.setDescription("123");
+        category.setImage("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/1200px-Good_Food_Display_-_NCI_Visuals_Online.jpg");
+        category.setStatus(1);
+        categories.add(category);
+
+        categoryRepository.saveAll(categories);
+    }
+
+    private void seedingFood () {
+        Food food;
+        List<Category> categoryList;
+        List<Long> categoryIds = new ArrayList<>();
+        Set<Category> categorySet;
+
+        categoryIds.add((long) 1);
+
+        categoryIds.add((long) 1);
+
+        categoryList = categoryRepository.findAllByIdIn(categoryIds);
+        categorySet = new HashSet<>(categoryList);
+        food = new Food();
+        food.setCategories(categorySet);
+        food.setName("a");
+        food.setImage("a");
+        food.setPrice((float)1.0);
+        food.setCarbonhydrates((float)1.0);
+        food.setProtein((float)1.0);
+        food.setLipid((float)1.0);
+        food.setXenluloza((float)1.0);
+        food.setCanxi((float)1.0);
+        food.setIron((float)1.0);
+        food.setZinc((float)1.0);
+        food.setVitaminA((float)1.0);
+        food.setVitaminB((float)1.0);
+        food.setVitaminC((float)1.0);
+        food.setVitaminD((float)1.0);
+        food.setVitaminE((float)1.0);
+        food.setCalorie((float)1.0);
+        food.setWeight((float)1.0);
+        food.setStatus(1);
+        food.setPrice((float)1.0);
+        foods.add(food);
+
+        foodRepository.saveAll(foods);
+    }
+
 }
  
