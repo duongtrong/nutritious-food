@@ -32,6 +32,30 @@ public class UserProfileController {
     @Autowired
     CategoryService categoryService;
 
+    @GetMapping()
+    public ResponseEntity<?> getList() {
+        User user = userService.getUserAuth();
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            List<UserProfile> userProfiles = userProfileService.getAllByUser(user);
+            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "Get List user profile success", userProfiles.stream().map(x -> new UserProfileDTO(x, true, false))), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/latest")
+    public ResponseEntity<?> getLatest() {
+        User user = userService.getUserAuth();
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            UserProfile userProfile = userProfileService.getLatestByUser(user);
+            return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "Get List user profile success", new UserProfileDTO(userProfile, true, true)), HttpStatus.OK);
+        }
+    }
+
+
+
     @PostMapping("/create")
     public ResponseEntity<Object> createUserProfile(@Valid @RequestBody UserProfileRequest userProfileRequest) {
         User user = userService.getUserAuth();
