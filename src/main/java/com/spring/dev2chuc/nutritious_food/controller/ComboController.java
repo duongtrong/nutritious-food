@@ -90,6 +90,9 @@ public class ComboController {
         }
 
         specification = specification
+                .and(new SpecificationAll(new SearchCriteria("id", "in", new Integer[] {1, 2} )));
+
+        specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
 
         Page<Combo> combos = comboService.foodsWithPaginate(specification, page, limit);
