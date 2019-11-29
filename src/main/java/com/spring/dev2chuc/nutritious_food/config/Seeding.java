@@ -118,8 +118,8 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         Role userRole;
 
         user  = new User();
-        user.setName("admin");
-        user.setUsername("admin");
+        user.setName("adminn");
+        user.setUsername("adminn");
         user.setEmail("admin@gmail.com");
         user.setPhone("09646548390");
         user.setPassword("$2a$10$ec18uzSdzaCDF0wi3dI0KOWYDoaDKY13Oq3MlkbHW4T.uQ61VcDr.");
@@ -129,8 +129,8 @@ public class Seeding implements ApplicationListener<ApplicationReadyEvent> {
         users.add(user);
 
         user  = new User();
-        user.setName("s1111");
-        user.setUsername("s1111");
+        user.setName("s11111");
+        user.setUsername("s11111");
         user.setEmail("s@gmail.com");
         user.setPhone("s111");
         user.setPassword("$2a$10$/x3FAKtcbeW1Qcd7793/fO5Mhi4.qs6UqNW3VqlTl67iZLmr0y6Rm");
