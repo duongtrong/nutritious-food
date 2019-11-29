@@ -327,7 +327,7 @@ public class DbController {
             str += "        category = new Category();\n" +
                     "        category.setName(\"" + category.getName() + "\");\n" +
                     "        category.setParentId((long) " + category.getParentId() + ");\n" +
-                    "        category.setDescription(\"" + category.getDescription() + "\");\n" +
+                    "        category.setDescription(\"" + category.getDescription().replace("\n", "").replace("\r", "") + "\");\n" +
                     "        category.setImage(\"" + category.getImage() + "\");\n" +
                     "        category.setStatus(" + category.getStatus() + ");\n" +
                     "        categories.add(category);\n\n";
@@ -354,13 +354,13 @@ public class DbController {
                         "\n";
             }
 
-            str += "        categoryIds.add((long) 1);\n" +
-                    "\n" +
+            str += "\n" +
                     "        categoryList = categoryRepository.findAllByIdIn(categoryIds);\n" +
                     "        categorySet = new HashSet<>(categoryList);\n" +
                     "        food = new Food();\n" +
                     "        food.setCategories(categorySet);\n" +
                     "        food.setName(\"" + food.getName() + "\");\n" +
+                    "        food.setDescription(\"" + food.getDescription() + "\");\n" +
                     "        food.setImage(\"" + food.getImage() + "\");\n" +
                     "        food.setPrice((float)" + food.getPrice() + ");\n" +
                     "        food.setCarbonhydrates((float)" + food.getCarbonhydrates() + ");\n" +
@@ -380,6 +380,7 @@ public class DbController {
                     "        food.setStatus(" + food.getStatus() + ");\n" +
                     "        food.setPrice((float)" + food.getPrice() + ");\n" +
                     "        foods.add(food);\n" +
+                    "        categoryIds.clear();\n" +
                     "\n";
         }
 
