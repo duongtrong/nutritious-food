@@ -73,6 +73,7 @@ public class DbController {
                     getFunctionSeedingAddress() +
                     getFunctionSeedingCategory() +
                     getFunctionSeedingFood() +
+                    getFunctionSeedingCombo() +
                     getEndOfFile());
             printWriter.close();
             System.out.println("Done!");
@@ -380,6 +381,57 @@ public class DbController {
         }
 
         str += "        foodRepository.saveAll(foods);\n" +
+                "    }\n\n";
+
+        return str;
+    }
+
+    private String getFunctionSeedingCombo() {
+        String str = "    private void seedingCombo () {\n" +
+                "        Combo combo;\n" +
+                "        List<Category> categoryList;\n" +
+                "        List<Long> categoryIds = new ArrayList<>();\n" +
+                "        Set<Category> categorySet;\n" +
+                "\n";
+
+        List<Combo> combos = comboRepository.findAll();
+        for (Combo combo : combos) {
+            Set<Category> categorySet = combo.getCategories();
+            for (Category category : categorySet) {
+                str += "        categoryIds.add((long) " + category.getId() + ");\n" +
+                        "\n";
+            }
+
+            str += "        categoryIds.add((long) 1);\n" +
+                    "\n" +
+                    "        categoryList = categoryRepository.findAllByIdIn(categoryIds);\n" +
+                    "        categorySet = new HashSet<>(categoryList);\n" +
+                    "        combo = new Combo();\n" +
+                    "        combo.setCategories(categorySet);\n" +
+                    "        combo.setName(\"" + combo.getName() + "\");\n" +
+                    "        combo.setImage(\"" + combo.getImage() + "\");\n" +
+                    "        combo.setPrice((float)" + combo.getPrice() + ");\n" +
+                    "        combo.setCarbonhydrates((float)" + combo.getCarbonhydrates() + ");\n" +
+                    "        combo.setProtein((float)" + combo.getProtein() + ");\n" +
+                    "        combo.setLipid((float)" + combo.getLipid() + ");\n" +
+                    "        combo.setXenluloza((float)" + combo.getXenluloza() + ");\n" +
+                    "        combo.setCanxi((float)" + combo.getCanxi() + ");\n" +
+                    "        combo.setIron((float)" + combo.getIron() + ");\n" +
+                    "        combo.setZinc((float)" + combo.getZinc() + ");\n" +
+                    "        combo.setVitaminA((float)" + combo.getVitaminA() + ");\n" +
+                    "        combo.setVitaminB((float)" + combo.getVitaminB() + ");\n" +
+                    "        combo.setVitaminC((float)" + combo.getVitaminC() + ");\n" +
+                    "        combo.setVitaminD((float)" + combo.getVitaminD() + ");\n" +
+                    "        combo.setVitaminE((float)" + combo.getVitaminE() + ");\n" +
+                    "        combo.setCalorie((float)" + combo.getCalorie() + ");\n" +
+                    "        combo.setWeight((float)" + combo.getWeight() + ");\n" +
+                    "        combo.setStatus(" + combo.getStatus() + ");\n" +
+                    "        combo.setPrice((float)" + combo.getPrice() + ");\n" +
+                    "        combos.add(combo);\n" +
+                    "\n";
+        }
+
+        str += "        comboRepository.saveAll(combos);\n" +
                 "    }\n\n";
 
         return str;
