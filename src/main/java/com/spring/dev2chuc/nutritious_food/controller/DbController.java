@@ -74,6 +74,7 @@ public class DbController {
                     getFunctionSeedingCategory() +
                     getFunctionSeedingFood() +
                     getFunctionSeedingCombo() +
+                    getFunctionSeedingSchedule() +
                     getEndOfFile());
             printWriter.close();
             System.out.println("Done!");
@@ -165,6 +166,8 @@ public class DbController {
                 "        seedingAddress();\n" +
                 "        seedingCategory();\n" +
                 "        seedingFood();\n" +
+                "        seedingCombo();\n" +
+                "        seedingSchedule();\n" +
                 "        LOGGER.log(Level.INFO, String.format(\"Seeding success!\"));\n" +
                 "    }\n" +
                 "\n" +
@@ -434,6 +437,25 @@ public class DbController {
         str += "        comboRepository.saveAll(combos);\n" +
                 "    }\n\n";
 
+        return str;
+    }
+
+    private String getFunctionSeedingSchedule() {
+        String str = "    private void seedingSchedule() {\n" +
+                "        Schedule schedule;\n";
+        List<Schedule> schedules = scheduleRepository.findAll();
+        for (Schedule schedule : schedules) {
+            str += "        schedule = new Schedule();\n" +
+                    "        schedule.setName(\"" + schedule.getName() +"\");\n" +
+                    "        schedule.setDescription(\"" + schedule.getDescription() +"\");\n" +
+                    "        schedule.setImage(\"" + schedule.getImage() + "\");\n" +
+                    "        schedule.setPrice((float)" + schedule.getPrice() + ");\n" +
+                    "        schedule.setStatus(" + schedule.getStatus() + ");\n" +
+                    "        schedules.add(schedule);\n\n";
+        }
+
+        str += "        scheduleRepository.saveAll(schedules);\n"+
+                "    }\n\n";
         return str;
     }
 
