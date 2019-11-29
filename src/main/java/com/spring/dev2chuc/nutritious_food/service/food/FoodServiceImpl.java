@@ -161,9 +161,14 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Page<Food> foodsWithPaginate(Specification specification, int page, int limit) {
-        List<Food> foodList = foodRepository.findAllByStatus(Status.ACTIVE.getValue());
+    public List<Food> findAllByCategory(Long categoryId) {
+        Category category = categoryService.findById(categoryId);
+        return foodRepository.findAllByStatusAndCategories(Status.ACTIVE.getValue(), category);
+    }
 
+
+    @Override
+    public Page<Food> foodsWithPaginate(Specification specification, int page, int limit) {
         return foodRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 }

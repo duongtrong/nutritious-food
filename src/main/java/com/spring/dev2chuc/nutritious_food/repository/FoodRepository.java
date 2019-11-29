@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.repository;
 
+import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -17,6 +18,8 @@ public interface FoodRepository extends JpaRepository<Food, Long>, JpaSpecificat
     Food findByIdAndStatus(Long id, Integer status);
 
     List<Food> findAllByIdIn(Collection<Long> Ids);
+
+    List<Food> findAllByStatusAndCategories(Integer status, Category category);
 
     Food findByStatusAndId(Integer status, Long id);
 
