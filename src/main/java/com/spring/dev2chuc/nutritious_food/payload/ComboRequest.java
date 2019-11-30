@@ -1,7 +1,9 @@
 package com.spring.dev2chuc.nutritious_food.payload;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -12,7 +14,8 @@ public class ComboRequest {
     private String name;
     private String description;
     private String image;
-    private float price;
+    @Builder.Default
+    private float price = 0;
     private float carbonhydrates;
     private float protein;
     private float lipid;

@@ -1,10 +1,13 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.Combo;
+import com.spring.dev2chuc.nutritious_food.model.Device;
 import com.spring.dev2chuc.nutritious_food.model.Status;
+import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
+import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +28,22 @@ public class ComboController {
     @Autowired
     ComboService comboService;
 
+    @Autowired
+    UserService userService;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody ComboRequest comboRequest) {
-        Combo current = new Combo();
-        Combo result = comboService.merge(current, comboRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", new ComboDTO(result, true, true)), HttpStatus.CREATED);
+        User user = userService.getUserAuth();
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            Combo combo = new Combo();
+            combo.setUser(user);
+            Combo result = comboService.merge(combo, comboRequest);
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Create success", new ComboDTO(result, true, true)), HttpStatus.CREATED);
+        }
     }
 
     @GetMapping

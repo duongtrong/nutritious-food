@@ -57,6 +57,10 @@ public class Combo extends DateAudit {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "combo")
     private Set<RattingCombo> combos;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Combo() {
     }
 

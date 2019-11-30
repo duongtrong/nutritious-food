@@ -87,19 +87,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/admin/**",
                         "/api/food/**",
                         "/api/category/**",
-                        "/api/combo/**",
                         "/api/schedule/**",
                         "/api/schedule-combo/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.PUT,
                         "/api/food/**",
                         "/api/category/**",
-                        "/api/combo/**",
                         "/api/schedule/**",
                         "/api/schedule-combo/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.DELETE,
                         "/api/food/**",
                         "/api/category/**",
-                        "/api/combo/**",
                         "/api/schedule/**",
                         "/api/schedule-combo/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET,

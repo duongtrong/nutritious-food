@@ -122,7 +122,6 @@ public class ComboServiceImpl implements ComboService {
         combo.setName(comboRequest.getName());
         combo.setDescription(comboRequest.getDescription());
         combo.setImage(comboRequest.getImage());
-        combo.setPrice(comboRequest.getPrice());
         combo.setCarbonhydrates(comboRequest.getCarbonhydrates());
         combo.setProtein(comboRequest.getProtein());
         combo.setLipid(comboRequest.getLipid());
@@ -139,6 +138,7 @@ public class ComboServiceImpl implements ComboService {
         combo.setWeight(comboRequest.getWeight());
         combo.setStatus(Status.ACTIVE.getValue());
 
+
         List<Long> categoryIds = comboRequest.getCategoryIds() == null ? new ArrayList<Long>() : comboRequest.getCategoryIds();
         List<Category> categories = categoryService.findAllByIdIn(categoryIds);
         Set<Category> categorySet = new HashSet<>(categories);
@@ -148,6 +148,17 @@ public class ComboServiceImpl implements ComboService {
         List<Food> foodList = foodService.findAllByIdIn(foodIds);
         Set<Food> foodSet = new HashSet<>(foodList);
         combo.setFoods(foodSet);
+
+        System.out.println(comboRequest.getPrice());
+        if (comboRequest.getPrice() != 0) {
+            combo.setPrice(comboRequest.getPrice());
+        } else {
+            float priceCombo = (float) 0;
+            for (Food food : foodList) {
+                priceCombo += food.getPrice();
+            }
+            combo.setPrice(priceCombo);
+        }
         Combo result = comboRepository.save(combo);
         updateByListFood(result);
         return result;
