@@ -219,6 +219,9 @@ public class AuthController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
             UserProfile userProfile = userProfileService.getLatestByUser(user);
+            if (userProfile == null) {
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User don't has any profile"), HttpStatus.NOT_FOUND);
+            }
             UserProfileDTO userProfileDTO = new UserProfileDTO(userProfile, true, false);
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "success", userProfileDTO), HttpStatus.OK);
         }
