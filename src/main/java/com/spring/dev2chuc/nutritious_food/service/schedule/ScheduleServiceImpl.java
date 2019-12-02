@@ -1,13 +1,17 @@
 package com.spring.dev2chuc.nutritious_food.service.schedule;
 
+import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
+import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -15,31 +19,39 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     ScheduleRepository scheduleRepository;
 
+    @Autowired
+    CategoryService categoryService;
+
     @Override
     public Schedule findById(Long id) {
         return scheduleRepository.findById(id).orElseThrow(null);
     }
 
     @Override
-    public Schedule merge(Schedule schedule) {
+    public Schedule delete(Schedule schedule) {
+        schedule.setStatus(Status.DEACTIVE.getValue());
         return scheduleRepository.save(schedule);
     }
 
     @Override
-    public Schedule merge(Schedule schedule, ScheduleRequest scheduleRequest) {
+    public Schedule store(ScheduleRequest scheduleRequest) {
+        Schedule schedule = new Schedule();
         schedule.setName(scheduleRequest.getName());
         schedule.setDescription(scheduleRequest.getDescription());
         schedule.setPrice(scheduleRequest.getPrice());
         schedule.setImage(scheduleRequest.getImage());
         schedule.setStatus(Status.ACTIVE.getValue());
-        Schedule result = scheduleRepository.save(schedule);
-        return result;
+
+        List<Category> categories = categoryService.findAllByIdIn(scheduleRequest.getCategoryIds());
+        Set<Category> categorySet = new HashSet<>(categories);
+        schedule.setCategories(categorySet);
+
+        return scheduleRepository.save(schedule);
     }
 
     @Override
     public List<Schedule> findAllByStatusIs(Integer status) {
-        List<Schedule> list = scheduleRepository.findAllByStatusIs(status);
-        return list;
+        return scheduleRepository.findAllByStatusIs(status);
     }
 
     @Override
@@ -48,13 +60,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (scheduleRequest.getDescription() != null) schedule.setDescription(scheduleRequest.getDescription());
         if (scheduleRequest.getPrice() != 0) schedule.setPrice(scheduleRequest.getPrice());
         if (scheduleRequest.getImage() != null) schedule.setImage(scheduleRequest.getImage());
-        Schedule result = scheduleRepository.save(schedule);
-        return result;
+
+        if (scheduleRequest.getCategoryIds().size() > 0) {
+            List<Category> categories = categoryService.findAllByIdIn(scheduleRequest.getCategoryIds());
+            Set<Category> categorySet = new HashSet<>(categories);
+            schedule.setCategories(categorySet);
+        }
+        return scheduleRepository.save(schedule);
     }
 
     @Override
     public Schedule findByStatusAndId(Integer status, Long id) {
-        Schedule schedule = scheduleRepository.findByStatusAndId(status, id);
-        return schedule;
+        return scheduleRepository.findByStatusAndId(status, id);
     }
 }

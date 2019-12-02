@@ -9,9 +9,9 @@ public interface ScheduleService {
 
     Schedule findById(Long id);
 
-    Schedule merge(Schedule schedule);
+    Schedule delete(Schedule schedule);
 
-    Schedule merge(Schedule schedule, ScheduleRequest scheduleRequest);
+    Schedule store(ScheduleRequest scheduleRequest);
 
     List<Schedule> findAllByStatusIs(Integer status);
 

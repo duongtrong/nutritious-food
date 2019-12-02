@@ -36,7 +36,7 @@ public class OrderDetailDTO {
         this.status = orderDetail.getStatus();
         this.food = orderDetail.getFood() != null ? new FoodDTO(orderDetail.getFood(), false, false) : null;
         this.combo = orderDetail.getCombo() != null ? new ComboDTO(orderDetail.getCombo(), false, false) : null;
-        this.schedule = orderDetail.getSchedule() != null ? new ScheduleDTO(orderDetail.getSchedule()) : null;
+        this.schedule = orderDetail.getSchedule() != null ? new ScheduleDTO(orderDetail.getSchedule(), false, false) : null;
         if (hasOrder) this.order = new OrderDTO(orderDetail.getOrder(), false);
         this.createdAt = DateTimeHelper.formatDateFromLong(orderDetail.getCreatedAt());
         this.updatedAt = DateTimeHelper.formatDateFromLong(orderDetail.getUpdatedAt());

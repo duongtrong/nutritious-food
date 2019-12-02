@@ -11,7 +11,7 @@ public interface ScheduleComboService {
 
     ScheduleCombo findById(Long id);
 
-    ScheduleCombo merge(ScheduleCombo scheduleCombo);
+    ScheduleCombo delete(ScheduleCombo scheduleCombo);
 
     List<ScheduleCombo> findAllByCombo(Combo combo);
 
@@ -19,6 +19,6 @@ public interface ScheduleComboService {
 
     ScheduleCombo findByStatusAndId(Integer status, Long id);
 
-    ScheduleCombo merge(ScheduleCombo scheduleCombo, ScheduleComboRequest scheduleComboRequest);
+    ScheduleCombo store(ScheduleCombo scheduleCombo, ScheduleComboRequest scheduleComboRequest);
 
 }

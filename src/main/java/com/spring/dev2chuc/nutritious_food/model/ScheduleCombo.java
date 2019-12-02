@@ -15,12 +15,10 @@ public class ScheduleCombo extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "combo_id", nullable = false)
     private Combo combo;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;

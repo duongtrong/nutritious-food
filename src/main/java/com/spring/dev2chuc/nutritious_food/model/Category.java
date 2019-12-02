@@ -37,6 +37,10 @@ public class Category extends DateAudit {
     @JoinTable(name = "combo_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "combo_id"))
     private Set<Combo> combos = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "schedule_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "schedule_id"))
+    private Set<Schedule> schedules = new HashSet<>();
+
     public Category(Long parentId, String name, String image, String description) {
         this.parentId = parentId;
         this.name = name;
