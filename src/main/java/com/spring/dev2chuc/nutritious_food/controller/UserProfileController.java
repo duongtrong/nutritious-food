@@ -49,6 +49,9 @@ public class UserProfileController {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
             UserProfile userProfile = userProfileService.getLatestByUser(user);
+            if (userProfile == null) {
+                return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User don't has any profile"), HttpStatus.NOT_FOUND);
+            }
             return new ResponseEntity<> (new ApiResponseCustom<> (HttpStatus.OK.value (), "Get List user profile success", new UserProfileDTO(userProfile, true, true)), HttpStatus.OK);
         }
     }
