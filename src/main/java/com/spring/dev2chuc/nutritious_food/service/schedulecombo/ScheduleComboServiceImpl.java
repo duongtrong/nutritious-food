@@ -3,6 +3,7 @@ package com.spring.dev2chuc.nutritious_food.service.schedulecombo;
 import com.spring.dev2chuc.nutritious_food.model.Combo;
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.ScheduleCombo;
+import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleComboRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleComboRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class ScheduleComboServiceImpl implements ScheduleComboService {
     }
 
     @Override
-    public ScheduleCombo merge(ScheduleCombo scheduleCombo) {
+    public ScheduleCombo delete(ScheduleCombo scheduleCombo) {
+        scheduleCombo.setStatus(Status.DEACTIVE.getValue());
         return scheduleComboRepository.save(scheduleCombo);
     }
 
@@ -64,10 +66,10 @@ public class ScheduleComboServiceImpl implements ScheduleComboService {
     }
 
     @Override
-    public ScheduleCombo merge(ScheduleCombo scheduleCombo, ScheduleComboRequest scheduleComboRequest) {
+    public ScheduleCombo store(ScheduleCombo scheduleCombo, ScheduleComboRequest scheduleComboRequest) {
         scheduleCombo.setDay(scheduleComboRequest.getDay());
         scheduleCombo.setType(scheduleComboRequest.getType());
-        ScheduleCombo result = scheduleComboRepository.save(scheduleCombo);
-        return result;
+        scheduleCombo.setStatus(Status.ACTIVE.getValue());
+        return scheduleComboRepository.save(scheduleCombo);
     }
 }

@@ -25,13 +25,15 @@ public class Schedule extends DateAudit {
     private String image;
     private Integer status;
 
-    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "schedule")
     private Set<ScheduleCombo> scheduleCombos;
 
-    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "schedule")
     private Set<RattingSchedule> rattingSchedules;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "schedule_category", joinColumns = @JoinColumn(name = "schedule_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
 
     public Schedule(String name, String description, float price, String image) {
         this.name = name;
