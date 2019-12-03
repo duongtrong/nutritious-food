@@ -1,6 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.service.schedule;
 
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
+import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface ScheduleService {
     Schedule update(Schedule schedule, ScheduleRequest scheduleRequest);
 
     Schedule findByStatusAndId(Integer status, Long id);
+
+    List<Schedule> suggest(UserProfile userProfile);
 }
