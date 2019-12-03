@@ -29,10 +29,10 @@ public class SpecificationAll implements org.springframework.data.jpa.domain.Spe
                 return builder.equal(root.get(criteria.getKey()), criteria.getValue());
             }
         } else if (criteria.getOperation().equalsIgnoreCase("in")) {
-            CriteriaBuilder.In<Integer> inClause = builder.in(root.get(criteria.getKey()));
-            Integer[] titles = (Integer[]) criteria.getValue();
-            for (Integer title : titles) {
-                inClause.value(title);
+            CriteriaBuilder.In<Long> inClause = builder.in(root.get(criteria.getKey()));
+            Long[] ids = (Long[]) criteria.getValue();
+            for (Long id : ids) {
+                inClause.value(id);
             }
             return inClause;
         }
