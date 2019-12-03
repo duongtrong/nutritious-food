@@ -30,7 +30,7 @@ public class ScheduleDTO {
             this.scheduleCombo = schedule
                     .getScheduleCombos()
                     .stream()
-                    .map(x -> new ScheduleComboDTO(x ,false, false))
+                    .map(x -> new ScheduleComboDTO(x ,false, true))
                     .collect(Collectors.toList());
         if (hasCategory)
             this.categories = schedule
