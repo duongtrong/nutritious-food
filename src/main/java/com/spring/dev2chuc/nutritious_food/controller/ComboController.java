@@ -101,8 +101,7 @@ public class ComboController {
                     .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
         }
 
-        specification = specification
-                .and(new SpecificationAll(new SearchCriteria("id", "in", new Integer[] {1, 2} )));
+
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));

@@ -114,8 +114,15 @@ public class FoodController {
                     .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
         }
 
+        Long[] foodIds = foodList.stream().map(Food::getId).toArray(Long[]::new);
+        if (foodIds.length == 0) {
+            return new ResponseEntity<>(new ApiResponsePage<>(
+                    HttpStatus.OK.value(), "OK", new Long[]{},
+                    new RESTPagination(page, limit, 0, 0)), HttpStatus.OK);
+        }
+
         specification = specification
-                .and(new SpecificationAll(new SearchCriteria("id", ":", "(1)")));
+                .and(new SpecificationAll(new SearchCriteria("id", "in", new Long[] {} )));
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
