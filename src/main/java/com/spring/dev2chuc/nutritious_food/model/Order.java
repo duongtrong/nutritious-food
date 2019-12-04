@@ -20,6 +20,10 @@ public class Order extends DateAudit {
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
+    private String code;
+
+    @Column(columnDefinition = "TEXT")
+    private String note;
     private float totalPrice;
     private int type;
     private int status;
@@ -27,9 +31,11 @@ public class Order extends DateAudit {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private Set<OrderDetail> orderDetails;
 
-    public Order(Address address, float totalPrice) {
+    public Order(Address address, float totalPrice, String note, Integer type) {
         this.address = address;
         this.totalPrice = totalPrice;
+        this.note = note;
+        this.type = type;
         this.status = Status.ACTIVE.getValue();
     }
 

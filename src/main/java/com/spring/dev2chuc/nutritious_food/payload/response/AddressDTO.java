@@ -10,6 +10,8 @@ import lombok.Setter;
 public class AddressDTO {
     private Long id;
     private String title;
+    private String phone;
+    private String content;
     private UserDTO user;
     private Integer status;
     private String createdAt;
@@ -18,6 +20,8 @@ public class AddressDTO {
     public AddressDTO(Address address, boolean hasUser) {
         this.id = address.getId();
         this.title = address.getTitle();
+        this.phone = address.getPhone();
+        this.content = address.getContent();
         if (hasUser) this.user = new UserDTO(address.getUser(), false, false, false, false, false);
         this.status = address.getStatus();
         this.createdAt = DateTimeHelper.formatDateFromLong(address.getCreatedAt());
