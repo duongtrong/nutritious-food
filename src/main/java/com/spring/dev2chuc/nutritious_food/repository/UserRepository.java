@@ -31,6 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
+    List<User> findAllByStatusAndRoles(Integer status, Role role);
+
     @Transactional
     @Modifying
     @Query(value = "alter  table users AUTO_INCREMENT = 1 ", nativeQuery = true)

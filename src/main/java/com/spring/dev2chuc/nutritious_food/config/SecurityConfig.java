@@ -108,6 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/schedule/**",
                         "/api/schedule-combo/**",
                         "/api/combo/**",
+                        "/api/push/**",
                         "/api/ratting-food/**",
                         "/api/ratting-combo/**",
                         "/api/ratting-schedule/**")

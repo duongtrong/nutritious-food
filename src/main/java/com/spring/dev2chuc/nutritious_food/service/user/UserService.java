@@ -32,6 +32,8 @@ public interface UserService {
 
     User getById(Long id);
 
+    List<User> findAll();
+
 //    Observable<Integer> changePassword(PasswordEncoder passwordEncoder, String email, String password, String oldPassword);
 //
 //    Observable<User> findUserWith(PasswordEncoder passwordEncoder, String email, String password);

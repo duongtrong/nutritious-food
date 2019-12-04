@@ -2,6 +2,7 @@ package com.spring.dev2chuc.nutritious_food.service.user;
 
 import com.spring.dev2chuc.nutritious_food.model.Role;
 import com.spring.dev2chuc.nutritious_food.model.RoleName;
+import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
@@ -124,6 +125,11 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("{user.id.not.found}");
         }
         return userRepository.findById(id).orElseThrow(null);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAllByStatusAndRoles(Status.ACTIVE.getValue(), roleRepository.findByName(RoleName.ROLE_USER));
     }
 
 //    @Override

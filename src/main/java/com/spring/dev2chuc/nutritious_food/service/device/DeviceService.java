@@ -10,4 +10,6 @@ public interface DeviceService {
     List<Device> getByUser(User user);
 
     Device store(User user, DeviceRequest deviceRequest);
+
+    Device getId(String id);
 }
