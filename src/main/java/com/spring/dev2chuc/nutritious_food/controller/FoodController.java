@@ -31,7 +31,7 @@ public class FoodController {
                         HttpStatus.OK.value(),
                         "OK",
                         foodList.stream()
-                                .map(x -> new OnlyFoodResponse(x))
+                                .map(x -> new FoodDTO(x, true, false))
                                 .collect(Collectors.toList())),
                 HttpStatus.OK);
     }
@@ -122,7 +122,7 @@ public class FoodController {
         }
 
         specification = specification
-                .and(new SpecificationAll(new SearchCriteria("id", "in", new Long[] {} )));
+                .and(new SpecificationAll(new SearchCriteria("id", "in", foodIds )));
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
