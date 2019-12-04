@@ -15,6 +15,9 @@ public class OrderDTO {
     private Long userId;
     private String userName;
     private String address;
+    private String note;
+    private String code;
+    private String urlPayment;
     private float totalPrice;
     private int type;
     private int status;
@@ -23,24 +26,13 @@ public class OrderDTO {
 
     private Set<OrderDetailDTO> orderDetail;
 
-    public OrderDTO(Order order, Set<OrderDetailDTO> orderDetails) {
-        this.id = order.getId();
-        this.userId = order.getAddress().getUser().getId();
-        this.userName = order.getAddress().getUser().getUsername();
-        this.address = order.getAddress().getTitle();
-        this.totalPrice = order.getTotalPrice();
-        this.type = order.getType();
-        this.status = order.getStatus();
-        this.orderDetail = orderDetails;
-        this.createdAt = DateTimeHelper.formatDateFromLong(order.getCreatedAt());
-        this.updatedAt = DateTimeHelper.formatDateFromLong(order.getUpdatedAt());
-    }
-
     public OrderDTO(Order order, boolean hasOrderDetail) {
         this.id = order.getId();
         this.userId = order.getAddress().getUser().getId();
         this.userName = order.getAddress().getUser().getUsername();
         this.address = order.getAddress().getTitle();
+        this.code = order.getCode();
+        this.note = order.getNote();
         this.totalPrice = order.getTotalPrice();
         this.type = order.getType();
         this.status = order.getStatus();

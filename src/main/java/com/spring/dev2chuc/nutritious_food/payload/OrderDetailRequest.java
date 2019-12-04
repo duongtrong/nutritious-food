@@ -10,5 +10,4 @@ public class OrderDetailRequest {
     private Long comboId;
     private Long scheduleId;
     private int quantity;
-    private float price;
 }
