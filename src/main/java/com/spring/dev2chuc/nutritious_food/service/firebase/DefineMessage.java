@@ -10,6 +10,7 @@ import java.util.Locale;
 
 @Service
 public class DefineMessage {
+
     @Autowired
     private MessageSource messageSource;
 

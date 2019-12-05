@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
+import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "devices")
-public class Device {
+public class Device extends DateAudit {
     @Id
     private String id;
 
