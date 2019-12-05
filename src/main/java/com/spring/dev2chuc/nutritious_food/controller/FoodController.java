@@ -135,5 +135,19 @@ public class FoodController {
                 new RESTPagination(page, limit, foodPage.getTotalPages(), foodPage.getTotalElements())), HttpStatus.OK);
     }
 
-
+    @GetMapping(value = "/{id}/suggest")
+    public ResponseEntity<?> getListSuggestByFoodId(@Valid @PathVariable("id") Long foodId) {
+        List<Food> foods = foodService.suggestByFoodId(foodId);
+        if (foods == null) {
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(), "Food not found"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(
+                new ApiResponseCustom<>(
+                        HttpStatus.OK.value(),
+                        "OK",
+                        foods.stream()
+                                .map(x -> new FoodDTO(x, true, false))
+                                .collect(Collectors.toList())),
+                HttpStatus.OK);
+    }
 }
