@@ -2,6 +2,7 @@ package com.spring.dev2chuc.nutritious_food.service.vnpay;
 
 import com.spring.dev2chuc.nutritious_food.config.VnPayConfig;
 import com.spring.dev2chuc.nutritious_food.model.Order;
+import com.spring.dev2chuc.nutritious_food.model.Status;
 import com.spring.dev2chuc.nutritious_food.repository.OrderRepository;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,7 @@ public class VnPayServiceIml implements VnPayService {
     }
 
     @Override
-    public void catchDataReturn(HttpServletRequest request) throws UnsupportedEncodingException {
+    public String catchDataReturn(HttpServletRequest request) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
             String fieldName = (String) params.nextElement();
@@ -115,32 +116,64 @@ public class VnPayServiceIml implements VnPayService {
         if (fields.containsKey("vnp_SecureHash")) {
             fields.remove("vnp_SecureHash");
         }
-        System.out.println(fields.get("vnp_TxnRef"));
+        String signValue = VnPayConfig.hashAllFields(fields);
+
+        if (signValue.equals(vnp_SecureHash)) {
+            return request.getParameter("vnp_ResponseCode");
+        } else {
+            return "97";
+        }
+    }
+
+    @Override
+    public String catchDataIPN(HttpServletRequest request) throws UnsupportedEncodingException {
+        //Begin process return from VNPAY
+        Map fields = new HashMap();
+        for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
+            String fieldName = (String) params.nextElement();
+            String fieldValue = request.getParameter(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                fields.put(fieldName, fieldValue);
+            }
+        }
+
+        String vnp_SecureHash = request.getParameter("vnp_SecureHash");
+        if (fields.containsKey("vnp_SecureHashType")) {
+            fields.remove("vnp_SecureHashType");
+        }
+        if (fields.containsKey("vnp_SecureHash")) {
+            fields.remove("vnp_SecureHash");
+        }
         String signValue = VnPayConfig.hashAllFields(fields);
         if (signValue.equals(vnp_SecureHash)) {
+
             //Kiem tra chu ky OK
         /* Kiem tra trang thai don hang trong DB: checkOrderStatus,
         - Neu trang thai don hang OK, tien hanh cap nhat vao DB, tra lai cho VNPAY RspCode=00
         - Neu trang thai don hang (da cap nhat roi) => khong cap nhat vao DB, tra lai cho VNPAY RspCode=02
          */
-            boolean checkOrderStatus = true;
-            if (checkOrderStatus) {
-                if ("00".equals(request.getParameter("vnp_ResponseCode"))) {
-                    //Xu ly thanh toan thanh cong
-                    // out.print("GD Thanh cong");
-                } else {
-                    //Xu ly thanh toan khong thanh cong
-                    //  out.print("GD Khong thanh cong");
-                }
-                System.out.println("Confirm Success");
 
+            Order order = orderRepository.findByCode(request.getParameter("vnp_TxnRef"));
+            if (order == null)
+                return "04";
+            if (order.getStatus() == 2)
+                return "05";
+            if (order.getType() != 2)
+                return "06";
+            if ("00".equals(request.getParameter("vnp_ResponseCode"))) {
+                //Xu ly thanh toan thanh cong
+                // out.print("GD Thanh cong");
+                order.setStatus(Status.CONFIRM.getValue());
+                orderRepository.save(order);
+                return "00";
             } else {
-                //Don hang nay da duoc cap nhat roi, Merchant khong cap nhat nua (Duplicate callback)
-                System.out.println("Order already confirmed");
+                //Xu ly thanh toan khong thanh cong
+                //  out.print("GD Khong thanh cong");
+                return "99";
             }
-
         } else {
             System.out.println("Invalid Checksum");
+            return "97";
         }
     }
 }
