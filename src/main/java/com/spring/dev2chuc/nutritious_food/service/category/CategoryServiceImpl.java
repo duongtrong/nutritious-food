@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -49,8 +50,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(null);
-        return category;
+        Optional<Category> category = categoryRepository.findById(id);
+        return category.orElse(null);
     }
 
     @Override

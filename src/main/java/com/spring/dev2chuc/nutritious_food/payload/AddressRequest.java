@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public class AddressRequest {
     private String title;
+    private String phone;
+    private String content;
 }

@@ -23,6 +23,8 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address store(User user, AddressRequest addressRequest) {
         Address address = new Address(addressRequest.getTitle(), user);
+        address.setPhone(addressRequest.getPhone());
+        address.setContent(addressRequest.getContent());
         return addressRepository.save(address);
     }
 
@@ -31,6 +33,8 @@ public class AddressServiceImpl implements AddressService {
         Address address = addressRepository.findByIdAndStatus(id, Status.ACTIVE.getValue());
         if (address == null) return null;
         address.setTitle(addressRequest.getTitle());
+        address.setPhone(addressRequest.getPhone());
+        address.setContent(addressRequest.getContent());
         return addressRepository.save(address);
     }
 

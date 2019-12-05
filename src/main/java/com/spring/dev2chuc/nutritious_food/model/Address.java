@@ -15,6 +15,8 @@ public class Address extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String phone;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -23,6 +25,7 @@ public class Address extends DateAudit {
     private Integer status;
 
     public Address() {
+        this.status = Status.ACTIVE.getValue();
     }
 
     public Address(String title, User user) {

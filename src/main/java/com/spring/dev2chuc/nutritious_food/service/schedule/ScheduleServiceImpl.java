@@ -3,12 +3,14 @@ package com.spring.dev2chuc.nutritious_food.service.schedule;
 import com.spring.dev2chuc.nutritious_food.model.Category;
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import com.spring.dev2chuc.nutritious_food.model.Status;
+import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,5 +74,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule findByStatusAndId(Integer status, Long id) {
         return scheduleRepository.findByStatusAndId(status, id);
+    }
+
+    @Override
+    public List<Schedule> suggest(UserProfile userProfile) {
+        Set<Category> categories = userProfile.getCategories();
+        List<Category> categoryList = new ArrayList<>(categories);
+        if (!categoryList.isEmpty()) {
+            categoryList = categoryService.findAll();
+        }
+
+        return scheduleRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categoryList);
     }
 }

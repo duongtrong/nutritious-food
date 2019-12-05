@@ -1,6 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.service.food;
 
 import com.spring.dev2chuc.nutritious_food.model.Food;
+import com.spring.dev2chuc.nutritious_food.model.UserProfile;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,4 +29,8 @@ public interface FoodService {
     List<Food> findAllByCategory(Long categoryId);
 
     Page<Food> foodsWithPaginate(Specification specification, int page, int limit);
+
+    List<Food> suggest(UserProfile userProfile);
+
+    List<Food> suggestByFoodId(Long foodId);
 }

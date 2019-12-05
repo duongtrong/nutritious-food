@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByAddressIn(List<Address> addresses);
+    Order findByCode(String code);
 
     @Transactional
     @Modifying
