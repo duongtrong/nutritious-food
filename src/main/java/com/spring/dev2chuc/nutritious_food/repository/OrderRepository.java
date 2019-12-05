@@ -4,6 +4,7 @@ import com.spring.dev2chuc.nutritious_food.model.Address;
 import com.spring.dev2chuc.nutritious_food.model.Order;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
     List<Order> findAllByAddressIn(List<Address> addresses);
     Order findByCode(String code);
 
