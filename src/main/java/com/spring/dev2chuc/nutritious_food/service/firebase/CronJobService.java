@@ -4,6 +4,7 @@ import com.spring.dev2chuc.nutritious_food.model.Device;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.service.device.DeviceService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -28,7 +29,7 @@ public class CronJobService {
     @Autowired
     PushNotificationServiceImpl pushNotificationService;
 
-    private void JsonObject(Device device, String body, String title) {
+    private void JsonObject(Device device, String body, String title) throws JSONException {
         JSONObject bodies = new JSONObject();
         bodies.put("to", device);
         bodies.put("collapse_key", "type_a");
@@ -55,7 +56,11 @@ public class CronJobService {
         for (User user : users) {
             List<Device> devices = deviceService.getByUser(user);
             for (Device device : devices) {
-                JsonObject(device, body, title);
+                try {
+                    JsonObject(device, body, title);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

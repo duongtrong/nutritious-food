@@ -17,6 +17,15 @@ public class SpecificationAll implements org.springframework.data.jpa.domain.Spe
 
     @Override
     public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
+        if (criteria.getOperation().equalsIgnoreCase("orderBy")) {
+            if (criteria.getValue().toString().equals("desc")) {
+                criteriaQuery.orderBy(builder.desc(root.get(criteria.getKey())));
+            }
+            if (criteria.getValue().toString().equals("asc")) {
+                criteriaQuery.orderBy(builder.asc(root.get(criteria.getKey())));
+            }
+        }
+
         if (criteria.getOperation().equalsIgnoreCase(">=")) {
             return builder.greaterThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
         } else if (criteria.getOperation().equalsIgnoreCase("<=")) {

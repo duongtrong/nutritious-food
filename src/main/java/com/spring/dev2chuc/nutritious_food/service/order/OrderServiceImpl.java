@@ -7,7 +7,12 @@ import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDetailDTO;
 import com.spring.dev2chuc.nutritious_food.repository.*;
+import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -20,6 +25,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     AddressRepository addressRepository;
@@ -40,9 +51,20 @@ public class OrderServiceImpl implements OrderService {
     OrderDetailRepository orderDetailRepository;
 
     @Override
-    public List<OrderDTO> getAllByUser(User user) {
-        List<Address> addresses = addressRepository.findAllByUserAndStatus(user, Status.ACTIVE.getValue());
-        return orderRepository.findAllByAddressIn(addresses).stream().map(x -> new OrderDTO(x, true)).collect(Collectors.toList());
+    public List<Order> getAllByUser(User user) {
+        List<Address> addresses;
+        if (userService.checkRoleByUser(user, RoleName.ROLE_ADMIN)) {
+            return orderRepository.findAll();
+        } else {
+            addresses = addressRepository.findAllByUserAndStatus(user, Status.ACTIVE.getValue());
+            return orderRepository.findAllByAddressIn(addresses);
+        }
+
+    }
+
+    @Override
+    public Page<Order> getAllByUserWithPaginate(Specification specification, int page, int limit) {
+        return orderRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 
     @Override
@@ -109,10 +131,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderAndStatus(order, Status.ACTIVE.getValue());
-        Set<OrderDetailDTO> onlyOrderDetailResponses = new HashSet<>();
+        Set<OrderDetailDTO> orderDetailDTOS = new HashSet<>();
         for (OrderDetail orderDetail : orderDetails) {
             OrderDetailDTO onlyOrderDetailResponse = new OrderDetailDTO(orderDetail, true);
-            onlyOrderDetailResponses.add(onlyOrderDetailResponse);
+            orderDetailDTOS.add(onlyOrderDetailResponse);
         }
 
         return new OrderDTO(order, true);

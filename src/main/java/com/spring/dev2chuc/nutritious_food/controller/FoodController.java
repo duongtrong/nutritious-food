@@ -93,7 +93,7 @@ public class FoodController {
         Page<Food> foodPage = foodService.foodsWithPaginate(specification, page, limit);
         return new ResponseEntity<>(new ApiResponsePage<>(
                 HttpStatus.OK.value(), "OK", foodPage.stream()
-                .map(x -> new OnlyFoodResponse(x))
+                .map(x -> new FoodDTO(x, true, true))
                 .collect(Collectors.toList()),
                 new RESTPagination(page, limit, foodPage.getTotalPages(), foodPage.getTotalElements())), HttpStatus.OK);
     }
