@@ -25,4 +25,9 @@ public class DeviceServiceImpl implements  DeviceService{
         Device device = new Device(deviceRequest.getId(), user);
         return devicesRepository.save(device);
     }
+
+    @Override
+    public Device getId(String id) {
+        return devicesRepository.findById(id).orElseThrow(null);
+    }
 }
