@@ -47,6 +47,13 @@ public class UserProfileServiceImpl implements UserProfileService {
         return (weight * (index - bodyFat)) / index;
     }
 
+    private static double mathBmI(int weight, int height) {
+        int index = 100;
+        float weightF = (float) weight;
+        float heightF = (float) height;
+        return (double) Math.round((weightF / ((heightF / index) * (heightF / index))) * 100)/ 100;
+    }
+
     @Override
     public List<UserProfile> getAllByUser(User user) {
         return userProfileRepository.findByUser(user);
@@ -72,6 +79,7 @@ public class UserProfileServiceImpl implements UserProfileService {
                 calories,
                 mathLbm(userProfileRequest.getWeight(), userProfileRequest.getBodyFat()),
                 mathBmr(userProfileRequest.getWeight(), userProfileRequest.getBodyFat()),
+                mathBmI(userProfileRequest.getWeight(), userProfileRequest.getHeight()),
                 userProfileRequest.getGender()
         );
         return userProfileRepository.save(userProfile);
