@@ -3,6 +3,7 @@ package com.spring.dev2chuc.nutritious_food.controller;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
+import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseIpn;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
 import com.spring.dev2chuc.nutritious_food.service.vnpay.VnPayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +41,12 @@ public class PaymentController {
     @GetMapping(value = "/ipn")
     public ResponseEntity<?> catchIPNVnPay(HttpServletRequest request) throws UnsupportedEncodingException {
         String errorCode = vnPayService.catchDataIPN(request);
-        if ("00".equals(errorCode)) {
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Giao dịch thành công"), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), messageSource.getMessage("payment.error.dr." + errorCode, null, null)), HttpStatus.BAD_REQUEST);
-        }
+        if ("00".equals(errorCode))
+            return new ResponseEntity<>(new ApiResponseIpn<>("00", "Confirm Success"), HttpStatus.OK);
+        if ("05".equals(errorCode))
+            return new ResponseEntity<>(new ApiResponseIpn<>("02", "Order already confirmed"), HttpStatus.OK);
+        if ("97".equals(errorCode))
+            return new ResponseEntity<>(new ApiResponseIpn<>("97", "Invalid Checksum"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), messageSource.getMessage("payment.error.dr." + errorCode, null, null)), HttpStatus.BAD_REQUEST);
     }
-
-
 }
