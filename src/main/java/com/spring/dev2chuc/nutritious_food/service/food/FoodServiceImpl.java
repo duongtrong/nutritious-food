@@ -1,9 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.service.food;
 
-import com.spring.dev2chuc.nutritious_food.model.Category;
-import com.spring.dev2chuc.nutritious_food.model.Combo;
-import com.spring.dev2chuc.nutritious_food.model.Food;
-import com.spring.dev2chuc.nutritious_food.model.Status;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.FoodRequest;
 import com.spring.dev2chuc.nutritious_food.repository.FoodRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FoodServiceImpl implements FoodService {
@@ -170,5 +168,27 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public Page<Food> foodsWithPaginate(Specification specification, int page, int limit) {
         return foodRepository.findAll(specification, PageRequest.of(page - 1, limit));
+    }
+
+    @Override
+    public List<Food> suggest(UserProfile userProfile) {
+        Set<Category> categories = userProfile.getCategories();
+        List<Category> categoryList = new ArrayList<>(categories);
+        if (!categoryList.isEmpty()) {
+            categoryList = categoryService.findAll();
+        }
+        return foodRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categoryList);
+    }
+
+    @Override
+    public List<Food> suggestByFoodId(Long foodId) {
+        Food food = foodRepository.findByStatusAndId(Status.ACTIVE.getValue(), foodId);
+        if (food == null)
+            return null;
+        List<Category> categories = new ArrayList<>(food.getCategories());
+        if (!categories.isEmpty()) {
+            categories = categoryService.findAll();
+        }
+        return foodRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categories);
     }
 }

@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.service.order;
 
+import com.spring.dev2chuc.nutritious_food.config.VnPayConfig;
 import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.OrderDetailRequest;
 import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
@@ -45,11 +46,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO saveOrderByUser(OrderRequest orderRequest) {
+    public Order saveOrderByUser(OrderRequest orderRequest) {
         System.out.println(orderRequest.getAddressId());
         Address address = addressRepository.findByIdAndStatus(orderRequest.getAddressId(), Status.ACTIVE.getValue());
         if (address == null) return null;
-        Order order = new Order(address, (float) 0);
+        Order order = new Order(address, (float) 0, orderRequest.getNote(), orderRequest.getType());
+        order.setCode(VnPayConfig.getRandomNumber(8));
         Order orderSave = orderRepository.save(order);
         float totalPrice = 0;
 
@@ -63,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
                         orderSave,
                         food,
                         orderDetailRequest.getQuantity(),
-                        orderDetailRequest.getPrice()
+                        food.getPrice()
                 );
 
             } else if (orderDetailRequest.getComboId() != null) {
@@ -73,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
                         orderSave,
                         combo,
                         orderDetailRequest.getQuantity(),
-                        orderDetailRequest.getPrice()
+                        combo.getPrice()
                 );
             } else if (orderDetailRequest.getScheduleId() != null) {
                 Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderDetailRequest.getScheduleId());
@@ -82,24 +84,21 @@ public class OrderServiceImpl implements OrderService {
                         orderSave,
                         schedule,
                         orderDetailRequest.getQuantity(),
-                        orderDetailRequest.getPrice()
+                        schedule.getPrice()
                 );
             } else {
                 return null;
             }
 
             OrderDetail orderDetail = orderDetailRepository.save(orderDetailCurrent);
-//            onlyOrderDetailResponse = new OnlyOrderDetailResponse(orderDetail);
-//            onlyOrderDetailResponses.add(onlyOrderDetailResponse);
+
             orderDetails.add(orderDetail);
             System.out.println(orderDetail.getType());
-            totalPrice += orderDetailRequest.getPrice() * orderDetailRequest.getQuantity();
+            totalPrice += orderDetailCurrent.getPrice() * orderDetailRequest.getQuantity();
         }
         orderSave.setTotalPrice(totalPrice);
         orderSave.setOrderDetails(orderDetails);
-        Order orderSavePrice = orderRepository.save(orderSave);
-        System.out.println(orderSavePrice.getOrderDetails().size());
-        return new OrderDTO(orderSavePrice, true);
+        return orderRepository.save(orderSave);
     }
 
     @Override
@@ -116,6 +115,6 @@ public class OrderServiceImpl implements OrderService {
             onlyOrderDetailResponses.add(onlyOrderDetailResponse);
         }
 
-        return new OrderDTO(order, onlyOrderDetailResponses);
+        return new OrderDTO(order, true);
     }
 }

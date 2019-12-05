@@ -9,5 +9,8 @@ import java.util.List;
 @Setter
 public class OrderRequest {
     private Long addressId;
+    private Integer type;
+    private String note;
+
     private List<OrderDetailRequest> orderDetails;
 }
