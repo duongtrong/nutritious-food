@@ -16,7 +16,7 @@ public class ScheduledTasks {
     private static final Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
 
     @Scheduled(cron = "0 26 9 * * ?")
-    public void scheduleTaskWithCronToday(String body, String title) {
+    public void scheduleTaskWithCronToday() {
         try {
             cronJobService.checkUserAndDevice("morning.message", "today.message");
         } catch (Exception ignored) {
@@ -26,7 +26,7 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 0 12 * * ?")
-    public void scheduleTaskWithCronNoonday(String body, String title) {
+    public void scheduleTaskWithCronNoonday() {
         try {
             cronJobService.checkUserAndDevice("noonday.message", "today.message");
         } catch (Exception ignored) {
@@ -36,7 +36,7 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 45 12 * * ?")
-    public void scheduleTaskWithCronLastNoonday(String body, String title) {
+    public void scheduleTaskWithCronLastNoonday() {
         try {
             cronJobService.checkUserAndDevice("last.noonday.message", "today.message");
         } catch (Exception ignored) {
@@ -46,7 +46,7 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 0 19 * * ?")
-    public void scheduleTaskWithCronDinner(String body, String title) {
+    public void scheduleTaskWithCronDinner() {
         try {
             cronJobService.checkUserAndDevice("dinner.message", "today.message");
         } catch (Exception ignored) {
@@ -57,7 +57,7 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 30 19 * * ?")
-    public void scheduleTaskWithCronLastDinner(String body, String title) {
+    public void scheduleTaskWithCronLastDinner() {
         try {
             cronJobService.checkUserAndDevice("last.dinner.message", "today.message");
         } catch (Exception ignored) {
