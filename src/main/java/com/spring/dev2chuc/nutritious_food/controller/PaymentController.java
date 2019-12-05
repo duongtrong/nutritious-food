@@ -1,10 +1,12 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
+import com.spring.dev2chuc.nutritious_food.model.Order;
 import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseCustom;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseError;
 import com.spring.dev2chuc.nutritious_food.payload.response.ApiResponseIpn;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
+import com.spring.dev2chuc.nutritious_food.repository.OrderRepository;
 import com.spring.dev2chuc.nutritious_food.service.vnpay.VnPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -28,11 +30,15 @@ public class PaymentController {
     @Autowired
     MessageSource messageSource;
 
+    @Autowired
+    OrderRepository orderRepository;
+
     @GetMapping(value = "/return")
     public ResponseEntity<?> catchReturnVnPay(HttpServletRequest request) throws UnsupportedEncodingException {
         String errorCode = vnPayService.catchDataReturn(request);
         if ("00".equals(errorCode)) {
-            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Giao dịch thành công"), HttpStatus.OK);
+            Order order = orderRepository.findByCode(request.getParameter("vnp_TxnRef"));
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "Giao dịch thành công", new OrderDTO(order, true)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), messageSource.getMessage("payment.error.dr." + errorCode, null, null)), HttpStatus.BAD_REQUEST);
         }
