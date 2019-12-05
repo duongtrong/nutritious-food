@@ -15,6 +15,8 @@ public class OrderDTO {
     private Long userId;
     private String userName;
     private String address;
+    private String addTitle;
+    private String phone;
     private String note;
     private String code;
     private String urlPayment;
@@ -30,7 +32,9 @@ public class OrderDTO {
         this.id = order.getId();
         this.userId = order.getAddress().getUser().getId();
         this.userName = order.getAddress().getUser().getUsername();
-        this.address = order.getAddress().getTitle();
+        this.addTitle = order.getAddress().getTitle();
+        this.address = order.getAddress().getContent();
+        this.phone = order.getAddress().getPhone();
         this.code = order.getCode();
         this.note = order.getNote();
         this.totalPrice = order.getTotalPrice();
