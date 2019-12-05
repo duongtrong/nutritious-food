@@ -7,5 +7,6 @@ import java.io.UnsupportedEncodingException;
 
 public interface VnPayService {
     String generateURLPayment(HttpServletRequest req, Order order) throws UnsupportedEncodingException;
-    void catchDataReturn(HttpServletRequest request) throws UnsupportedEncodingException;
+    String catchDataReturn(HttpServletRequest request) throws UnsupportedEncodingException;
+    String catchDataIPN(HttpServletRequest request) throws UnsupportedEncodingException;
 }

@@ -1,6 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.model;
 
 public enum Status {
+    CONFIRM(2),
     ACTIVE(1),
     DEACTIVE(0);
 
