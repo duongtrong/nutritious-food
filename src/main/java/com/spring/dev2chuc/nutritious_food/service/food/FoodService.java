@@ -31,4 +31,6 @@ public interface FoodService {
     Page<Food> foodsWithPaginate(Specification specification, int page, int limit);
 
     List<Food> suggest(UserProfile userProfile);
+
+    List<Food> suggestByFoodId(Long foodId);
 }

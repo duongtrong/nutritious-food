@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FoodServiceImpl implements FoodService {
@@ -177,5 +178,17 @@ public class FoodServiceImpl implements FoodService {
             categoryList = categoryService.findAll();
         }
         return foodRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categoryList);
+    }
+
+    @Override
+    public List<Food> suggestByFoodId(Long foodId) {
+        Food food = foodRepository.findByStatusAndId(Status.ACTIVE.getValue(), foodId);
+        if (food == null)
+            return null;
+        List<Category> categories = new ArrayList<>(food.getCategories());
+        if (!categories.isEmpty()) {
+            categories = categoryService.findAll();
+        }
+        return foodRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categories);
     }
 }
