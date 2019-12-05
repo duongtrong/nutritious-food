@@ -45,7 +45,7 @@ public class HistoryController {
             List<History> histories = historyService.findAllByUser(user);
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(),
                     "Get your history success",
-                    histories.stream().map(x -> new OnlyHistoryResponse(x)).collect(Collectors.toList())
+                    histories.stream().map(x -> new HistoryDTO(x, false, true)).collect(Collectors.toList())
             ), HttpStatus.OK);
         }
     }
@@ -60,7 +60,7 @@ public class HistoryController {
             History history = historyService.store(historyRequest, user, food);
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(),
                     "Store history success",
-                    new HistoryDTO(history)),
+                    new HistoryDTO(history, true, true)),
                     HttpStatus.CREATED
             );
         }
