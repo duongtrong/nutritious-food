@@ -19,6 +19,7 @@ public class UserProfileDTO {
     private Double exerciseIntensity;
     private Integer lbmIndex;
     private Integer bmrIndex;
+    private Double bmiIndex;
     private Integer tdeeIndex;
     private Integer caloriesConsumed;
     private Integer age;
@@ -36,6 +37,7 @@ public class UserProfileDTO {
         this.exerciseIntensity = userProfile.getExerciseIntensity();
         this.lbmIndex = userProfile.getLbmIndex();
         this.bmrIndex = userProfile.getBmrIndex();
+        this.bmiIndex = userProfile.getBmiIndex();
         this.tdeeIndex = userProfile.getTdeeIndex();
         this.caloriesConsumed = userProfile.getCaloriesConsumed();
         this.age = LocalDate.now().getYear() - userProfile.getYearOfBirth();
