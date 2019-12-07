@@ -33,4 +33,6 @@ public interface FoodService {
     List<Food> suggest(UserProfile userProfile);
 
     List<Food> suggestByFoodId(Long foodId);
+
+    List<Food> searchByNameAndDescription(String search);
 }

@@ -16,7 +16,7 @@ public interface OrderService {
 
     Order saveOrderByUser(OrderRequest orderRequest);
 
-    Order updateStatusOrder(Long id);
+    Order updateStatusOrder(Long id, Integer status);
 
     OrderDTO getById(Long id);
 

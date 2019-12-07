@@ -105,7 +105,14 @@ public class OrderController {
 
         if (from != null && to != null) {
             List<Order> orders = orderService.getAllByCreatedAtBetween(from, to);
-            Long[] foodIds = orders.stream().map(Order::getId).toArray(Long[]::new);
+            Long[] foodIds;
+            if (orders.size() == 0) {
+                foodIds = new Long[]{Long.valueOf(0)};
+            } else {
+                foodIds = orders.stream().map(Order::getId).toArray(Long[]::new);
+            }
+            System.out.println(foodIds);
+
             specification = specification
                     .and(new SpecificationAll(new SearchCriteria("id", "in", foodIds)));
         }
@@ -157,13 +164,13 @@ public class OrderController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable("id") Long id) {
+    public ResponseEntity<?> updateOrder(@PathVariable("id") Long id, @RequestParam(value = "status", required = true) Integer status) {
         User user = userService.getUserAuth();
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
             if (userService.checkRoleByUser(user, RoleName.ROLE_ADMIN)) {
-                Order order = orderService.updateStatusOrder(id);
+                Order order = orderService.updateStatusOrder(id, status);
                 if (order == null) {
                     return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Order not found"), HttpStatus.NOT_FOUND);
                 }

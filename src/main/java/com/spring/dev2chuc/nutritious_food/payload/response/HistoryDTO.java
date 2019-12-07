@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
+import com.spring.dev2chuc.nutritious_food.helper.DateTimeHelper;
 import com.spring.dev2chuc.nutritious_food.model.History;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,8 @@ public class HistoryDTO {
     private String comment;
     private int type;
     private int status;
-    private Instant createdAt;
+    private String createdAt;
+    private String updatedAt;
     private UserDTO user;
     private FoodDTO food;
 
@@ -29,6 +31,7 @@ public class HistoryDTO {
             this.user = new UserDTO(history.getUser(), false,false,false,false,false);
         if (hasFood)
             this.food = new FoodDTO(history.getFood(), false, false);
-        this.createdAt = history.getCreatedAt();
+        this.createdAt = DateTimeHelper.formatDateFromLong(history.getCreatedAt());
+        this.updatedAt = DateTimeHelper.formatDateFromLong(history.getUpdatedAt());
     }
 }
