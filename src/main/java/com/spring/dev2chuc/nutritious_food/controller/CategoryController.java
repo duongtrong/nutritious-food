@@ -89,7 +89,7 @@ public class CategoryController {
     @GetMapping("/list")
     public ResponseEntity<?> getListPage(
             @RequestParam(value = "search", required = false) String search,
-            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int limit) {

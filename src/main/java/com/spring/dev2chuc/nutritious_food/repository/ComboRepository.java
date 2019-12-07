@@ -19,6 +19,8 @@ public interface ComboRepository extends JpaRepository<Combo, Long>, JpaSpecific
 
     List<Combo> findAllByStatusIs(Integer status);
 
+    List<Combo> findAllByIdNotInAndStatusIsAndCalorieBetween(List<Long> ids, Integer status, float minCalories, float maxCalories);
+
     List<Combo> findAllByStatusAndIdIn(Integer status, List<Long> ids);
 
     List<Combo> findAllByStatusAndCategoriesInAndCalorieBetween(Integer status, List<Category> categories, float minCalories, float maxCalories);

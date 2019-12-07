@@ -2,6 +2,7 @@ package com.spring.dev2chuc.nutritious_food.service.order;
 
 import com.spring.dev2chuc.nutritious_food.config.VnPayConfig;
 import com.spring.dev2chuc.nutritious_food.model.*;
+import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 import com.spring.dev2chuc.nutritious_food.payload.OrderDetailRequest;
 import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
@@ -15,8 +16,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -124,6 +127,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order updateStatusOrder(Long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            if (order.getStatus() < 5)
+                order.setStatus(order.getStatus() + 1);
+            orderRepository.save(order);
+            return order;
+        }
+        return null;
+    }
+
+    @Override
     public OrderDTO getById(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(null);
         if (order == null) {
@@ -138,5 +154,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return new OrderDTO(order, true);
+    }
+
+    @Override
+    public List<Order> getAllByCreatedAtBetween(String from, String to) {
+        Instant fromInstant = DateAudit.stringToInstant(from);
+        Instant toInstant = DateAudit.stringToInstant(to);
+        return orderRepository.findAllByCreatedAtBetween(fromInstant, toInstant);
     }
 }

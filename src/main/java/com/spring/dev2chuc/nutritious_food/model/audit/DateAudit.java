@@ -11,6 +11,11 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 @Getter
 @Setter
@@ -27,5 +32,15 @@ public abstract class DateAudit implements Serializable {
 
     @LastModifiedDate
     private Instant updatedAt;
+
+    public static Instant stringToInstant(String str) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        TemporalAccessor temporalAccessor = formatter.parse(str);
+
+        LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+        return Instant.from(zonedDateTime);
+    }
 
 }
