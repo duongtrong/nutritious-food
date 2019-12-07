@@ -15,18 +15,20 @@ public class HistoryDTO {
     private int type;
     private int status;
     private Instant createdAt;
-    private OnlyUserResponse user;
+    private UserDTO user;
     private FoodDTO food;
 
 
-    public HistoryDTO(History history) {
+    public HistoryDTO(History history, boolean hasUser, boolean hasFood) {
         this.id = history.getId();
         this.calorie = history.getCalorie();
         this.comment = history.getComment();
         this.type = history.getType();
         this.status = history.getStatus();
-        this.user = new OnlyUserResponse(history.getUser());
-        this.food = new FoodDTO(history.getFood(), false, false);
+        if (hasUser)
+            this.user = new UserDTO(history.getUser(), false,false,false,false,false);
+        if (hasFood)
+            this.food = new FoodDTO(history.getFood(), false, false);
         this.createdAt = history.getCreatedAt();
     }
 }
