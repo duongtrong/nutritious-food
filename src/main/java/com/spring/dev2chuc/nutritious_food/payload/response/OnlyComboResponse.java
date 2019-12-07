@@ -1,8 +1,12 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
+import com.spring.dev2chuc.nutritious_food.helper.DateTimeHelper;
 import com.spring.dev2chuc.nutritious_food.model.Combo;
+import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -28,6 +32,8 @@ public class OnlyComboResponse {
     private float calorie;
     private float weight;
     private int status;
+    private String createdAt;
+    private String updatedAt;
 
     public OnlyComboResponse(Combo combo) {
         this.id = combo.getId();
@@ -50,5 +56,7 @@ public class OnlyComboResponse {
         this.calorie = combo.getCalorie();
         this.weight = combo.getWeight();
         this.status = combo.getStatus();
+        this.createdAt = DateTimeHelper.formatDateFromLong(combo.getCreatedAt());
+        this.updatedAt = DateTimeHelper.formatDateFromLong(combo.getUpdatedAt());
     }
 }

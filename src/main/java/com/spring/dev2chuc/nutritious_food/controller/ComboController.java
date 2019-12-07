@@ -1,9 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
-import com.spring.dev2chuc.nutritious_food.model.Combo;
-import com.spring.dev2chuc.nutritious_food.model.Device;
-import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.model.User;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.ComboRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.service.combo.ComboService;
@@ -92,7 +89,7 @@ public class ComboController {
             @RequestParam(value = "form", required = false) String form,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "12", required = false) int limit) {
+            @RequestParam(defaultValue = "6", required = false) int limit) {
 
         Specification specification = Specification.where(null);
         if (search != null && search.length() > 0) {
@@ -100,15 +97,55 @@ public class ComboController {
                     .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
                     .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
         }
-
-
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("createdAt", "orderBy", "desc")));
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
 
-        Page<Combo> combos = comboService.foodsWithPaginate(specification, page, limit);
+        Page<Combo> combos = comboService.combosWithPaginate(specification, page, limit);
         return new ResponseEntity<>(new ApiResponsePage<>(
                 HttpStatus.OK.value(), "OK", combos.stream().map(x -> new OnlyComboResponse(x)).collect(Collectors.toList()),
+                new RESTPagination(page, limit, combos.getTotalPages(), combos.getTotalElements())), HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<?> getListByCategory(
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "to", required = false) String to,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "6", required = false) int limit,
+            @PathVariable("id") Long id) {
+        List<Combo> comboList = comboService.findAllByCategory(id);
+        Specification specification = Specification.where(null);
+        if (search != null && search.length() > 0) {
+            specification = specification
+                    .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
+                    .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
+        }
+
+        Long[] comboIds = comboList.stream().map(Combo::getId).toArray(Long[]::new);
+        if (comboIds.length == 0) {
+            return new ResponseEntity<>(new ApiResponsePage<>(
+                    HttpStatus.OK.value(), "OK", new Long[]{},
+                    new RESTPagination(page, limit, 0, 0)), HttpStatus.OK);
+        }
+
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("id", "in", comboList )));
+
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("createdAt", "orderBy", "desc")));
+
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
+
+        Page<Combo> combos = comboService.combosWithPaginate(specification, page, limit);
+        return new ResponseEntity<>(new ApiResponsePage<>(
+                HttpStatus.OK.value(), "OK", combos.stream()
+                .map(x -> new OnlyComboResponse(x))
+                .collect(Collectors.toList()),
                 new RESTPagination(page, limit, combos.getTotalPages(), combos.getTotalElements())), HttpStatus.OK);
     }
 }

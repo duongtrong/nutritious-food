@@ -100,6 +100,8 @@ public class CategoryController {
                     .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
                     .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
         }
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("createdAt", "orderBy", "desc")));
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));

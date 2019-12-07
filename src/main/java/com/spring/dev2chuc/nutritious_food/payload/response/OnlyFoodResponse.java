@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
+import com.spring.dev2chuc.nutritious_food.helper.DateTimeHelper;
 import com.spring.dev2chuc.nutritious_food.model.Food;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +32,8 @@ public class OnlyFoodResponse {
     private float calorie;
     private float weight;
     private int status;
+    private String createdAt;
+    private String updatedAt;
     private Set<CategoryDTO> categories = new HashSet<>();
     private Set<OnlyComboResponse> combos = new HashSet<>();
 
@@ -71,6 +74,8 @@ public class OnlyFoodResponse {
         this.calorie = food.getCalorie();
         this.weight = food.getWeight();
         this.status = food.getStatus();
+        this.createdAt = DateTimeHelper.formatDateFromLong(food.getCreatedAt());
+        this.updatedAt = DateTimeHelper.formatDateFromLong(food.getUpdatedAt());
         this.categories = new HashSet<>();
         this.combos = new HashSet<>();
     }

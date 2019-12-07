@@ -1,5 +1,6 @@
 package com.spring.dev2chuc.nutritious_food.payload.response;
 
+import com.spring.dev2chuc.nutritious_food.helper.DateTimeHelper;
 import com.spring.dev2chuc.nutritious_food.model.Schedule;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,8 @@ public class ScheduleDTO {
     private String description;
     private float price;
     private String image;
+    private String createdAt;
+    private String updatedAt;
     private Integer status;
     private List<ScheduleComboDTO> scheduleCombo;
     private List<CategoryDTO> categories;
@@ -25,6 +28,8 @@ public class ScheduleDTO {
         this.description = schedule.getDescription();
         this.price = schedule.getPrice();
         this.image = schedule.getImage();
+        this.createdAt = DateTimeHelper.formatDateFromLong(schedule.getCreatedAt());
+        this.updatedAt = DateTimeHelper.formatDateFromLong(schedule.getUpdatedAt());
         this.status = schedule.getStatus();
         if (hasScheduleCombo)
             this.scheduleCombo = schedule
