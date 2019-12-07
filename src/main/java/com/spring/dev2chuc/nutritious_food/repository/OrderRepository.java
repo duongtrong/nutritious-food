@@ -10,11 +10,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
     List<Order> findAllByAddressIn(List<Address> addresses);
+
+    List<Order> findAllByCreatedAtBetween(Instant form, Instant to);
+
     Order findByCode(String code);
 
     @Transactional
