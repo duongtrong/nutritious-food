@@ -8,12 +8,14 @@ import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -43,8 +45,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.setPrice(scheduleRequest.getPrice());
         schedule.setImage(scheduleRequest.getImage());
         schedule.setStatus(Status.ACTIVE.getValue());
-
-        List<Category> categories = categoryService.findAllByIdIn(scheduleRequest.getCategoryIds());
+        List<Long> categoryIds = scheduleRequest.getCategoryIds();
+        if (categoryIds == null)
+            categoryIds = new ArrayList<>();
+        List<Category> categories = categoryService.findAllByIdIn(categoryIds);
         Set<Category> categorySet = new HashSet<>(categories);
         schedule.setCategories(categorySet);
 
@@ -78,12 +82,31 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<Schedule> suggest(UserProfile userProfile) {
+        System.out.println(userProfile.getId());
         Set<Category> categories = userProfile.getCategories();
+        System.out.println(userProfile.getCategories().size());
         List<Category> categoryList = new ArrayList<>(categories);
-        if (!categoryList.isEmpty()) {
+        System.out.println(categoryList.size());
+        if (categoryList.isEmpty()) {
             categoryList = categoryService.findAll();
         }
+        List<Schedule> scheduleList = scheduleRepository
+                .findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categoryList)
+                .stream()
+                .limit(8)
+                .collect(Collectors.toList());
+        Set<Schedule> scheduleSet = new HashSet<>(scheduleList);
+        List<Schedule> schedules = new ArrayList<>(scheduleSet);
+        if (scheduleSet.size() <= 8) {
+            int numberAdd = 8 - scheduleSet.size();
+            List<Long> scheduleIds = scheduleSet.stream().map(Schedule::getId).collect(Collectors.toList());
+            List<Schedule> scheduleOtherSet = scheduleRepository.findAllByIdNotInAndStatusIs(
+                    scheduleIds,
+                    Status.ACTIVE.getValue()
+            ).stream().limit(numberAdd).collect(Collectors.toList());
+            schedules.addAll(scheduleOtherSet);
 
-        return scheduleRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categoryList);
+        }
+        return schedules;
     }
 }

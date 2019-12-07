@@ -174,10 +174,30 @@ public class FoodServiceImpl implements FoodService {
     public List<Food> suggest(UserProfile userProfile) {
         Set<Category> categories = userProfile.getCategories();
         List<Category> categoryList = new ArrayList<>(categories);
-        if (!categoryList.isEmpty()) {
+        if (categoryList.isEmpty()) {
             categoryList = categoryService.findAll();
         }
-        return foodRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categoryList);
+        List<Food> foodList = foodRepository.
+                findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categoryList)
+                .stream()
+                .limit(8)
+                .collect(Collectors.toList());
+
+        Set<Food> foodSet = new HashSet<>(foodList);
+        List<Food> foods = new ArrayList<>(foodSet);
+        System.out.println(foods.size());
+        if (foods.size() <= 8) {
+            int numberAdd = 8 - foods.size();
+            System.out.println(numberAdd);
+            List<Long> foodIds = foods.stream().map(Food::getId).collect(Collectors.toList());
+            System.out.println(foodIds);
+            List<Food> comboOtherList = foodRepository.findAllByIdNotInAndStatusIs(
+                    foodIds,
+                    Status.ACTIVE.getValue()
+            ).stream().limit(numberAdd).collect(Collectors.toList());
+            foods.addAll(comboOtherList);
+        }
+        return foods;
     }
 
     @Override
