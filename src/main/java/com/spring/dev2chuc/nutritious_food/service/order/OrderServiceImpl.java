@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -123,6 +124,19 @@ public class OrderServiceImpl implements OrderService {
         orderSave.setTotalPrice(totalPrice);
         orderSave.setOrderDetails(orderDetails);
         return orderRepository.save(orderSave);
+    }
+
+    @Override
+    public Order updateStatusOrder(Long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            if (order.getStatus() < 5)
+                order.setStatus(order.getStatus() + 1);
+            orderRepository.save(order);
+            return order;
+        }
+        return null;
     }
 
     @Override

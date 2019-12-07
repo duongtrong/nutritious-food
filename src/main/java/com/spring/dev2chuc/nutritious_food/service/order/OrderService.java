@@ -16,7 +16,11 @@ public interface OrderService {
 
     Order saveOrderByUser(OrderRequest orderRequest);
 
+    Order updateStatusOrder(Long id);
+
     OrderDTO getById(Long id);
 
     List<Order> getAllByCreatedAtBetween(String from, String to);
+
+
 }

@@ -156,5 +156,22 @@ public class OrderController {
         }
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateOrder(@PathVariable("id") Long id) {
+        User user = userService.getUserAuth();
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
+        } else {
+            if (userService.checkRoleByUser(user, RoleName.ROLE_ADMIN)) {
+                Order order = orderService.updateStatusOrder(id);
+                if (order == null) {
+                    return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Order not found"), HttpStatus.NOT_FOUND);
+                }
+                return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.OK.value(), "OK", new OrderDTO(order, true)), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.UNAUTHORIZED.value(), "Request has reject"), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 
 }
