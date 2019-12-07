@@ -211,4 +211,9 @@ public class FoodServiceImpl implements FoodService {
         }
         return foodRepository.findAllByStatusAndCategoriesIn(Status.ACTIVE.getValue(), categories);
     }
+
+    @Override
+    public List<Food> searchByNameAndDescription(String search) {
+        return foodRepository.queryAllByNameContainingAndDescriptionContaining(search, search);
+    }
 }
