@@ -110,11 +110,36 @@ public class ComboServiceImpl implements ComboService {
     public List<Combo> suggest(UserProfile userProfile) {
         Set<Category> categories = userProfile.getCategories();
         List<Category> categoryList = new ArrayList<>(categories);
-        if (!categoryList.isEmpty()) {
+        if (categoryList.isEmpty()) {
             categoryList = categoryService.findAll();
         }
-        float calories = userProfile.getCaloriesConsumed();
-        return comboRepository.findAllByStatusAndCategoriesInAndCalorieBetween(Status.ACTIVE.getValue(), categoryList, calories - 100, calories + 100);
+        float calories = (float) userProfile.getCaloriesConsumed() / 3;
+        List<Combo> comboList = comboRepository
+                .findAllByStatusAndCategoriesInAndCalorieBetween(
+                        Status.ACTIVE.getValue(),
+                        categoryList,
+                        calories - 100,
+                        calories + 100)
+                .stream()
+                .limit(8)
+                .collect(Collectors.toList());
+        Set<Combo> comboSet = new HashSet<>(comboList);
+        List<Combo> combos = new ArrayList<>(comboSet);
+        System.out.println(combos.size());
+        if (combos.size() <= 8) {
+            int numberAdd = 8 - combos.size();
+            System.out.println(numberAdd);
+            List<Long> comboIds = combos.stream().map(Combo::getId).collect(Collectors.toList());
+            System.out.println(comboIds);
+            List<Combo> comboOtherList = comboRepository.findAllByIdNotInAndStatusIsAndCalorieBetween(
+                    comboIds,
+                    Status.ACTIVE.getValue(),
+                    calories - 100,
+                    calories + 100
+            ).stream().limit(numberAdd).collect(Collectors.toList());
+            combos.addAll(comboOtherList);
+        }
+        return combos;
     }
 
     @Override

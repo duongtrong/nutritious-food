@@ -25,7 +25,11 @@ public interface FoodRepository extends JpaRepository<Food, Long>, JpaSpecificat
 
     Food findByStatusAndId(Integer status, Long id);
 
-    List<Food> findAllByStatus(Integer Status);
+    List<Food> findAllByStatus(Integer status);
+
+    List<Food> findAllByIdNotInAndStatusIs(List<Long> ids, Integer status);
+
+
 
     @Transactional
     @Modifying
