@@ -8,6 +8,7 @@ import com.spring.dev2chuc.nutritious_food.payload.ScheduleRequest;
 import com.spring.dev2chuc.nutritious_food.repository.ScheduleRepository;
 import com.spring.dev2chuc.nutritious_food.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -108,5 +109,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         }
         return schedules;
+    }
+
+    @Override
+    public Page<Schedule> schedulesWithPaginate(Specification specification, int page, int limit) {
+        return scheduleRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 }

@@ -143,6 +143,11 @@ public class ComboServiceImpl implements ComboService {
     }
 
     @Override
+    public List<Combo> findAllByCategory(Long categoryId) {
+        return null;
+    }
+
+    @Override
     public Combo merge(Combo combo, ComboRequest comboRequest) {
         combo.setName(comboRequest.getName());
         combo.setDescription(comboRequest.getDescription());
@@ -194,8 +199,9 @@ public class ComboServiceImpl implements ComboService {
         return comboRepository.findByStatusAndId(status, id);
     }
 
+
     @Override
-    public Page<Combo> foodsWithPaginate(Specification specification, int page, int limit) {
+    public Page<Combo> combosWithPaginate(Specification specification, int page, int limit) {
         return comboRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 

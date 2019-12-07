@@ -22,11 +22,13 @@ public interface ComboService {
 
     Combo findByStatusAndId(Integer status, Long id);
 
-    Page<Combo> foodsWithPaginate(Specification specification, int page, int limit);
+    Page<Combo> combosWithPaginate(Specification specification, int page, int limit);
 
     List<Combo> findAllByIdIn(List<Long> combos);
 
     void updateByListFood(Combo combo);
 
     List<Combo> suggest(UserProfile userProfile);
+
+    List<Combo> findAllByCategory(Long categoryId);
 }

@@ -86,6 +86,8 @@ public class FoodController {
                     .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
                     .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
         }
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("createdAt", "orderBy", "desc")));
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
@@ -123,6 +125,9 @@ public class FoodController {
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("id", "in", foodIds )));
+
+        specification = specification
+                .and(new SpecificationAll(new SearchCriteria("createdAt", "orderBy", "desc")));
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("status", ":", Status.ACTIVE.getValue())));
