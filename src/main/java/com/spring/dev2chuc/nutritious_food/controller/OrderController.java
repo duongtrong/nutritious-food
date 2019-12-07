@@ -1,6 +1,7 @@
 package com.spring.dev2chuc.nutritious_food.controller;
 
 import com.spring.dev2chuc.nutritious_food.model.*;
+import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.service.address.AddressService;
@@ -18,7 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,7 +58,7 @@ public class OrderController {
     @GetMapping()
     public ResponseEntity<?> getListByUser(
             @RequestParam(value = "search", required = false) String search,
-            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "12", required = false) int limit,
@@ -68,7 +74,8 @@ public class OrderController {
         if (search != null && search.length() > 0) {
             specification = specification
                     .and(new SpecificationAll(new SearchCriteria("name", ":", search)))
-                    .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
+                    .or(new SpecificationAll(new SearchCriteria("description", ":", search)))
+                    .or(new SpecificationAll(new SearchCriteria("code", ":", search)));
         }
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("createdAt", "orderBy", "desc")));
@@ -87,7 +94,6 @@ public class OrderController {
             specification = specification
                     .and(new SpecificationAll(new SearchCriteria("id", "in", orderIds )));
         }
-
         if (status != null) {
             specification = specification
                     .and(new SpecificationAll(new SearchCriteria("status", ":", status )));
@@ -97,6 +103,12 @@ public class OrderController {
                     .and(new SpecificationAll(new SearchCriteria("type", ":", type )));
         }
 
+        if (from != null && to != null) {
+            List<Order> orders = orderService.getAllByCreatedAtBetween(from, to);
+            Long[] foodIds = orders.stream().map(Order::getId).toArray(Long[]::new);
+            specification = specification
+                    .and(new SpecificationAll(new SearchCriteria("id", "in", foodIds)));
+        }
 
         Page<Order> orderPage  = orderService.getAllByUserWithPaginate(specification, page, limit);
         return new ResponseEntity<>(new ApiResponsePage<>(

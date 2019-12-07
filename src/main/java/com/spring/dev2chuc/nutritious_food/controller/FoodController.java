@@ -75,7 +75,7 @@ public class FoodController {
     @GetMapping("/list")
     public ResponseEntity<?> getListPage(
             @RequestParam(value = "search", required = false) String search,
-            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "12", required = false) int limit) {
@@ -101,7 +101,7 @@ public class FoodController {
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getListByCategory(
             @RequestParam(value = "search", required = false) String search,
-            @RequestParam(value = "form", required = false) String form,
+            @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "to", required = false) String to,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "12", required = false) int limit,
