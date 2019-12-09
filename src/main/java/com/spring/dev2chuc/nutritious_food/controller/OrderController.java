@@ -5,6 +5,7 @@ import com.spring.dev2chuc.nutritious_food.model.audit.DateAudit;
 import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.*;
 import com.spring.dev2chuc.nutritious_food.service.address.AddressService;
+import com.spring.dev2chuc.nutritious_food.service.mail.MailService;
 import com.spring.dev2chuc.nutritious_food.service.order.OrderService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import com.spring.dev2chuc.nutritious_food.service.vnpay.VnPayService;
@@ -41,6 +42,9 @@ public class OrderController {
 
     @Autowired
     AddressService addressService;
+
+    @Autowired
+    MailService mailService;
 
 
 
@@ -131,6 +135,7 @@ public class OrderController {
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
+            mailService.sendMail(user.getEmail(), "Thanh toán thành công", "");
             Order order = orderService.saveOrderByUser(orderRequest);
 
             if (order == null)
