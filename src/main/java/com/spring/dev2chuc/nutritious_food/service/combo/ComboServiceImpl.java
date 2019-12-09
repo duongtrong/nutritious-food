@@ -110,6 +110,7 @@ public class ComboServiceImpl implements ComboService {
     public List<Combo> suggest(UserProfile userProfile) {
         Set<Category> categories = userProfile.getCategories();
         List<Category> categoryList = new ArrayList<>(categories);
+        System.out.println(categoryList.size());
         if (categoryList.isEmpty()) {
             categoryList = categoryService.findAll();
         }
@@ -128,9 +129,7 @@ public class ComboServiceImpl implements ComboService {
         System.out.println(combos.size());
         if (combos.size() <= 8) {
             int numberAdd = 8 - combos.size();
-            System.out.println(numberAdd);
             List<Long> comboIds = combos.stream().map(Combo::getId).collect(Collectors.toList());
-            System.out.println(comboIds);
             List<Combo> comboOtherList = comboRepository.findAllByIdNotInAndStatusIsAndCalorieBetween(
                     comboIds,
                     Status.ACTIVE.getValue(),
@@ -138,6 +137,7 @@ public class ComboServiceImpl implements ComboService {
                     calories + 100
             ).stream().limit(numberAdd).collect(Collectors.toList());
             combos.addAll(comboOtherList);
+            System.out.println(combos.size());
         }
         return combos;
     }
