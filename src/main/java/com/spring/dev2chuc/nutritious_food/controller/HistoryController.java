@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,17 +102,35 @@ public class HistoryController {
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
-            Food food = foodService.findById(historyRequest.getFoodId());
-            if (food == null) {
+            List<History> histories = new ArrayList<>();
+            for (Long foodId : historyRequest.getFoodIds()) {
+                Food food = foodService.findById(foodId);
+                if (food == null) {
+                    return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(),
+                            "Food not found"),
+                            HttpStatus.NOT_FOUND
+                    );
+                }
+                History history = historyService.store(historyRequest, user, food);
+                if (history != null) {
+                    histories.add(history);
+                } else {
+                    return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(),
+                            "History store error"),
+                            HttpStatus.NOT_FOUND
+                    );
+                }
+            }
+
+            if (histories == null) {
                 return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.NOT_FOUND.value(),
-                        "Food not found"),
+                        "Store history success"),
                         HttpStatus.NOT_FOUND
                 );
             }
-            History history = historyService.store(historyRequest, user, food);
             return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(),
                     "Store history success",
-                    new HistoryDTO(history, true, true)),
+                    histories.stream().map(x -> new HistoryDTO(x, true, true)).collect(Collectors.toList())),
                     HttpStatus.CREATED
             );
         }
