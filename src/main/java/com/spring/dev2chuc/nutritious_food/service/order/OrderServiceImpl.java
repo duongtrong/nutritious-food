@@ -8,6 +8,7 @@ import com.spring.dev2chuc.nutritious_food.payload.OrderRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDTO;
 import com.spring.dev2chuc.nutritious_food.payload.response.OrderDetailDTO;
 import com.spring.dev2chuc.nutritious_food.repository.*;
+import com.spring.dev2chuc.nutritious_food.service.history.HistoryService;
 import com.spring.dev2chuc.nutritious_food.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,6 +52,9 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
 
     @Autowired
+    HistoryRepository historyRepository;
+
+    @Autowired
     OrderDetailRepository orderDetailRepository;
 
     @Override
@@ -92,7 +96,8 @@ public class OrderServiceImpl implements OrderService {
                         orderDetailRequest.getQuantity(),
                         food.getPrice()
                 );
-
+                History history = new History(food.getCalorie() * orderDetailRequest.getQuantity(), "Đã đặt hàng food", 2, address.getUser(), food);
+                historyRepository.save(history);
             } else if (orderDetailRequest.getComboId() != null) {
                 Combo combo = comboRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderDetailRequest.getComboId());
                 if (combo == null) return null;
@@ -102,6 +107,10 @@ public class OrderServiceImpl implements OrderService {
                         orderDetailRequest.getQuantity(),
                         combo.getPrice()
                 );
+                for (Food food : combo.getFoods()) {
+                    History history = new History(food.getCalorie() * orderDetailRequest.getQuantity(), "Đã đặt hàng combo", 2, address.getUser(), food);
+                    historyRepository.save(history);
+                }
             } else if (orderDetailRequest.getScheduleId() != null) {
                 Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderDetailRequest.getScheduleId());
                 if (schedule == null) return null;
