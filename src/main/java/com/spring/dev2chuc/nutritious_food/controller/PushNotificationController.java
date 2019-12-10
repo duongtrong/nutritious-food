@@ -82,7 +82,7 @@ public class PushNotificationController {
                     new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Device not found"), HttpStatus.NOT_FOUND);
         }
         for (Device device : devices) {
-            cronJobService.JsonObject(device, pushNotificationRequest.getBody(), pushNotificationRequest.getTitle());
+            cronJobService.JsonObject(device, pushNotificationRequest.getBody(), pushNotificationRequest.getTitle(), false);
         }
         return new ResponseEntity<>(
                 new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
@@ -98,7 +98,22 @@ public class PushNotificationController {
         }
         String[] strings = userService.generateSuggest(user);
         for (Device device : devices) {
-            cronJobService.JsonObject(device, strings[1], strings[0]);
+            cronJobService.JsonObject(device, strings[1], strings[0], false);
+        }
+        return new ResponseEntity<>(
+                new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}/question")
+    public ResponseEntity<?> sendToUserQuestion(@PathVariable("id") Long id) throws JSONException {
+        User user =  userService.getById(id);
+        List<Device> devices = deviceService.getByUser(user);
+        if (devices == null || devices.size() == 0) {
+            return new ResponseEntity<>(
+                    new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Device not found"), HttpStatus.NOT_FOUND);
+        }
+        for (Device device : devices) {
+            cronJobService.JsonObject(device, "Hãy cho mình biết bạn đã ăn gì hôm này nào ^^", "Bạn đã ăn gì", true);
         }
         return new ResponseEntity<>(
                 new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
