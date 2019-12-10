@@ -18,10 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
 
     @Autowired
-    HistoryRepository historyRepository;
+    HistoryService historyService;
 
     @Autowired
     OrderDetailRepository orderDetailRepository;
@@ -96,8 +93,13 @@ public class OrderServiceImpl implements OrderService {
                         orderDetailRequest.getQuantity(),
                         food.getPrice()
                 );
-                History history = new History(food.getCalorie() * orderDetailRequest.getQuantity(), "Đã đặt hàng food", 2, address.getUser(), food);
-                historyRepository.save(history);
+                History history = new History(food.getCalorie() * orderDetailRequest.getQuantity(),
+                        "Đã đặt hàng food",
+                        generateTypeNow(),
+                        address.getUser(),
+                        food
+                );
+                historyService.save(history);
             } else if (orderDetailRequest.getComboId() != null) {
                 Combo combo = comboRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderDetailRequest.getComboId());
                 if (combo == null) return null;
@@ -108,8 +110,13 @@ public class OrderServiceImpl implements OrderService {
                         combo.getPrice()
                 );
                 for (Food food : combo.getFoods()) {
-                    History history = new History(food.getCalorie() * orderDetailRequest.getQuantity(), "Đã đặt hàng combo", 2, address.getUser(), food);
-                    historyRepository.save(history);
+                    History history = new History(food.getCalorie() * orderDetailRequest.getQuantity(),
+                            "Đã đặt hàng combo",
+                            generateTypeNow(),
+                            address.getUser(),
+                            food
+                    );
+                    historyService.save(history);
                 }
             } else if (orderDetailRequest.getScheduleId() != null) {
                 Schedule schedule = scheduleRepository.findByStatusAndId(Status.ACTIVE.getValue(), orderDetailRequest.getScheduleId());
@@ -133,6 +140,19 @@ public class OrderServiceImpl implements OrderService {
         orderSave.setTotalPrice(totalPrice);
         orderSave.setOrderDetails(orderDetails);
         return orderRepository.save(orderSave);
+    }
+
+    private Integer generateTypeNow() {
+        Calendar rightNow = Calendar.getInstance();
+        int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+        System.out.println(hour);
+        if (hour >= 5 && hour < 11) {
+            return 1;
+        } else if (hour >= 16 || hour < 5) {
+            return 3;
+        } else {
+            return 2;
+        }
     }
 
     @Override

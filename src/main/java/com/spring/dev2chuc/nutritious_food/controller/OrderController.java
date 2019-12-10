@@ -135,9 +135,10 @@ public class OrderController {
         if (user == null) {
             return new ResponseEntity<>(new ApiResponseError(HttpStatus.NOT_FOUND.value(), "User not found"), HttpStatus.NOT_FOUND);
         } else {
-            mailService.sendMail(user.getEmail(), "Thanh toán thành công", "");
-            Order order = orderService.saveOrderByUser(orderRequest);
 
+            Order order = orderService.saveOrderByUser(orderRequest);
+            String contentMailOrder = mailService.generateMailOrder(order);
+            mailService.sendMail(user.getEmail(), "Đặt hàng thành công", contentMailOrder);
             if (order == null)
                 return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.BAD_REQUEST.value(), "Item not match"), HttpStatus.BAD_REQUEST);
             String urlVnPay = "";

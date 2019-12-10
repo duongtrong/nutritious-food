@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/address")
 public class AddressController {
+
     @Autowired
     UserService userService;
 

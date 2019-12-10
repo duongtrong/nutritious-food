@@ -21,6 +21,11 @@ public class DeviceServiceImpl implements  DeviceService{
     }
 
     @Override
+    public List<Device> getAll() {
+        return devicesRepository.findAll();
+    }
+
+    @Override
     public Device store(User user, DeviceRequest deviceRequest) {
         Device device = new Device(deviceRequest.getId(), user);
         return devicesRepository.save(device);

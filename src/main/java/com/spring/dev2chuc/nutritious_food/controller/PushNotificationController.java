@@ -45,7 +45,7 @@ public class PushNotificationController {
             List<Device> devices = deviceService.getByUser(user);
             for (Device device : devices) {
                 JSONObject body = new JSONObject();
-                body.put("to", device);
+                body.put("to", "fd6rLKcEGVQ:APA91bEDZqtHtOsEgpWUBCIztOqQ13gpK8grnvqt7M6U_NZPurpqtYiE5UZnCfvwScqxclrT6pJk365ORxNlwkfq0zwVxn7Wy2qP6y5rszLJ0fQSd8SB4WBIkZxVB9-2JhusdSTCisEp");
                 body.put("collapse_key", "type_a");
 
                 JSONObject notification = new JSONObject();
@@ -83,6 +83,22 @@ public class PushNotificationController {
         }
         for (Device device : devices) {
             cronJobService.JsonObject(device, pushNotificationRequest.getBody(), pushNotificationRequest.getTitle());
+        }
+        return new ResponseEntity<>(
+                new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}/auto")
+    public ResponseEntity<?> sendToUserAuto(@PathVariable("id") Long id) throws JSONException {
+        User user =  userService.getById(id);
+        List<Device> devices = deviceService.getByUser(user);
+        if (devices == null || devices.size() == 0) {
+            return new ResponseEntity<>(
+                    new ApiResponseError(HttpStatus.NOT_FOUND.value(), "Device not found"), HttpStatus.NOT_FOUND);
+        }
+        String[] strings = userService.generateSuggest(user);
+        for (Device device : devices) {
+            cronJobService.JsonObject(device, strings[1], strings[0]);
         }
         return new ResponseEntity<>(
                 new ApiResponseError(HttpStatus.OK.value(), "OK"), HttpStatus.OK);

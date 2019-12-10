@@ -2,10 +2,12 @@ package com.spring.dev2chuc.nutritious_food.service.firebase;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,6 +33,8 @@ public class PushNotificationServiceImpl {
         interceptors.add(new FCMSender("Authorization", "key=" + FIREBASE_SERVER_KEY));
         interceptors.add(new FCMSender("Content-Type", "application/json"));
         restTemplate.setInterceptors(interceptors);
+        restTemplate.getMessageConverters()
+                .add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         String firebaseResponse = restTemplate.postForObject(FIREBASE_API_URL, entity, String.class);
         return CompletableFuture.completedFuture(firebaseResponse);
     }

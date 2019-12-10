@@ -19,6 +19,8 @@ public interface HistoryRepository extends JpaRepository<History, Long>, JpaSpec
 
     List<History> findAllByCreatedAtBetween(Instant fromInstant, Instant toInstant);
 
+    List<History> findAllByUserAndCreatedAtBetween(User user, Instant fromInstant, Instant toInstant);
+
     @Transactional
     @Modifying
     @Query(value = "alter  table histories AUTO_INCREMENT = 1 ", nativeQuery = true)

@@ -19,5 +19,4 @@ public interface UserProfileService {
     UserProfile updateCategory(UserProfile userProfile);
 
     UserProfile getLatestByUser(User user);
-
 }
