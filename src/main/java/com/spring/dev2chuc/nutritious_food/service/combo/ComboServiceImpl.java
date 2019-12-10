@@ -144,7 +144,8 @@ public class ComboServiceImpl implements ComboService {
 
     @Override
     public List<Combo> findAllByCategory(Long categoryId) {
-        return null;
+        Category category = categoryService.findById(categoryId);
+        return comboRepository.findAllByCategoriesAndStatus(category, Status.ACTIVE.getValue());
     }
 
     @Override

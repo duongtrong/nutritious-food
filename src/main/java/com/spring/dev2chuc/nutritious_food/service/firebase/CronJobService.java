@@ -29,7 +29,7 @@ public class CronJobService {
     @Autowired
     PushNotificationServiceImpl pushNotificationService;
 
-    private void JsonObject(Device device, String body, String title) throws JSONException {
+    public void JsonObject(Device device, String body, String title) throws JSONException {
         JSONObject bodies = new JSONObject();
         bodies.put("to", device);
         bodies.put("collapse_key", "type_a");
