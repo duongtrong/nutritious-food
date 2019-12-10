@@ -31,7 +31,7 @@ public class CronJobService {
     @Autowired
     PushNotificationServiceImpl pushNotificationService;
 
-    public String JsonObject(Device device, String body, String title) throws JSONException {
+    public String JsonObject(Device device, String body, String title, Boolean question) throws JSONException {
         JSONObject data = new JSONObject();
         data.put("to", device.getId());
         data.put("collapse_key", "type_a");
@@ -41,7 +41,11 @@ public class CronJobService {
         notification.put("title", title);
 
         data.put("notification", notification);
-
+        if (question) {
+            JSONObject type = new JSONObject();
+            type.put("type", "question");
+            data.put("data", type);
+        }
         HttpEntity<String> request = new HttpEntity<>(data.toString());
         CompletableFuture<String> pushNotification = pushNotificationService.send(request);
         CompletableFuture.allOf(pushNotification).join();
@@ -62,7 +66,7 @@ public class CronJobService {
             List<Device> devices = deviceService.getByUser(user);
             for (Device device : devices) {
                 try {
-                    JsonObject(device, body, title);
+                    JsonObject(device, body, title, false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
