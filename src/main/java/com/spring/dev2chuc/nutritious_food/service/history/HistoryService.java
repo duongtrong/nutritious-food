@@ -20,4 +20,6 @@ public interface HistoryService {
     List<History> getAllByCreatedAtBetween(String from, String to);
 
     List<History> getAllByUser(User user);
+
+    History save(History history);
 }

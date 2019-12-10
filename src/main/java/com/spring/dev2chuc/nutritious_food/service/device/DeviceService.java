@@ -9,7 +9,11 @@ import java.util.List;
 public interface DeviceService {
     List<Device> getByUser(User user);
 
+    List<Device> getAll();
+
     Device store(User user, DeviceRequest deviceRequest);
 
     Device getId(String id);
+
+
 }

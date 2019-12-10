@@ -25,7 +25,7 @@ public class VnPayServiceIml implements VnPayService {
     public String generateURLPayment(HttpServletRequest req, Order order) {
         String vnp_Version = "2.0.0";
         String vnp_Command = "pay";
-        String vnp_OrderInfo = "vnp_OrderInfo";
+        String vnp_OrderInfo = order.getAddress().getUser().getEmail();
         String orderType = String.valueOf(order.getType());
         String vnp_TxnRef = order.getCode();
         String vnp_IpAddr = VnPayConfig.getIpAddress(req);

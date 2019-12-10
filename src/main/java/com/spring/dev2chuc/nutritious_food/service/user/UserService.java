@@ -5,6 +5,7 @@ import com.spring.dev2chuc.nutritious_food.model.User;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,10 @@ public interface UserService {
     User getById(Long id);
 
     List<User> findAll();
+
+    String[] generateSuggest(User user);
+
+
 
 //    Observable<Integer> changePassword(PasswordEncoder passwordEncoder, String email, String password, String oldPassword);
 //

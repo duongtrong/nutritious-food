@@ -1,13 +1,13 @@
 package com.spring.dev2chuc.nutritious_food.service.user;
 
-import com.spring.dev2chuc.nutritious_food.model.Role;
-import com.spring.dev2chuc.nutritious_food.model.RoleName;
-import com.spring.dev2chuc.nutritious_food.model.Status;
-import com.spring.dev2chuc.nutritious_food.model.User;
+import com.spring.dev2chuc.nutritious_food.model.*;
 import com.spring.dev2chuc.nutritious_food.payload.SignUpRequest;
 import com.spring.dev2chuc.nutritious_food.payload.response.OnlyUserResponse;
+import com.spring.dev2chuc.nutritious_food.repository.HistoryRepository;
 import com.spring.dev2chuc.nutritious_food.repository.RoleRepository;
 import com.spring.dev2chuc.nutritious_food.repository.UserRepository;
+import com.spring.dev2chuc.nutritious_food.service.userprofile.UserProfileService;
+import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,10 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.time.temporal.TemporalUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +27,13 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    HistoryRepository historyRepository;
+
+    @Autowired
+    UserProfileService userProfileService;
+
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -130,6 +136,47 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAllByStatusAndRoles(Status.ACTIVE.getValue(), roleRepository.findByName(RoleName.ROLE_USER));
+    }
+
+    @Override
+    public String[] generateSuggest(User user) {
+        Instant now = Instant.now();
+        Instant yesterday = Instant.now().minusSeconds(259200);
+        List<History> histories = historyRepository.findAllByUserAndCreatedAtBetween(user, now, yesterday);
+        float carbonhydrates = 0;
+        float protein = 0;
+        float lipit = 0;
+        for (History history : histories) {
+            carbonhydrates += history.getFood().getCarbonhydrates();
+            protein += history.getFood().getProtein();
+            lipit += history.getFood().getLipid();
+        }
+        UserProfile userProfile = userProfileService.getLatestByUser(user);
+        if (userProfile == null) return new String[]{
+                "Hãy cập nhật profile",
+                "Cập nhật profile của bạn để sử dụng tối đa tính năng của chúng tôi"
+        };
+        float totalCalories = userProfile.getCaloriesConsumed() * 3;
+        int ran = (int)(Math.random() * (100)) % 3;
+        if (lipit > totalCalories*15/100) {
+            return new String[]{"Bạn đã ăn quá ít chất béo", "Hãy cùng chúng tôi bổ sung để có 1 thân hình đầy đặn"};
+        }
+        if (lipit > totalCalories*30/100) {
+            return new String[]{ "Bạn đã ăn quá nhiều chất béo", "Hãy cùng chúng tôi bổ sung để có 1 thân hình đầy đặn"};
+        }
+        if (protein < totalCalories*10/100) {
+            return new String[]{ "Bạn đã ăn quá ít chất đạm", "Hãy cùng chúng tôi bổ sung để có 1 thân hình đầy đặn"};
+        }
+        if (protein > totalCalories*30/100) {
+            return new String[]{ "Bạn đã ăn quá nhiều chất đạm", "Hãy cùng chúng tôi bổ sung để có 1 thân hình đầy đặn"};
+        }
+        if (carbonhydrates < totalCalories*50/100) {
+            return new String[]{ "Bạn đã ăn quá ít tinh bột", "Hãy cùng chúng tôi bổ sung để có 1 thân hình đầy đặn"};
+        }
+        if (carbonhydrates > totalCalories*70/100) {
+            return new String[]{ "Bạn đã ăn quá nhiều tinh bột", "Hãy cùng chúng tôi bổ sung để có 1 thân hình đầy đặn"};
+        }
+        return null;
     }
 
 //    @Override

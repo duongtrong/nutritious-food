@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,25 +31,28 @@ public class CronJobService {
     @Autowired
     PushNotificationServiceImpl pushNotificationService;
 
-    public void JsonObject(Device device, String body, String title) throws JSONException {
-        JSONObject bodies = new JSONObject();
-        bodies.put("to", device);
-        bodies.put("collapse_key", "type_a");
+    public String JsonObject(Device device, String body, String title) throws JSONException {
+        JSONObject data = new JSONObject();
+        data.put("to", device.getId());
+        data.put("collapse_key", "type_a");
 
         JSONObject notification = new JSONObject();
-        notification.put("body", message.get(body));
-        notification.put("title", message.get(title));
+        notification.put("body", body);
+        notification.put("title", title);
 
-        bodies.put("notification", notification);
+        data.put("notification", notification);
 
-        HttpEntity<String> request = new HttpEntity<>(body);
+        HttpEntity<String> request = new HttpEntity<>(data.toString());
         CompletableFuture<String> pushNotification = pushNotificationService.send(request);
         CompletableFuture.allOf(pushNotification).join();
 
         try {
             String firebaseResponse = pushNotification.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return firebaseResponse;
+        } catch (InterruptedException e) {
+            return e.getMessage().toString();
+        } catch (ExecutionException e) {
+            return e.getMessage().toString();
         }
     }
 

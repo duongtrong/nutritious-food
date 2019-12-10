@@ -53,5 +53,10 @@ public class HistoryServiceImpl implements HistoryService {
         return historyRepository.findAllByUser(user);
     }
 
+    @Override
+    public History save(History history) {
+        return historyRepository.save(history);
+    }
+
 
 }
