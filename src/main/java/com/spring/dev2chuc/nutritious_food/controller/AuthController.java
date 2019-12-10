@@ -53,13 +53,13 @@ public class AuthController {
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
                         new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
-                                "Password not matches"),
+                                "Password không đúng"),
                         HttpStatus.UNAUTHORIZED);
             }
         } else {
             return new ResponseEntity<>(
                     new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
-                            "Account not found"),
+                            "Không tìm thấy tài khoản"),
                     HttpStatus.UNAUTHORIZED);
         }
 
@@ -73,64 +73,64 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
 
-        return new ResponseEntity<>(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Login Success", jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Đăng nhập thành công", jwt), HttpStatus.OK);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (signUpRequest.getName() == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your name."),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Hãy nhập tên của bạn"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (signUpRequest.getUsername() == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your username"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Hãy nhập tên đăng nhập của bạn"),
                     HttpStatus.BAD_REQUEST);
         } else if (signUpRequest.getUsername().length() < 4) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is too short"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Tên đăng nhập phải nhiều hơn 4 ký tự"),
                     HttpStatus.BAD_REQUEST);
         } else if (signUpRequest.getUsername().length() > 20) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is too long"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Tên đăng nhập phải ít hơn 20 ký tự"),
                     HttpStatus.BAD_REQUEST);
         } else if (userService.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Tên đăng nhập đã tồn tại"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (signUpRequest.getPhone() == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your phone."),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Hãy nhập số điện thoại"),
                     HttpStatus.BAD_REQUEST);
         } else if (signUpRequest.getPhone().length() < 10) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number is in the wrong format"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Số điện thoại không đúng định dạng"),
                     HttpStatus.BAD_REQUEST);
         } else if (userService.existsByPhone(signUpRequest.getPhone())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone number already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Số điện thoại đã được sử dụng"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (signUpRequest.getEmail() == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your email."),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Hãy nhập email"),
                     HttpStatus.BAD_REQUEST);
         } else if (userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Email already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Email đã được sử dụng"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (signUpRequest.getPassword() == null) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Please enter your password."),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Hãy nhập mật khẩu"),
                     HttpStatus.BAD_REQUEST);
         } else if (signUpRequest.getPassword().length() <= 6) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too short."),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Mật khẩu phải nhiều hơn 6 ký tự"),
                     HttpStatus.BAD_REQUEST);
         } else if (signUpRequest.getPassword().length() >= 20) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Password is too long."),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Mật khẩu phải ít hơn 20 ký tự"),
                     HttpStatus.BAD_REQUEST);
         }
 
         User current = new User();
         User result = userService.merge(current, signUpRequest);
 
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "User registered successfully", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Đăng ký thành công", result), HttpStatus.CREATED);
     }
 
     // private for permission admin
@@ -143,13 +143,13 @@ public class AuthController {
             if (!passwordEncoder.matches(loginRequest.getPassword(), userCurrent.getPassword())) {
                 return new ResponseEntity<>(
                         new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
-                                "Password not matches"),
+                                "Mật khẩu sai rồi"),
                         HttpStatus.UNAUTHORIZED);
             }
         } else {
             return new ResponseEntity<>(
                     new ApiResponseError(HttpStatus.UNAUTHORIZED.value(),
-                            "Account not found"),
+                            "Tài khoản chưa đăng ký"),
                     HttpStatus.UNAUTHORIZED);
         }
 
@@ -163,29 +163,29 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
 
-        return new ResponseEntity<>(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Login Success", jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new JwtAuthenticationResponse(HttpStatus.OK.value(), "Hello boss", jwt), HttpStatus.OK);
     }
 
     @PostMapping("/admin/signup")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Tên đăng nhập đã được đăng ký"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (userService.existsByPhone(signUpRequest.getPhone())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Phone Address already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Số điện thoại đã được đăng ký"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if(userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponseError(HttpStatus.BAD_REQUEST.value(), "Email đã đượcn sử dụng"),
                     HttpStatus.BAD_REQUEST);
         }
 
         User current = new User();
         User result = userService.mergeAdmin(current, signUpRequest);
-        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Admin create successfully", result), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseCustom<>(HttpStatus.CREATED.value(), "Chào admin mới", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/me")

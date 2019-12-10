@@ -118,6 +118,13 @@ public class ComboController {
             @RequestParam(defaultValue = "6", required = false) int limit,
             @PathVariable("id") Long id) {
         List<Combo> comboList = comboService.findAllByCategory(id);
+        System.out.println(id);
+        Long[] comboIds;
+        if (comboList == null || comboList.size() == 0) {
+            comboIds = new Long[]{Long.valueOf(0)};
+        } else {
+            comboIds = comboList.stream().map(Combo::getId).toArray(Long[]::new);
+        }
         Specification specification = Specification.where(null);
         if (search != null && search.length() > 0) {
             specification = specification
@@ -125,7 +132,6 @@ public class ComboController {
                     .or(new SpecificationAll(new SearchCriteria("description", ":", search)));
         }
 
-        Long[] comboIds = comboList.stream().map(Combo::getId).toArray(Long[]::new);
         if (comboIds.length == 0) {
             return new ResponseEntity<>(new ApiResponsePage<>(
                     HttpStatus.OK.value(), "OK", new Long[]{},
@@ -133,7 +139,7 @@ public class ComboController {
         }
 
         specification = specification
-                .and(new SpecificationAll(new SearchCriteria("id", "in", comboList )));
+                .and(new SpecificationAll(new SearchCriteria("id", "in", comboIds)));
 
         specification = specification
                 .and(new SpecificationAll(new SearchCriteria("createdAt", "orderBy", "desc")));
