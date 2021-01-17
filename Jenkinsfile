@@ -9,4 +9,8 @@ node {
     stage("Docker build") {
         sh "docker build -t nutritious-food:latest ."
     }
+
+    stage("Docker Deploy") {
+        sh "docker-compose up -d"
+    }
 }
